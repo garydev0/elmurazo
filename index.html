@@ -6,12 +6,12 @@
     <title>El Murazo | Cyber Wall</title>
     <style>
         :root {
-            --bg-color: #050508;
-            --card-bg: #0f0f17;
-            --text-color: #e0e0e0;
-            --neon-cyan: #00f3ff;
-            --neon-pink: #ff0055;
-            --neon-yellow: #f3e600;
+            --bg-color: #f4f5f7;
+            --card-bg: #ffffff;
+            --text-color: #111115;
+            --accent-cyan: #00a8cc;
+            --accent-pink: #e6005c;
+            --accent-yellow: #b38600;
         }
         body {
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
@@ -29,26 +29,26 @@
             text-transform: uppercase; 
             letter-spacing: 4px; 
             margin-bottom: 5px;
-            color: #fff;
-            text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+            color: #000;
         }
-        .subtitle { margin-bottom: 40px; color: #888; font-size: 0.95rem; letter-spacing: 1px; }
+        .subtitle { margin-bottom: 40px; color: #555; font-size: 0.95rem; letter-spacing: 1px; }
         
         .muro-container { display: flex; flex-direction: column; gap: 25px; width: 100%; max-width: 700px; margin-bottom: 40px; }
         
         .cartel { 
             background: var(--card-bg); 
-            border: 1px solid rgba(0, 243, 255, 0.2); 
+            border: 2px solid #111; 
             border-radius: 12px; 
             padding: 30px; 
             text-align: center; 
-            box-shadow: 0 0 20px rgba(0, 243, 255, 0.05);
+            box-shadow: 6px 6px 0px #111;
             position: relative; 
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
         }
         .cartel:hover {
-            border-color: var(--neon-cyan);
-            box-shadow: 0 0 25px rgba(0, 243, 255, 0.15);
+            transform: translateY(-2px);
+            box-shadow: 8px 8px 0px #111, 0 0 15px rgba(0, 168, 204, 0.3);
+            border-color: var(--accent-cyan);
         }
         .cartel-grande { min-height: 140px; font-size: 1.8rem; }
         .cartel-mediano { min-height: 100px; font-size: 1.3rem; }
@@ -58,20 +58,19 @@
             position: absolute; 
             top: -12px; 
             right: 20px; 
-            background: var(--bg-color); 
-            color: var(--neon-pink); 
+            background: var(--accent-pink); 
+            color: white; 
             padding: 4px 12px; 
             border-radius: 20px; 
             font-weight: bold; 
             font-size: 0.85rem;
-            border: 1px solid var(--neon-pink);
-            box-shadow: 0 0 10px rgba(255, 0, 85, 0.3);
+            border: 2px solid #111;
         }
         
         .btn-comprar { 
-            background: transparent;
-            color: var(--neon-cyan);
-            border: 1px solid var(--neon-cyan);
+            background: #111;
+            color: #fff;
+            border: none;
             padding: 10px 24px; 
             font-size: 0.85rem; 
             font-weight: 600; 
@@ -83,17 +82,61 @@
             transition: all 0.2s ease;
         }
         .btn-comprar:hover { 
-            background: var(--neon-cyan);
+            background: var(--accent-cyan);
             color: #000;
-            box-shadow: 0 0 15px var(--neon-cyan);
-            transform: translateY(-2px);
+            box-shadow: 0 0 15px rgba(0, 168, 204, 0.4);
         }
+
+        /* Modal */
+        #modal-pago {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+        .modal-content {
+            background: #fff;
+            border: 2px solid #111;
+            padding: 30px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 8px 8px 0px #111;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .modal-content h3 { color: #111; margin-top: 0; letter-spacing: 1px; }
+        .modal-content input, .modal-content textarea {
+            background: #f4f5f7;
+            border: 1px solid #ccc;
+            padding: 12px;
+            border-radius: 6px;
+            color: #111;
+            font-family: inherit;
+            resize: none;
+        }
+        .modal-content input:focus, .modal-content textarea:focus {
+            border-color: var(--accent-cyan);
+            outline: none;
+            box-shadow: 0 0 8px rgba(0, 168, 204, 0.2);
+        }
+        .modal-buttons { display: flex; gap: 10px; margin-top: 10px; }
+        .modal-buttons button { flex: 1; padding: 10px; border-radius: 6px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 0.8rem; }
+        .btn-cancelar { background: transparent; border: 1px solid #999; color: #555; }
+        .btn-cancelar:hover { border-color: #111; color: #111; }
+        .btn-enviar { background: var(--accent-cyan); border: none; color: #fff; }
+        .btn-enviar:hover { opacity: 0.9; }
         
         .listas-container { display: flex; gap: 20px; width: 100%; max-width: 700px; }
-        .lista { background: var(--card-bg); flex: 1; padding: 20px; border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; }
-        .lista h3 { margin-top: 0; font-size: 0.9rem; letter-spacing: 1px; color: #aaa; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 10px; }
+        .lista { background: var(--card-bg); flex: 1; padding: 20px; border: 2px solid #111; border-radius: 12px; box-shadow: 4px 4px 0px #111; }
+        .lista h3 { margin-top: 0; font-size: 0.9rem; letter-spacing: 1px; color: #333; border-bottom: 2px solid #eee; padding-bottom: 10px; }
         ul { list-style: none; padding: 0; margin: 0; font-size: 0.9rem; }
-        li { padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.02); display: flex; justify-content: space-between; }
+        li { padding: 8px 0; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; }
         
         @media (max-width: 600px) { .listas-container { flex-direction: column; } }
     </style>
@@ -107,17 +150,30 @@
         <div class="cartel cartel-grande">
             <div class="precio-tag">10 €</div>
             <p id="texto-grande">"Cargando..."</p>
-            <button class="btn-comprar" onclick="comprarEspacio('grande')">Sobreescribir Muro Grande</button>
+            <button class="btn-comprar" onclick="abrirModal('grande', 10)">Sobreescribir Muro Grande</button>
         </div>
         <div class="cartel cartel-mediano">
             <div class="precio-tag">5 €</div>
             <p id="texto-mediano">"Cargando..."</p>
-            <button class="btn-comprar" onclick="comprarEspacio('mediano')">Sobreescribir Muro Mediano</button>
+            <button class="btn-comprar" onclick="abrirModal('mediano', 5)">Sobreescribir Muro Mediano</button>
         </div>
         <div class="cartel cartel-pequeno">
             <div class="precio-tag">1 €</div>
             <p id="texto-pequeno">"Cargando..."</p>
-            <button class="btn-comprar" onclick="comprarEspacio('pequeno')">Sobreescribir Muro Pequeño</button>
+            <button class="btn-comprar" onclick="abrirModal('pequeno', 1)">Sobreescribir Muro Pequeño</button>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="modal-pago">
+        <div class="modal-content">
+            <h3 id="modal-titulo">Configurar Muro</h3>
+            <input type="text" id="input-alias" placeholder="Tu Alias / Nombre" maxlength="25">
+            <textarea id="input-mensaje" placeholder="Escribe tu mensaje aquí..." rows="3" maxlength="100"></textarea>
+            <div class="modal-buttons">
+                <button class="btn-cancelar" onclick="cerrarModal()">Cancelar</button>
+                <button class="btn-enviar" onclick="irAPagar()">Continuar al Pago</button>
+            </div>
         </div>
     </div>
 
@@ -125,13 +181,13 @@
         <div class="lista">
             <h3>⚡ ÚLTIMOS</h3>
             <ul id="lista-ultimos">
-                <li><span>Anónimo</span> <span style="color:var(--neon-cyan)">1€</span></li>
+                <li><span>Anónimo</span> <span style="color:var(--accent-cyan)">1€</span></li>
             </ul>
         </div>
         <div class="lista">
             <h3>👑 TOP</h3>
             <ul id="lista-top">
-                <li><span>CryptoKing</span> <span style="color:var(--neon-yellow)">10€</span></li>
+                <li><span>CryptoKing</span> <span style="color:var(--accent-yellow)">10€</span></li>
             </ul>
         </div>
     </div>
@@ -154,7 +210,42 @@
         const db = getFirestore(app);
         const cartelesRef = doc(db, "muro", "textos");
 
-        // Escuchar datos en tiempo real
+        let tierActual = '';
+
+        window.abrirModal = function(tamano, precio) {
+            tierActual = tamano;
+            document.getElementById("modal-titulo").innerText = `Muro ${tamano.toUpperCase()} (${precio}€)`;
+            document.getElementById("modal-pago").style.display = "flex";
+        }
+
+        window.cerrarModal = function() {
+            document.getElementById("modal-pago").style.display = "none";
+        }
+
+        window.irAPagar = function() {
+            const alias = document.getElementById("input-alias").value.trim();
+            const mensaje = document.getElementById("input-mensaje").value.trim();
+
+            if (!alias || !mensaje) {
+                alert("Por favor, rellena tu alias y el mensaje.");
+                return;
+            }
+
+            localStorage.setItem("pending_alias", alias);
+            localStorage.setItem("pending_mensaje", mensaje);
+            localStorage.setItem("pending_tier", tierActual);
+
+            const enlacesStripe = {
+                'grande': 'https://buy.stripe.com/test_8x27sKdJidfs86l2p373G02',
+                'mediano': 'https://buy.stripe.com/test_6oUeVccFea3gaet4xb73G01',
+                'pequeno': 'https://buy.stripe.com/test_4gM8wOdJia3g4U91kZ73G00'
+            };
+
+            if (enlacesStripe[tierActual]) {
+                window.location.href = enlacesStripe[tierActual];
+            }
+        }
+
         onSnapshot(cartelesRef, (documento) => {
             if (documento.exists()) {
                 const datos = documento.data();
@@ -168,39 +259,29 @@
             }
         });
 
-        // Detectar si el usuario acaba de pagar y vuelve de Stripe
         window.addEventListener('load', async () => {
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('success') === 'true') {
-                const tamano = urlParams.get('tier');
-                if (tamano) {
-                    const nuevoTexto = prompt(`¡Pago exitoso! Escribe tu mensaje para el muro (${tamano}):`);
-                    if (nuevoTexto && nuevoTexto.trim() !== "") {
-                        try {
-                            await setDoc(cartelesRef, { [tamano]: nuevoTexto }, { merge: true });
-                            alert("¡Mensaje publicado con éxito!");
-                        } catch (error) {
-                            console.error(error);
-                        }
+                const alias = localStorage.getItem("pending_alias");
+                const mensaje = localStorage.getItem("pending_mensaje");
+                const tier = localStorage.getItem("pending_tier");
+
+                if (alias && mensaje && tier) {
+                    try {
+                        document.getElementById("texto-" + tier).innerText = `"Publicando..."`;
+                        await setDoc(cartelesRef, { 
+                            [tier]: `${mensaje} — [${alias}]` 
+                        }, { merge: true });
+                    } catch (error) {
+                        console.error(error);
                     }
-                    // Limpiar la URL
-                    window.history.replaceState({}, document.title, window.location.pathname);
+                    localStorage.removeItem("pending_alias");
+                    localStorage.removeItem("pending_mensaje");
+                    localStorage.removeItem("pending_tier");
                 }
+                window.history.replaceState({}, document.title, window.location.pathname);
             }
         });
-
-        // Redirigir a Stripe
-        window.comprarEspacio = function(tamano) {
-            const enlacesStripe = {
-                'grande': 'https://buy.stripe.com/test_8x27sKdJidfs86l2p373G02',
-                'mediano': 'https://buy.stripe.com/test_6oUeVccFea3gaet4xb73G01',
-                'pequeno': 'https://buy.stripe.com/test_4gM8wOdJia3g4U91kZ73G00'
-            };
-
-            if (enlacesStripe[tamano]) {
-                window.location.href = enlacesStripe[tamano];
-            }
-        }
     </script>
 </body>
 </html>
