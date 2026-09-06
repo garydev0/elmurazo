@@ -217,7 +217,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
-        import { getFirestore, doc, setDoc, onSnapshot, collection, addCollection, addDoc, query, orderBy, limit, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, onSnapshot, collection, addDoc, query, orderBy, limit, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCFE0T4m16MOyn9JqMujJZZwMJCLen-LgA",
@@ -273,7 +273,6 @@
             }
         }
 
-        // Escuchar datos del muro
         onSnapshot(cartelesRef, (documento) => {
             if (documento.exists()) {
                 const datos = documento.data();
@@ -295,10 +294,14 @@
                         elAutor.innerText = "";
                     }
                 });
+            } else {
+                ['grande', 'mediano', 'pequeno'].forEach(t => {
+                    document.getElementById(`texto-${t}`).innerText = `"Muro vacío"`;
+                    document.getElementById(`autor-${t}`).innerText = "";
+                });
             }
         });
 
-        // Escuchar Últimos Donadores en tiempo real
         onSnapshot(query(historialRef, orderBy("timestamp", "desc"), limit(5)), (snapshot) => {
             const listaUltimos = document.getElementById("lista-ultimos");
             listaUltimos.innerHTML = "";
@@ -312,7 +315,6 @@
             });
         });
 
-        // Escuchar Top Donadores en tiempo real
         onSnapshot(query(historialRef, orderBy("precio", "desc"), limit(5)), (snapshot) => {
             const listaTop = document.getElementById("lista-top");
             listaTop.innerHTML = "";
@@ -326,7 +328,6 @@
             });
         });
 
-        // Al volver de Stripe
         window.addEventListener('load', async () => {
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('success') === 'true') {
@@ -340,12 +341,10 @@
                         document.getElementById("texto-" + tier).innerText = `"Publicando..."`;
                         document.getElementById("autor-" + tier).innerText = "";
                         
-                        // Actualizar muro
                         await setDoc(cartelesRef, { 
                             [tier]: { texto: mensaje, autor: alias } 
                         }, { merge: true });
 
-                        // Guardar en historial para los rankings
                         await addDoc(historialRef, {
                             alias: alias,
                             precio: precio,
