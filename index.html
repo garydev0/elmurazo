@@ -49,17 +49,17 @@
         <div class="cartel cartel-grande">
             <div class="precio-tag">10€</div>
             <p id="texto-grande">"Cargando..."</p>
-            <button class="btn-comprar" onclick="comprarEspacio(10, 'grande')">Sobreescribir Muro Grande</button>
+            <button class="btn-comprar" onclick="comprarEspacio('grande')">Sobreescribir Muro Grande</button>
         </div>
         <div class="cartel cartel-mediano">
             <div class="precio-tag">5€</div>
             <p id="texto-mediano">"Cargando..."</p>
-            <button class="btn-comprar" onclick="comprarEspacio(5, 'mediano')">Sobreescribir Muro Mediano</button>
+            <button class="btn-comprar" onclick="comprarEspacio('mediano')">Sobreescribir Muro Mediano</button>
         </div>
         <div class="cartel cartel-pequeno">
             <div class="precio-tag">1€</div>
             <p id="texto-pequeno">"Cargando..."</p>
-            <button class="btn-comprar" onclick="comprarEspacio(1, 'pequeno')">Sobreescribir Muro Pequeño</button>
+            <button class="btn-comprar" onclick="comprarEspacio('pequeno')">Sobreescribir Muro Pequeño</button>
         </div>
     </div>
 
@@ -78,10 +78,10 @@
         </div>
     </div>
 
-    <!-- Firebase conectado por CDN -->
+    <!-- Firebase y Stripe integrados -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
-        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore.js";
+        import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCFE0T4m16MOyn9JqMujJZZwMJCLen-LgA",
@@ -97,7 +97,7 @@
         const db = getFirestore(app);
         const cartelesRef = doc(db, "muro", "textos");
 
-        // Escuchar cambios en tiempo real
+        // Escuchar cambios en tiempo real desde Firebase
         onSnapshot(cartelesRef, (documento) => {
             if (documento.exists()) {
                 const datos = documento.data();
@@ -111,19 +111,16 @@
             }
         });
 
-        // Función global para que los botones la detecten
-        window.comprarEspacio = async function(precio, tamano) {
-            const nuevoTexto = prompt(`Vas a pagar ${precio}€. Escribe tu mensaje:`);
-            
-            if (nuevoTexto && nuevoTexto.trim() !== "") {
-                try {
-                    await setDoc(cartelesRef, {
-                        [tamano]: nuevoTexto
-                    }, { merge: true });
-                } catch (error) {
-                    alert("Error: Asegúrate de haber creado la base de datos en Firestore.");
-                    console.error(error);
-                }
+        // Redirección directa a los enlaces de pago de Stripe
+        window.comprarEspacio = function(tamano) {
+            const enlacesStripe = {
+                'grande': 'https://buy.stripe.com/8x27sKdJidfs86l2p373G02',
+                'mediano': 'https://buy.stripe.com/6oUeVccFea3gaet4xb73G01',
+                'pequeno': 'https://buy.stripe.com/4gM8wOdJia3g4U91kZ73G00'
+            };
+
+            if (enlacesStripe[tamano]) {
+                window.location.href = enlacesStripe[tamano];
             }
         }
     </script>
