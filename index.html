@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>El Murazo | Cyber Wall</title>
-    <!-- Fuente Inter y Font Awesome -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -110,7 +109,6 @@
             box-shadow: 0 0 15px rgba(0, 168, 204, 0.4);
         }
 
-        /* Modal */
         #modal-pago {
             display: none;
             position: fixed;
@@ -190,7 +188,6 @@
         </div>
     </div>
 
-    <!-- Modal -->
     <div id="modal-pago">
         <div class="modal-content">
             <h3 id="modal-titulo">Configurar Muro</h3>
@@ -207,20 +204,20 @@
         <div class="lista">
             <h3><i class="fa-solid fa-bolt" style="color:var(--accent-cyan)"></i> ÚLTIMOS</h3>
             <ul id="lista-ultimos">
-                <li><span>Anónimo</span> <span style="color:var(--accent-cyan)">1€</span></li>
+                <li><span>Cargando...</span></li>
             </ul>
         </div>
         <div class="lista">
             <h3><i class="fa-solid fa-crown" style="color:var(--accent-yellow)"></i> TOP</h3>
             <ul id="lista-top">
-                <li><span>CryptoKing</span> <span style="color:var(--accent-yellow)">10€</span></li>
+                <li><span>Cargando...</span></li>
             </ul>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
-        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, onSnapshot, collection, addCollection, addDoc, query, orderBy, limit, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCFE0T4m16MOyn9JqMujJZZwMJCLen-LgA",
@@ -235,11 +232,14 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const cartelesRef = doc(db, "muro", "textos");
+        const historialRef = collection(db, "historial");
 
         let tierActual = '';
+        let precioActual = 0;
 
         window.abrirModal = function(tamano, precio) {
             tierActual = tamano;
+            precioActual = precio;
             document.getElementById("modal-titulo").innerText = `Muro ${tamano.toUpperCase()} (${precio}€)`;
             document.getElementById("modal-pago").style.display = "flex";
         }
@@ -260,6 +260,7 @@
             localStorage.setItem("pending_alias", alias);
             localStorage.setItem("pending_mensaje", mensaje);
             localStorage.setItem("pending_tier", tierActual);
+            localStorage.setItem("pending_precio", precioActual);
 
             const enlacesStripe = {
                 'grande': 'https://buy.stripe.com/test_8x27sKdJidfs86l2p373G02',
@@ -272,6 +273,7 @@
             }
         }
 
+        // Escuchar datos del muro
         onSnapshot(cartelesRef, (documento) => {
             if (documento.exists()) {
                 const datos = documento.data();
@@ -281,12 +283,10 @@
                     const elAutor = document.getElementById(`autor-${t}`);
                     
                     if (val) {
-                        // Soporta tanto objetos nuevos como textos antiguos si los hubiera
                         if (typeof val === 'object') {
                             elTexto.innerText = `"${val.texto}"`;
                             elAutor.innerText = `— ${val.autor}`;
                         } else {
-                            // Limpieza por si hay datos viejos en formato string
                             elTexto.innerText = `"${val}"`;
                             elAutor.innerText = "";
                         }
@@ -298,27 +298,67 @@
             }
         });
 
+        // Escuchar Últimos Donadores en tiempo real
+        onSnapshot(query(historialRef, orderBy("timestamp", "desc"), limit(5)), (snapshot) => {
+            const listaUltimos = document.getElementById("lista-ultimos");
+            listaUltimos.innerHTML = "";
+            if (snapshot.empty) {
+                listaUltimos.innerHTML = "<li><span>Sin registros</span></li>";
+                return;
+            }
+            snapshot.forEach((doc) => {
+                const d = doc.data();
+                listaUltimos.innerHTML += `<li><span>${d.alias}</span> <span style="color:var(--accent-cyan)">${d.precio}€</span></li>`;
+            });
+        });
+
+        // Escuchar Top Donadores en tiempo real
+        onSnapshot(query(historialRef, orderBy("precio", "desc"), limit(5)), (snapshot) => {
+            const listaTop = document.getElementById("lista-top");
+            listaTop.innerHTML = "";
+            if (snapshot.empty) {
+                listaTop.innerHTML = "<li><span>Sin registros</span></li>";
+                return;
+            }
+            snapshot.forEach((doc) => {
+                const d = doc.data();
+                listaTop.innerHTML += `<li><span>${d.alias}</span> <span style="color:var(--accent-yellow)">${d.precio}€</span></li>`;
+            });
+        });
+
+        // Al volver de Stripe
         window.addEventListener('load', async () => {
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('success') === 'true') {
                 const alias = localStorage.getItem("pending_alias");
                 const mensaje = localStorage.getItem("pending_mensaje");
                 const tier = localStorage.getItem("pending_tier");
+                const precio = Number(localStorage.getItem("pending_precio"));
 
                 if (alias && mensaje && tier) {
                     try {
                         document.getElementById("texto-" + tier).innerText = `"Publicando..."`;
                         document.getElementById("autor-" + tier).innerText = "";
                         
+                        // Actualizar muro
                         await setDoc(cartelesRef, { 
                             [tier]: { texto: mensaje, autor: alias } 
                         }, { merge: true });
+
+                        // Guardar en historial para los rankings
+                        await addDoc(historialRef, {
+                            alias: alias,
+                            precio: precio,
+                            timestamp: serverTimestamp()
+                        });
+
                     } catch (error) {
                         console.error(error);
                     }
                     localStorage.removeItem("pending_alias");
                     localStorage.removeItem("pending_mensaje");
                     localStorage.removeItem("pending_tier");
+                    localStorage.removeItem("pending_precio");
                 }
                 window.history.replaceState({}, document.title, window.location.pathname);
             }
