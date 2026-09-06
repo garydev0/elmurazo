@@ -78,7 +78,6 @@
         </div>
     </div>
 
-    <!-- Firebase y Stripe integrados -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
         import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore.js";
@@ -97,7 +96,6 @@
         const db = getFirestore(app);
         const cartelesRef = doc(db, "muro", "textos");
 
-        // Escuchar cambios en tiempo real desde Firebase
         onSnapshot(cartelesRef, (documento) => {
             if (documento.exists()) {
                 const datos = documento.data();
@@ -111,12 +109,11 @@
             }
         });
 
-        // Redirección directa a los enlaces de pago de Stripe
         window.comprarEspacio = function(tamano) {
             const enlacesStripe = {
-                'grande': 'https://buy.stripe.com/8x27sKdJidfs86l2p373G02',
-                'mediano': 'https://buy.stripe.com/6oUeVccFea3gaet4xb73G01',
-                'pequeno': 'https://buy.stripe.com/4gM8wOdJia3g4U91kZ73G00'
+                'grande': 'https://buy.stripe.com/test_8x27sKdJidfs86l2p373G02',
+                'mediano': 'https://buy.stripe.com/test_6oUeVccFea3gaet4xb73G01',
+                'pequeno': 'https://buy.stripe.com/test_4gM8wOdJia3g4U91kZ73G00'
             };
 
             if (enlacesStripe[tamano]) {
