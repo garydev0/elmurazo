@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>El Murazo | Cyber Wall</title>
+    <!-- Fuente Inter y Font Awesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
         :root {
             --bg-color: #f4f5f7;
@@ -14,7 +18,7 @@
             --accent-yellow: #b38600;
         }
         body {
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            font-family: 'Inter', sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
             margin: 0;
@@ -30,8 +34,9 @@
             letter-spacing: 4px; 
             margin-bottom: 5px;
             color: #000;
+            font-weight: 800;
         }
-        .subtitle { margin-bottom: 40px; color: #555; font-size: 0.95rem; letter-spacing: 1px; }
+        .subtitle { margin-bottom: 40px; color: #555; font-size: 0.95rem; letter-spacing: 1px; font-weight: 500; }
         
         .muro-container { display: flex; flex-direction: column; gap: 25px; width: 100%; max-width: 700px; margin-bottom: 40px; }
         
@@ -43,6 +48,10 @@
             text-align: center; 
             box-shadow: 6px 6px 0px #111;
             position: relative; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             transition: all 0.2s ease;
         }
         .cartel:hover {
@@ -50,9 +59,23 @@
             box-shadow: 8px 8px 0px #111, 0 0 15px rgba(0, 168, 204, 0.3);
             border-color: var(--accent-cyan);
         }
-        .cartel-grande { min-height: 140px; font-size: 1.8rem; }
-        .cartel-mediano { min-height: 100px; font-size: 1.3rem; }
-        .cartel-pequeno { min-height: 70px; font-size: 1.1rem; }
+        .cartel-grande { min-height: 140px; }
+        .cartel-mediano { min-height: 100px; }
+        .cartel-pequeno { min-height: 70px; }
+
+        .mensaje-texto {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 0 0 10px 0;
+            word-break: break-word;
+        }
+        .mensaje-autor {
+            font-size: 0.9rem;
+            color: #666;
+            font-weight: 500;
+            align-self: flex-end;
+            margin-top: 5px;
+        }
         
         .precio-tag { 
             position: absolute; 
@@ -117,7 +140,7 @@
             padding: 12px;
             border-radius: 6px;
             color: #111;
-            font-family: inherit;
+            font-family: 'Inter', sans-serif;
             resize: none;
         }
         .modal-content input:focus, .modal-content textarea:focus {
@@ -149,17 +172,20 @@
     <div class="muro-container">
         <div class="cartel cartel-grande">
             <div class="precio-tag">10 €</div>
-            <p id="texto-grande">"Cargando..."</p>
+            <p class="mensaje-texto" id="texto-grande">"Cargando..."</p>
+            <span class="mensaje-autor" id="autor-grande"></span>
             <button class="btn-comprar" onclick="abrirModal('grande', 10)">Sobreescribir Muro Grande</button>
         </div>
         <div class="cartel cartel-mediano">
             <div class="precio-tag">5 €</div>
-            <p id="texto-mediano">"Cargando..."</p>
+            <p class="mensaje-texto" id="texto-mediano">"Cargando..."</p>
+            <span class="mensaje-autor" id="autor-mediano"></span>
             <button class="btn-comprar" onclick="abrirModal('mediano', 5)">Sobreescribir Muro Mediano</button>
         </div>
         <div class="cartel cartel-pequeno">
             <div class="precio-tag">1 €</div>
-            <p id="texto-pequeno">"Cargando..."</p>
+            <p class="mensaje-texto" id="texto-pequeno">"Cargando..."</p>
+            <span class="mensaje-autor" id="autor-pequeno"></span>
             <button class="btn-comprar" onclick="abrirModal('pequeno', 1)">Sobreescribir Muro Pequeño</button>
         </div>
     </div>
@@ -179,13 +205,13 @@
 
     <div class="listas-container">
         <div class="lista">
-            <h3>⚡ ÚLTIMOS</h3>
+            <h3><i class="fa-solid fa-bolt" style="color:var(--accent-cyan)"></i> ÚLTIMOS</h3>
             <ul id="lista-ultimos">
                 <li><span>Anónimo</span> <span style="color:var(--accent-cyan)">1€</span></li>
             </ul>
         </div>
         <div class="lista">
-            <h3>👑 TOP</h3>
+            <h3><i class="fa-solid fa-crown" style="color:var(--accent-yellow)"></i> TOP</h3>
             <ul id="lista-top">
                 <li><span>CryptoKing</span> <span style="color:var(--accent-yellow)">10€</span></li>
             </ul>
@@ -249,13 +275,26 @@
         onSnapshot(cartelesRef, (documento) => {
             if (documento.exists()) {
                 const datos = documento.data();
-                if(datos.grande) document.getElementById("texto-grande").innerText = `"${datos.grande}"`;
-                if(datos.mediano) document.getElementById("texto-mediano").innerText = `"${datos.mediano}"`;
-                if(datos.pequeno) document.getElementById("texto-pequeno").innerText = `"${datos.pequeno}"`;
-            } else {
-                document.getElementById("texto-grande").innerText = `"Muro vacío"`
-                document.getElementById("texto-mediano").innerText = `"Muro vacío"`
-                document.getElementById("texto-pequeno").innerText = `"Muro vacío"`
+                ['grande', 'mediano', 'pequeno'].forEach(t => {
+                    const val = datos[t];
+                    const elTexto = document.getElementById(`texto-${t}`);
+                    const elAutor = document.getElementById(`autor-${t}`);
+                    
+                    if (val) {
+                        // Soporta tanto objetos nuevos como textos antiguos si los hubiera
+                        if (typeof val === 'object') {
+                            elTexto.innerText = `"${val.texto}"`;
+                            elAutor.innerText = `— ${val.autor}`;
+                        } else {
+                            // Limpieza por si hay datos viejos en formato string
+                            elTexto.innerText = `"${val}"`;
+                            elAutor.innerText = "";
+                        }
+                    } else {
+                        elTexto.innerText = `"Muro vacío"`;
+                        elAutor.innerText = "";
+                    }
+                });
             }
         });
 
@@ -269,8 +308,10 @@
                 if (alias && mensaje && tier) {
                     try {
                         document.getElementById("texto-" + tier).innerText = `"Publicando..."`;
+                        document.getElementById("autor-" + tier).innerText = "";
+                        
                         await setDoc(cartelesRef, { 
-                            [tier]: `${mensaje} — [${alias}]` 
+                            [tier]: { texto: mensaje, autor: alias } 
                         }, { merge: true });
                     } catch (error) {
                         console.error(error);
