@@ -22,97 +22,22 @@
             flex-direction: column;
             align-items: center;
         }
-        h1 {
-            font-size: 3rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 5px;
-        }
-        .subtitle {
-            margin-bottom: 30px;
-            color: #666;
-        }
-        .muro-container {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            width: 100%;
-            max-width: 800px;
-            margin-bottom: 40px;
-        }
-        .cartel {
-            background: #fff;
-            border: 4px solid #222;
-            border-radius: 8px;
-            padding: 20px;
-            text-align: center;
-            box-shadow: 8px 8px 0px #222;
-            position: relative;
-        }
+        h1 { font-size: 3rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px; }
+        .subtitle { margin-bottom: 30px; color: #666; }
+        .muro-container { display: flex; flex-direction: column; gap: 20px; width: 100%; max-width: 800px; margin-bottom: 40px; }
+        .cartel { background: #fff; border: 4px solid #222; border-radius: 8px; padding: 20px; text-align: center; box-shadow: 8px 8px 0px #222; position: relative; }
         .cartel-grande { min-height: 200px; font-size: 2rem; }
         .cartel-mediano { min-height: 120px; font-size: 1.5rem; }
         .cartel-pequeno { min-height: 80px; font-size: 1.2rem; }
-        
-        .precio-tag {
-            position: absolute;
-            top: -15px;
-            right: -15px;
-            background: var(--accent);
-            color: white;
-            padding: 10px 15px;
-            border-radius: 50%;
-            font-weight: bold;
-            transform: rotate(15deg);
-            border: 2px solid #222;
-        }
-        .btn-comprar {
-            background-color: var(--primary);
-            border: 2px solid #222;
-            padding: 10px 20px;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 15px;
-            transition: all 0.2s;
-            text-transform: uppercase;
-        }
-        .btn-comprar:hover {
-            background-color: var(--primary-dark);
-            transform: translateY(-2px);
-            box-shadow: 4px 4px 0px #222;
-        }
-        .listas-container {
-            display: flex;
-            gap: 30px;
-            width: 100%;
-            max-width: 800px;
-        }
-        .lista {
-            background: white;
-            flex: 1;
-            padding: 20px;
-            border: 2px solid #222;
-            border-radius: 8px;
-        }
-        .lista h3 {
-            margin-top: 0;
-            border-bottom: 2px solid #222;
-            padding-bottom: 10px;
-        }
-        ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        li {
-            padding: 8px 0;
-            border-bottom: 1px solid #eee;
-            display: flex;
-            justify-content: space-between;
-        }
-        @media (max-width: 600px) {
-            .listas-container { flex-direction: column; }
-        }
+        .precio-tag { position: absolute; top: -15px; right: -15px; background: var(--accent); color: white; padding: 10px 15px; border-radius: 50%; font-weight: bold; transform: rotate(15deg); border: 2px solid #222; }
+        .btn-comprar { background-color: var(--primary); border: 2px solid #222; padding: 10px 20px; font-size: 1rem; font-weight: bold; cursor: pointer; margin-top: 15px; text-transform: uppercase; }
+        .btn-comprar:hover { background-color: var(--primary-dark); transform: translateY(-2px); box-shadow: 4px 4px 0px #222; }
+        .listas-container { display: flex; gap: 30px; width: 100%; max-width: 800px; }
+        .lista { background: white; flex: 1; padding: 20px; border: 2px solid #222; border-radius: 8px; }
+        .lista h3 { margin-top: 0; border-bottom: 2px solid #222; padding-bottom: 10px; }
+        ul { list-style: none; padding: 0; margin: 0; }
+        li { padding: 8px 0; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; }
+        @media (max-width: 600px) { .listas-container { flex-direction: column; } }
     </style>
 </head>
 <body>
@@ -121,24 +46,19 @@
     <p class="subtitle">Paga. Escribe. Sé el último en hablar.</p>
 
     <div class="muro-container">
-        <!-- Cartel 10€ -->
         <div class="cartel cartel-grande">
             <div class="precio-tag">10€</div>
-            <p id="texto-grande">"COMPRAD CRIPTO, NOS VAMOS A LA LUNA 🚀"</p>
+            <p id="texto-grande">"Cargando..."</p>
             <button class="btn-comprar" onclick="comprarEspacio(10, 'grande')">Sobreescribir Muro Grande</button>
         </div>
-
-        <!-- Cartel 5€ -->
         <div class="cartel cartel-mediano">
             <div class="precio-tag">5€</div>
-            <p id="texto-mediano">"Vendo Opel Corsa del 2005. Razón aquí."</p>
+            <p id="texto-mediano">"Cargando..."</p>
             <button class="btn-comprar" onclick="comprarEspacio(5, 'mediano')">Sobreescribir Muro Mediano</button>
         </div>
-
-        <!-- Cartel 1€ -->
         <div class="cartel cartel-pequeno">
             <div class="precio-tag">1€</div>
-            <p id="texto-pequeno">"María desbloquéame del WhatsApp porfa"</p>
+            <p id="texto-pequeno">"Cargando..."</p>
             <button class="btn-comprar" onclick="comprarEspacio(1, 'pequeno')">Sobreescribir Muro Pequeño</button>
         </div>
     </div>
@@ -148,37 +68,62 @@
             <h3>⚡ Últimos Donadores</h3>
             <ul id="lista-ultimos">
                 <li><span>Usuario Anónimo</span> <span>1€</span></li>
-                <li><span>Troll99</span> <span>5€</span></li>
-                <li><span>CryptoBro</span> <span>10€</span></li>
             </ul>
         </div>
         <div class="lista">
             <h3>👑 Top Donadores</h3>
             <ul id="lista-top">
                 <li><span>👑 CryptoBro</span> <span>50€</span></li>
-                <li><span>🥈 Troll99</span> <span>25€</span></li>
-                <li><span>🥉 ElCoches</span> <span>15€</span></li>
             </ul>
         </div>
     </div>
 
-    <script>
-        function comprarEspacio(precio, tamano) {
-            const nuevoTexto = prompt(`Vas a pagar ${precio}€. Escribe tu mensaje (máx 100 caracteres):`);
+    <!-- Firebase conectado por CDN -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
+        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCFE0T4m16MOyn9JqMujJZZwMJCLen-LgA",
+            authDomain: "elmurazo.firebaseapp.com",
+            projectId: "elmurazo",
+            storageBucket: "elmurazo.firebasestorage.app",
+            messagingSenderId: "722334671597",
+            appId: "1:722334671597:web:4b316572169de9c66262e4",
+            measurementId: "G-P003BX46Z4"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const cartelesRef = doc(db, "muro", "textos");
+
+        // Escuchar cambios en tiempo real
+        onSnapshot(cartelesRef, (documento) => {
+            if (documento.exists()) {
+                const datos = documento.data();
+                if(datos.grande) document.getElementById("texto-grande").innerText = `"${datos.grande}"`;
+                if(datos.mediano) document.getElementById("texto-mediano").innerText = `"${datos.mediano}"`;
+                if(datos.pequeno) document.getElementById("texto-pequeno").innerText = `"${datos.pequeno}"`;
+            } else {
+                document.getElementById("texto-grande").innerText = `"Muro vacío"`
+                document.getElementById("texto-mediano").innerText = `"Muro vacío"`
+                document.getElementById("texto-pequeno").innerText = `"Muro vacío"`
+            }
+        });
+
+        // Función global para que los botones la detecten
+        window.comprarEspacio = async function(precio, tamano) {
+            const nuevoTexto = prompt(`Vas a pagar ${precio}€. Escribe tu mensaje:`);
             
             if (nuevoTexto && nuevoTexto.trim() !== "") {
-                // Filtro básico de groserías (ejemplo)
-                const palabrasProhibidas = ["insulto1", "insulto2"];
-                const textoLimpio = nuevoTexto.toLowerCase();
-                
-                if (palabrasProhibidas.some(palabra => textoLimpio.includes(palabra))) {
-                    alert("Mensaje no permitido por las normas de la comunidad.");
-                    return;
+                try {
+                    await setDoc(cartelesRef, {
+                        [tamano]: nuevoTexto
+                    }, { merge: true });
+                } catch (error) {
+                    alert("Error: Asegúrate de haber creado la base de datos en Firestore.");
+                    console.error(error);
                 }
-
-                // Aquí iría la redirección a Stripe. Por ahora simulamos el cambio visual:
-                alert("Redirigiendo a pasarela de pago... (Simulación)");
-                document.getElementById(`texto-${tamano}`).innerText = `"${nuevoTexto}"`;
             }
         }
     </script>
