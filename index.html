@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>El Murazo | Cyber Wall</title>
+    <!-- Favicon futurista -->
+    <link rel="icon" type="image/png" href="logo.png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -15,7 +17,6 @@
             --text-color: #111115;
             --accent-cyan: #00a8cc;
             --accent-pink: #e6005c;
-            --accent-yellow: #b38600;
         }
         body {
             font-family: 'Inter', sans-serif;
@@ -49,7 +50,7 @@
             gap: 40px; 
             width: 100%; 
             max-width: 850px; 
-            margin-bottom: 60px;
+            margin-bottom: 40px;
             background: linear-gradient(145deg, #ffffff, #e6e9ef);
             padding: 40px;
             border-radius: 16px;
@@ -109,11 +110,11 @@
         }
         
         .btn-comprar { 
-            background: #111;
-            color: #fff;
+            background: #fff;
+            color: #111;
             border: 2px solid #111;
-            padding: 12px 28px; 
-            font-size: 0.9rem; 
+            padding: 15px 35px; 
+            font-size: 1.1rem; 
             font-weight: 700; 
             cursor: pointer; 
             text-transform: uppercase; 
@@ -121,7 +122,6 @@
             border-radius: 8px;
             transition: all 0.2s ease;
         }
-        .cartel-grande .btn-comprar { background: #fff; color: #111; font-size: 1.1rem; padding: 15px 35px; }
         .btn-comprar:hover { 
             background: var(--accent-cyan);
             color: #000;
@@ -176,13 +176,13 @@
         .btn-enviar { background: var(--accent-cyan); color: #000; box-shadow: 4px 4px 0px #111; }
         .btn-enviar:hover { transform: translate(2px, 2px); box-shadow: 2px 2px 0px #111; }
         
-        .listas-container { display: flex; gap: 30px; width: 100%; max-width: 850px; }
-        .lista { background: var(--card-bg); flex: 1; padding: 25px; border: 3px solid #111; border-radius: 12px; box-shadow: 8px 8px 0px #111; }
+        .lista-container { width: 100%; max-width: 850px; }
+        .lista { background: var(--card-bg); padding: 25px; border: 3px solid #111; border-radius: 12px; box-shadow: 8px 8px 0px #111; }
         .lista h3 { margin-top: 0; font-size: 1.1rem; font-weight: 800; letter-spacing: 1px; color: #111; border-bottom: 3px solid #111; padding-bottom: 15px; }
         ul { list-style: none; padding: 0; margin: 0; font-size: 1rem; }
         li { padding: 12px 0; border-bottom: 1px dashed #ccc; display: flex; justify-content: space-between; font-weight: 500; }
         
-        @media (max-width: 700px) { .listas-container { flex-direction: column; } .cartel-grande { padding: 40px 20px; } }
+        @media (max-width: 700px) { .cartel-grande { padding: 40px 20px; } }
     </style>
 </head>
 <body>
@@ -191,7 +191,6 @@
     <p class="subtitle">Sé el último en hablar</p>
 
     <div class="muro-container">
-        <!-- ÚNICO CARTEL -->
         <div class="cartel cartel-grande">
             <div class="precio-tag">1 €</div>
             <p class="mensaje-texto" id="texto-grande">"CARGANDO..."</p>
@@ -211,16 +210,10 @@
         </div>
     </div>
 
-    <div class="listas-container">
+    <div class="lista-container">
         <div class="lista">
             <h3><i class="fa-solid fa-bolt" style="color:var(--accent-cyan)"></i> ÚLTIMOS</h3>
             <ul id="lista-ultimos">
-                <li><span>Cargando...</span></li>
-            </ul>
-        </div>
-        <div class="lista">
-            <h3><i class="fa-solid fa-crown" style="color:var(--accent-yellow)"></i> TOP</h3>
-            <ul id="lista-top">
                 <li><span>Cargando...</span></li>
             </ul>
         </div>
@@ -273,7 +266,6 @@
             localStorage.setItem("pending_tier", tierActual);
             localStorage.setItem("pending_precio", precioActual);
 
-            // Enlace de Stripe actualizado para el muro de 1€
             const enlacesStripe = {
                 'grande': 'https://buy.stripe.com/test_4gM8wOdJia3g4U91kZ73G00' 
             };
@@ -312,19 +304,6 @@
             snapshot.forEach((doc) => {
                 const d = doc.data();
                 listaUltimos.innerHTML += `<li><span>${d.alias}</span> <span style="color:var(--accent-cyan); font-weight:bold;">${d.precio}€</span></li>`;
-            });
-        });
-
-        onSnapshot(query(historialRef, orderBy("precio", "desc"), limit(5)), (snapshot) => {
-            const listaTop = document.getElementById("lista-top");
-            listaTop.innerHTML = "";
-            if (snapshot.empty) {
-                listaTop.innerHTML = "<li><span>Sin registros</span></li>";
-                return;
-            }
-            snapshot.forEach((doc) => {
-                const d = doc.data();
-                listaTop.innerHTML += `<li><span>${d.alias}</span> <span style="color:var(--accent-yellow); font-weight:bold;">${d.precio}€</span></li>`;
             });
         });
 
