@@ -23,52 +23,52 @@
             background-image: 
                 linear-gradient(var(--grid-color) 1px, transparent 1px),
                 linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
-            background-size: 30px 30px;
+            background-size: 25px 25px;
             color: var(--text-color);
             margin: 0;
-            padding: 20px;
+            padding: 10px;
             display: flex;
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
             box-sizing: border-box;
+            overflow-x: hidden;
         }
         h1 { 
-            font-size: 2.2rem; 
+            font-size: 1.8rem; 
             text-transform: uppercase; 
-            letter-spacing: 3px; 
-            margin: 0 0 5px 0;
+            letter-spacing: 2px; 
+            margin: 0 0 3px 0;
             color: #111;
             font-weight: 900;
-            text-shadow: 2px 2px 0px #fff, 4px 4px 0px var(--accent-cyan);
+            text-shadow: 2px 2px 0px #fff, 3px 3px 0px var(--accent-cyan);
             text-align: center;
         }
-        .subtitle { margin-bottom: 10px; color: #555; font-size: 0.85rem; letter-spacing: 1px; font-weight: 700; text-transform: uppercase; background: #fff; padding: 4px 12px; border: 2px solid #111; border-radius: 20px; box-shadow: 2px 2px 0px #111;}
+        .subtitle { margin-bottom: 8px; color: #555; font-size: 0.75rem; letter-spacing: 1px; font-weight: 700; text-transform: uppercase; background: #fff; padding: 3px 10px; border: 2px solid #111; border-radius: 20px; box-shadow: 2px 2px 0px #111;}
         
         .counter-box {
-            font-size: 0.95rem;
+            font-size: 0.85rem;
             font-weight: 800;
             background: #111;
             color: #fff;
-            padding: 8px 16px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            box-shadow: 3px 3px 0px var(--accent-cyan);
+            padding: 6px 14px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            box-shadow: 2px 2px 0px var(--accent-cyan);
             border: 2px solid #111;
         }
         
-        /* Contenedor ajustado sin barras de scroll */
         .muro-canvas-container {
             width: 100%;
-            max-width: 480px;
+            max-width: 380px;
             aspect-ratio: 1 / 1;
             background: #111;
             border: 3px solid #111;
-            border-radius: 12px;
-            box-shadow: 8px 8px 0px #111;
+            border-radius: 10px;
+            box-shadow: 6px 6px 0px #111;
             position: relative;
             overflow: hidden;
-            margin-bottom: 20px;
+            margin-bottom: 12px;
             cursor: pointer;
         }
 
@@ -82,23 +82,23 @@
         .btn-comprar-global {
             background: var(--accent-pink);
             color: #fff;
-            border: 3px solid #111;
-            padding: 12px 25px;
-            font-size: 1rem;
+            border: 2px solid #111;
+            padding: 10px 20px;
+            font-size: 0.9rem;
             font-weight: 900;
             cursor: pointer;
             text-transform: uppercase;
             letter-spacing: 1px;
-            border-radius: 10px;
-            box-shadow: 4px 4px 0px #111;
+            border-radius: 8px;
+            box-shadow: 3px 3px 0px #111;
             transition: all 0.2s ease;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
         .btn-comprar-global:hover {
             background: var(--accent-cyan);
             color: #000;
-            transform: translate(-2px, -2px);
-            box-shadow: 6px 6px 0px #111;
+            transform: translate(-1px, -1px);
+            box-shadow: 4px 4px 0px #111;
         }
 
         /* Modal */
@@ -111,40 +111,40 @@
             justify-content: center;
             align-items: center;
             z-index: 100;
-            padding: 20px;
+            padding: 15px;
             box-sizing: border-box;
         }
         .modal-content {
             background: #fff;
             border: 3px solid #111;
-            padding: 25px;
+            padding: 20px;
             border-radius: 12px;
             width: 100%;
-            max-width: 380px;
-            box-shadow: 10px 10px 0px #111;
+            max-width: 350px;
+            box-shadow: 8px 8px 0px #111;
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
         }
-        .modal-content h3 { color: #111; margin-top: 0; font-size: 1.2rem; text-transform: uppercase; }
+        .modal-content h3 { color: #111; margin-top: 0; font-size: 1.1rem; text-transform: uppercase; }
         .modal-content input {
             background: #f4f6f9;
             border: 2px solid #ccc;
-            padding: 10px;
-            border-radius: 8px;
+            padding: 9px;
+            border-radius: 6px;
             color: #111;
             font-family: 'Inter', sans-serif;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
         }
         .modal-content input:focus {
             border-color: #111;
             outline: none;
-            box-shadow: 3px 3px 0px var(--accent-cyan);
+            box-shadow: 2px 2px 0px var(--accent-cyan);
         }
-        .modal-buttons { display: flex; gap: 10px; margin-top: 5px; }
-        .modal-buttons button { flex: 1; padding: 10px; border-radius: 8px; font-weight: 800; cursor: pointer; text-transform: uppercase; font-size: 0.85rem; border: 2px solid #111; }
+        .modal-buttons { display: flex; gap: 8px; margin-top: 4px; }
+        .modal-buttons button { flex: 1; padding: 9px; border-radius: 6px; font-weight: 800; cursor: pointer; text-transform: uppercase; font-size: 0.8rem; border: 2px solid #111; }
         .btn-cancelar { background: #eee; color: #555; }
-        .btn-enviar { background: var(--accent-cyan); color: #000; box-shadow: 3px 3px 0px #111; }
+        .btn-enviar { background: var(--accent-cyan); color: #000; box-shadow: 2px 2px 0px #111; }
     </style>
 </head>
 <body>
@@ -160,14 +160,14 @@
         <canvas id="muroCanvas" width="1000" height="1000"></canvas>
     </div>
 
-    <button class="btn-comprar-global" onclick="abrirModal()">Comprar casilla (1€)</button>
+    <button class="btn-comprar-global" onclick="abrirModal()">Seleccionar casilla</button>
 
     <div id="modal-pago">
         <div class="modal-content">
             <h3>Reclamar Casilla</h3>
             <input type="text" id="input-alias" placeholder="Tu Nombre / Marca" maxlength="30">
             <input type="url" id="input-url" placeholder="Tu enlace (Web, IG, TikTok...)">
-            <input type="text" id="input-coords" placeholder="Coordenada (ej: 10,15)" maxlength="10">
+            <input type="text" id="input-coords" placeholder="Coordenada seleccionada" readonly style="background:#e2e8f0; font-weight:bold;">
             <div class="modal-buttons">
                 <button class="btn-cancelar" onclick="cerrarModal()">Cancelar</button>
                 <button class="btn-enviar" onclick="irAPagar()">Ir al Pago (1€)</button>
@@ -195,9 +195,10 @@
 
         const canvas = document.getElementById("muroCanvas");
         const ctx = canvas.getContext("2d");
-        const gridCols = 100; // 100x100 celdas visibles para que encaje limpio
+        const gridCols = 100;
         const cellSize = canvas.width / gridCols;
         let casillasOcupadas = new Map();
+        let casillaSeleccionada = null; // Guarda la celda seleccionada temporalmente
 
         function dibujarMuro() {
             ctx.fillStyle = "#111115";
@@ -212,11 +213,22 @@
                 ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
             }
 
+            // Dibujar casillas ocupadas
             casillasOcupadas.forEach((data, key) => {
                 const [x, y] = key.split(',').map(Number);
                 ctx.fillStyle = "#00a8cc";
                 ctx.fillRect(x * cellSize, y * cellSize, cellSize - 0.5, cellSize - 0.5);
             });
+
+            // Dibujar selección temporal del usuario (borde amarillo/rosa brillante)
+            if (casillaSeleccionada) {
+                const [sx, sy] = casillaSeleccionada.split(',').map(Number);
+                ctx.fillStyle = "rgba(230, 0, 92, 0.5)";
+                ctx.fillRect(sx * cellSize, sy * cellSize, cellSize - 0.5, cellSize - 0.5);
+                ctx.strokeStyle = "#fff";
+                ctx.lineWidth = 2;
+                ctx.strokeRect(sx * cellSize, sy * cellSize, cellSize - 0.5, cellSize - 0.5);
+            }
 
             const libres = 1000000 - casillasOcupadas.size;
             document.getElementById("contador-libres").innerText = libres.toLocaleString();
@@ -232,6 +244,10 @@
         }
 
         window.abrirModal = function() {
+            if (!casillaSeleccionada) {
+                alert("Por favor, toca primero una casilla libre en el muro.");
+                return;
+            }
             document.getElementById("modal-pago").style.display = "flex";
         }
 
@@ -266,11 +282,13 @@
 
             if (casillasOcupadas.has(key)) {
                 const data = casillasOcupadas.get(key);
-                if (confirm(`Visitar el espacio de ${data.alias}?`)) {
+                if (confirm(`Este espacio es de ${data.alias}. ¿Quieres visitar su enlace?`)) {
                     window.open(data.url, '_blank');
                 }
             } else {
-                document.getElementById("input-coords").value = `${x},${y}`;
+                casillaSeleccionada = key;
+                document.getElementById("input-coords").value = key;
+                dibujarMuro();
                 abrirModal();
             }
         });
@@ -289,7 +307,7 @@
                             url: url,
                             timestamp: serverTimestamp()
                         });
-                        alert("¡Casilla comprada y publicada!");
+                        alert("¡Casilla comprada y publicada con éxito!");
                     } catch (e) {
                         console.error(e);
                     }
