@@ -93,7 +93,6 @@
             box-shadow: 5px 5px 0px #111;
             transition: all 0.2s ease;
             margin-bottom: 30px;
-            text-align: center;
         }
         .btn-comprar-global:hover {
             background: var(--accent-cyan);
@@ -161,17 +160,17 @@
         <canvas id="muroCanvas" width="1000" height="1000"></canvas>
     </div>
 
-    <button class="btn-comprar-global" id="btn-comprar" onclick="abrirModal()">Selecciona casillas en el muro</button>
+    <button class="btn-comprar-global" onclick="abrirModal()">Comprar casilla (1€)</button>
 
     <div id="modal-pago">
         <div class="modal-content">
-            <h3>Reclamar Espacio</h3>
+            <h3>Reclamar Casilla</h3>
             <input type="text" id="input-alias" placeholder="Tu Nombre / Marca" maxlength="30">
             <input type="url" id="input-url" placeholder="Tu enlace (Web, IG, TikTok...)">
-            <input type="text" id="input-info" placeholder="Casillas seleccionadas" readonly style="background:#e2e8f0; font-weight:bold;">
+            <input type="text" id="input-coords" placeholder="Casilla seleccionada" readonly style="background:#e2e8f0; font-weight:bold;">
             <div class="modal-buttons">
                 <button class="btn-cancelar" onclick="cerrarModal()">Cancelar</button>
-                <button class="btn-enviar" onclick="irAPagar()">Ir al Pago</button>
+                <button class="btn-enviar" onclick="irAPagar()">Ir al Pago (1€)</button>
             </div>
         </div>
     </div>
@@ -199,7 +198,7 @@
         const gridCols = 100;
         const cellSize = canvas.width / gridCols;
         let casillasOcupadas = new Map();
-        let selectedCoords = new Set();
+        let casillaSeleccionada = null;
 
         function dibujarMuro() {
             ctx.fillStyle = "#111115";
@@ -214,34 +213,23 @@
                 ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
             }
 
-            // Dibujar casillas ocupadas por otros
             casillasOcupadas.forEach((data, key) => {
                 const [x, y] = key.split(',').map(Number);
                 ctx.fillStyle = "#00a8cc";
                 ctx.fillRect(x * cellSize, y * cellSize, cellSize - 0.5, cellSize - 0.5);
             });
 
-            // Dibujar casillas seleccionadas por el usuario actual
-            selectedCoords.forEach((key) => {
-                const [x, y] = key.split(',').map(Number);
+            if (casillaSeleccionada) {
+                const [sx, sy] = casillaSeleccionada.split(',').map(Number);
                 ctx.fillStyle = "rgba(230, 0, 92, 0.7)";
-                ctx.fillRect(x * cellSize, y * cellSize, cellSize - 0.5, cellSize - 0.5);
+                ctx.fillRect(sx * cellSize, sy * cellSize, cellSize - 0.5, cellSize - 0.5);
                 ctx.strokeStyle = "#fff";
                 ctx.lineWidth = 1.5;
-                ctx.strokeRect(x * cellSize, y * cellSize, cellSize - 0.5, cellSize - 0.5);
-            });
+                ctx.strokeRect(sx * cellSize, sy * cellSize, cellSize - 0.5, cellSize - 0.5);
+            }
 
             const libres = 1000000 - casillasOcupadas.size;
             document.getElementById("contador-libres").innerText = libres.toLocaleString();
-
-            // Actualizar el texto del botón dinámicamente en tiempo real
-            const btnComprar = document.getElementById("btn-comprar");
-            const total = selectedCoords.size;
-            if (total === 0) {
-                btnComprar.innerText = "Selecciona casillas en el muro";
-            } else {
-                btnComprar.innerText = `Comprar ${total} casilla${total > 1 ? 's' : ''} (${total}€)`;
-            }
         }
 
         async function cargarCasillas() {
@@ -267,22 +255,18 @@
                     window.open(data.url, '_blank');
                 }
             } else {
-                if (selectedCoords.has(key)) {
-                    selectedCoords.delete(key);
-                } else {
-                    selectedCoords.add(key);
-                }
+                casillaSeleccionada = key;
+                document.getElementById("input-coords").value = key;
                 dibujarMuro();
+                abrirModal();
             }
         });
 
         window.abrirModal = function() {
-            if (selectedCoords.size === 0) {
-                alert("Por favor, haz clic en al menos una casilla libre para seleccionarla.");
+            if (!casillaSeleccionada) {
+                alert("Por favor, haz clic primero en una casilla libre del muro.");
                 return;
             }
-            const total = selectedCoords.size;
-            document.getElementById("input-info").value = `${total} casilla${total > 1 ? 's' : ''} (${total}€)`;
             document.getElementById("modal-pago").style.display = "flex";
         }
 
@@ -293,21 +277,18 @@
         window.irAPagar = function() {
             const alias = document.getElementById("input-alias").value.trim();
             const url = document.getElementById("input-url").value.trim();
+            const coords = document.getElementById("input-coords").value.trim();
 
-            if (!alias || !url || selectedCoords.size === 0) {
+            if (!alias || !url || !coords) {
                 alert("Por favor, rellena todos los campos.");
                 return;
             }
 
-            const listaCoords = Array.from(selectedCoords);
-            const totalCasillas = selectedCoords.size;
-
             localStorage.setItem("p_alias", alias);
             localStorage.setItem("p_url", url);
-            localStorage.setItem("p_coords", JSON.stringify(listaCoords));
+            localStorage.setItem("p_coords", coords);
 
-            const stripeLink = "https://buy.stripe.com/4gM8wOdJia3g4U91kZ73G00";
-            window.location.href = `${stripeLink}?prefilled_quantity=${totalCasillas}`;
+            window.location.href = "https://buy.stripe.com/4gM8wOdJia3g4U91kZ73G00";
         }
 
         window.addEventListener('load', async () => {
@@ -315,19 +296,16 @@
             if (urlParams.get('success') === 'true') {
                 const alias = localStorage.getItem("p_alias");
                 const url = localStorage.getItem("p_url");
-                const coordsJson = localStorage.getItem("p_coords");
+                const coords = localStorage.getItem("p_coords");
 
-                if (alias && url && coordsJson) {
+                if (alias && url && coords) {
                     try {
-                        const listaCoords = JSON.parse(coordsJson);
-                        for (const coord of listaCoords) {
-                            await setDoc(doc(db, "casillas", coord), {
-                                alias: alias,
-                                url: url,
-                                timestamp: serverTimestamp()
-                            });
-                        }
-                        alert("¡Casillas compradas y publicadas con éxito!");
+                        await setDoc(doc(db, "casillas", coords), {
+                            alias: alias,
+                            url: url,
+                            timestamp: serverTimestamp()
+                        });
+                        alert("¡Casilla comprada y publicada con éxito!");
                     } catch (e) {
                         console.error(e);
                     }
