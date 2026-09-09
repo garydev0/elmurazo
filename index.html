@@ -93,6 +93,7 @@
             box-shadow: 5px 5px 0px #111;
             transition: all 0.2s ease;
             margin-bottom: 30px;
+            text-align: center;
         }
         .btn-comprar-global:hover {
             background: var(--accent-cyan);
@@ -160,7 +161,7 @@
         <canvas id="muroCanvas" width="1000" height="1000"></canvas>
     </div>
 
-    <button class="btn-comprar-global" onclick="abrirModal()">Comprar casillas seleccionadas</button>
+    <button class="btn-comprar-global" id="btn-comprar" onclick="abrirModal()">Selecciona casillas en el muro</button>
 
     <div id="modal-pago">
         <div class="modal-content">
@@ -198,7 +199,7 @@
         const gridCols = 100;
         const cellSize = canvas.width / gridCols;
         let casillasOcupadas = new Map();
-        let selectedCoords = new Set(); // Almacena las casillas seleccionadas por el usuario
+        let selectedCoords = new Set();
 
         function dibujarMuro() {
             ctx.fillStyle = "#111115";
@@ -232,6 +233,15 @@
 
             const libres = 1000000 - casillasOcupadas.size;
             document.getElementById("contador-libres").innerText = libres.toLocaleString();
+
+            // Actualizar el texto del botón dinámicamente en tiempo real
+            const btnComprar = document.getElementById("btn-comprar");
+            const total = selectedCoords.size;
+            if (total === 0) {
+                btnComprar.innerText = "Selecciona casillas en el muro";
+            } else {
+                btnComprar.innerText = `Comprar ${total} casilla${total > 1 ? 's' : ''} (${total}€)`;
+            }
         }
 
         async function cargarCasillas() {
@@ -257,7 +267,6 @@
                     window.open(data.url, '_blank');
                 }
             } else {
-                // Toggle selección (selecciona o deselecciona al hacer clic)
                 if (selectedCoords.has(key)) {
                     selectedCoords.delete(key);
                 } else {
@@ -273,7 +282,7 @@
                 return;
             }
             const total = selectedCoords.size;
-            document.getElementById("input-info").value = `${total} casillas (${total}€)`;
+            document.getElementById("input-info").value = `${total} casilla${total > 1 ? 's' : ''} (${total}€)`;
             document.getElementById("modal-pago").style.display = "flex";
         }
 
@@ -291,12 +300,14 @@
             }
 
             const listaCoords = Array.from(selectedCoords);
+            const totalCasillas = selectedCoords.size;
 
             localStorage.setItem("p_alias", alias);
             localStorage.setItem("p_url", url);
             localStorage.setItem("p_coords", JSON.stringify(listaCoords));
 
-            window.location.href = "https://buy.stripe.com/4gM8wOdJia3g4U91kZ73G00";
+            const stripeLink = "https://buy.stripe.com/4gM8wOdJia3g4U91kZ73G00";
+            window.location.href = `${stripeLink}?prefilled_quantity=${totalCasillas}`;
         }
 
         window.addEventListener('load', async () => {
