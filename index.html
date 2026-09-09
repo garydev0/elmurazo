@@ -20,7 +20,6 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--bg-color);
-            /* Patrón Cyber-Grid de fondo */
             background-image: 
                 linear-gradient(var(--grid-color) 1px, transparent 1px),
                 linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
@@ -51,7 +50,6 @@
             width: 100%; 
             max-width: 850px; 
             margin-bottom: 60px;
-            /* Efecto de Muro Físico */
             background: linear-gradient(145deg, #ffffff, #e6e9ef);
             padding: 40px;
             border-radius: 16px;
@@ -77,26 +75,11 @@
             border-color: var(--accent-cyan);
         }
 
-        /* TAMAÑOS EXAGERADOS */
-        .cartel-pequeno { 
-            min-height: 100px; 
-            padding: 20px;
-            box-shadow: 4px 4px 0px #111;
-        }
-        .cartel-pequeno .mensaje-texto { font-size: 1.2rem; font-weight: 500; color: #444; }
-        
-        .cartel-mediano { 
-            min-height: 220px; 
-            padding: 40px;
-            box-shadow: 8px 8px 0px #111;
-        }
-        .cartel-mediano .mensaje-texto { font-size: 2.2rem; font-weight: 700; color: #222; }
-
         .cartel-grande { 
             min-height: 400px; 
             padding: 60px 40px;
             box-shadow: 12px 12px 0px #111;
-            background: #111; /* Contraste para el gigante */
+            background: #111; 
             color: #fff;
         }
         .cartel-grande:hover { box-shadow: 12px 12px 0px var(--accent-cyan); border-color: var(--accent-cyan); }
@@ -146,7 +129,6 @@
             transform: scale(1.05);
         }
 
-        /* Modal */
         #modal-pago {
             display: none;
             position: fixed;
@@ -209,28 +191,12 @@
     <p class="subtitle">Sé el último en hablar</p>
 
     <div class="muro-container">
-        
-        <!-- PEQUEÑO -->
-        <div class="cartel cartel-pequeno">
-            <div class="precio-tag">1 €</div>
-            <p class="mensaje-texto" id="texto-pequeno">"Cargando..."</p>
-            <button class="btn-comprar" onclick="abrirModal('pequeno', 1)">Sobreescribir Muro Pequeño</button>
-        </div>
-
-        <!-- MEDIANO -->
-        <div class="cartel cartel-mediano">
-            <div class="precio-tag">5 €</div>
-            <p class="mensaje-texto" id="texto-mediano">"Cargando..."</p>
-            <button class="btn-comprar" onclick="abrirModal('mediano', 5)">Sobreescribir Muro Mediano</button>
-        </div>
-
-        <!-- GRANDE -->
+        <!-- ÚNICO CARTEL -->
         <div class="cartel cartel-grande">
-            <div class="precio-tag">10 €</div>
+            <div class="precio-tag">1 €</div>
             <p class="mensaje-texto" id="texto-grande">"CARGANDO..."</p>
-            <button class="btn-comprar" onclick="abrirModal('grande', 10)">Sobreescribir Muro Grande</button>
+            <button class="btn-comprar" onclick="abrirModal('grande', 1)">Sobreescribir Muro</button>
         </div>
-
     </div>
 
     <div id="modal-pago">
@@ -285,7 +251,7 @@
         window.abrirModal = function(tamano, precio) {
             tierActual = tamano;
             precioActual = precio;
-            document.getElementById("modal-titulo").innerText = `Muro ${tamano.toUpperCase()} (${precio}€)`;
+            document.getElementById("modal-titulo").innerText = `Muro Principal (${precio}€)`;
             document.getElementById("modal-pago").style.display = "flex";
         }
 
@@ -307,10 +273,9 @@
             localStorage.setItem("pending_tier", tierActual);
             localStorage.setItem("pending_precio", precioActual);
 
+            // Enlace de Stripe actualizado para el muro de 1€
             const enlacesStripe = {
-                'grande': 'https://buy.stripe.com/test_8x27sKdJidfs86l2p373G02',
-                'mediano': 'https://buy.stripe.com/test_6oUeVccFea3gaet4xb73G01',
-                'pequeno': 'https://buy.stripe.com/test_4gM8wOdJia3g4U91kZ73G00'
+                'grande': 'https://buy.stripe.com/test_4gM8wOdJia3g4U91kZ73G00' 
             };
 
             if (enlacesStripe[tierActual]) {
@@ -318,28 +283,22 @@
             }
         }
 
-        // Ya NO se renderiza el alias en el muro (sólo texto)
         onSnapshot(cartelesRef, (documento) => {
+            const elTexto = document.getElementById("texto-grande");
             if (documento.exists()) {
                 const datos = documento.data();
-                ['grande', 'mediano', 'pequeno'].forEach(t => {
-                    const val = datos[t];
-                    const elTexto = document.getElementById(`texto-${t}`);
-                    
-                    if (val) {
-                        if (typeof val === 'object') {
-                            elTexto.innerText = `"${val.texto}"`;
-                        } else {
-                            elTexto.innerText = `"${val}"`;
-                        }
+                const val = datos.grande;
+                if (val) {
+                    if (typeof val === 'object') {
+                        elTexto.innerText = `"${val.texto}"`;
                     } else {
-                        elTexto.innerText = `"Muro vacío"`;
+                        elTexto.innerText = `"${val}"`;
                     }
-                });
+                } else {
+                    elTexto.innerText = `"Muro vacío"`;
+                }
             } else {
-                ['grande', 'mediano', 'pequeno'].forEach(t => {
-                    document.getElementById(`texto-${t}`).innerText = `"Muro vacío"`;
-                });
+                elTexto.innerText = `"Muro vacío"`;
             }
         });
 
@@ -381,7 +340,6 @@
                     try {
                         document.getElementById("texto-" + tier).innerText = `"Publicando..."`;
                         
-                        // Se guarda el alias en base de datos, pero el onSnapshot arriba lo oculta del HTML
                         await setDoc(cartelesRef, { 
                             [tier]: { texto: mensaje, autor: alias } 
                         }, { merge: true });
