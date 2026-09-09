@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>El Murazo | Cyber Wall</title>
-    <!-- Favicon futurista -->
+    <title>El Murazo | El Millón de Creadores</title>
     <link rel="icon" type="image/png" href="logo.png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -12,7 +11,7 @@
     <style>
         :root {
             --bg-color: #f4f6f9;
-            --grid-color: rgba(0, 168, 204, 0.1);
+            --grid-color: rgba(0, 168, 204, 0.15);
             --card-bg: #ffffff;
             --text-color: #111115;
             --accent-cyan: #00a8cc;
@@ -24,116 +23,87 @@
             background-image: 
                 linear-gradient(var(--grid-color) 1px, transparent 1px),
                 linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
-            background-size: 40px 40px;
+            background-size: 30px 30px;
             color: var(--text-color);
             margin: 0;
-            padding: 40px 20px;
+            padding: 30px 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
         }
         h1 { 
-            font-size: 3rem; 
+            font-size: 2.8rem; 
             text-transform: uppercase; 
-            letter-spacing: 6px; 
+            letter-spacing: 4px; 
             margin-bottom: 5px;
             color: #111;
             font-weight: 900;
-            text-shadow: 4px 4px 0px #fff, 6px 6px 0px var(--accent-cyan);
+            text-shadow: 3px 3px 0px #fff, 5px 5px 0px var(--accent-cyan);
+            text-align: center;
         }
-        .subtitle { margin-bottom: 40px; color: #555; font-size: 1rem; letter-spacing: 2px; font-weight: 700; text-transform: uppercase; background: #fff; padding: 5px 15px; border: 2px solid #111; border-radius: 20px; box-shadow: 3px 3px 0px #111;}
+        .subtitle { margin-bottom: 15px; color: #555; font-size: 0.95rem; letter-spacing: 1px; font-weight: 700; text-transform: uppercase; background: #fff; padding: 5px 15px; border: 2px solid #111; border-radius: 20px; box-shadow: 3px 3px 0px #111;}
         
-        .muro-container { 
-            display: flex; 
-            flex-direction: column; 
-            gap: 40px; 
-            width: 100%; 
-            max-width: 850px; 
-            margin-bottom: 40px;
-            background: linear-gradient(145deg, #ffffff, #e6e9ef);
-            padding: 40px;
-            border-radius: 16px;
-            border: 2px solid #d1d5db;
-            box-shadow: 15px 15px 40px rgba(0,0,0,0.05), -15px -15px 40px rgba(255,255,255,0.8);
-        }
-        
-        .cartel { 
-            background: var(--card-bg); 
-            border: 3px solid #111; 
-            border-radius: 12px; 
-            text-align: center; 
-            position: relative; 
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            overflow: hidden;
-        }
-        .cartel:hover {
-            transform: translateY(-5px) scale(1.01);
-            border-color: var(--accent-cyan);
-        }
-
-        .cartel-grande { 
-            min-height: 400px; 
-            padding: 60px 40px;
-            box-shadow: 12px 12px 0px #111;
-            background: #111; 
+        .counter-box {
+            font-size: 1.1rem;
+            font-weight: 800;
+            background: #111;
             color: #fff;
-        }
-        .cartel-grande:hover { box-shadow: 12px 12px 0px var(--accent-cyan); border-color: var(--accent-cyan); }
-        .cartel-grande .mensaje-texto { 
-            font-size: clamp(2.5rem, 6vw, 4.5rem); 
-            font-weight: 900; 
-            line-height: 1.1; 
-            text-transform: uppercase; 
-            color: #fff;
-            text-shadow: 3px 3px 0px var(--accent-pink);
-        }
-
-        .mensaje-texto { margin: 0 0 20px 0; word-break: break-word; }
-        
-        .precio-tag { 
-            position: absolute; 
-            top: 15px; 
-            right: 15px; 
-            background: var(--accent-pink); 
-            color: white; 
-            padding: 6px 16px; 
-            border-radius: 20px; 
-            font-weight: 900; 
-            font-size: 1rem;
-            border: 2px solid #111;
-            box-shadow: 3px 3px 0px #111;
-        }
-        
-        .btn-comprar { 
-            background: #fff;
-            color: #111;
-            border: 2px solid #111;
-            padding: 15px 35px; 
-            font-size: 1.1rem; 
-            font-weight: 700; 
-            cursor: pointer; 
-            text-transform: uppercase; 
-            letter-spacing: 1px;
+            padding: 10px 20px;
             border-radius: 8px;
-            transition: all 0.2s ease;
+            margin-bottom: 30px;
+            box-shadow: 4px 4px 0px var(--accent-cyan);
+            border: 2px solid #111;
         }
-        .btn-comprar:hover { 
+        
+        /* Contenedor del Muro / Cuadrícula Gigante */
+        .muro-canvas-container {
+            width: 100%;
+            max-width: 1000px;
+            height: 600px;
+            background: #111;
+            border: 3px solid #111;
+            border-radius: 12px;
+            box-shadow: 12px 12px 0px #111;
+            position: relative;
+            overflow: auto;
+            margin-bottom: 30px;
+            cursor: crosshair;
+        }
+
+        canvas {
+            display: block;
+            background: #1a1a1a;
+        }
+
+        .btn-comprar-global {
+            background: var(--accent-pink);
+            color: #fff;
+            border: 3px solid #111;
+            padding: 15px 35px;
+            font-size: 1.2rem;
+            font-weight: 900;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 10px;
+            box-shadow: 6px 6px 0px #111;
+            transition: all 0.2s ease;
+            margin-bottom: 40px;
+        }
+        .btn-comprar-global:hover {
             background: var(--accent-cyan);
             color: #000;
-            border-color: #000;
-            transform: scale(1.05);
+            transform: translate(-2px, -2px);
+            box-shadow: 8px 8px 0px #111;
         }
 
+        /* Modal */
         #modal-pago {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(10px);
             justify-content: center;
             align-items: center;
@@ -142,86 +112,67 @@
         .modal-content {
             background: #fff;
             border: 3px solid #111;
-            padding: 40px;
+            padding: 30px;
             border-radius: 12px;
             width: 100%;
-            max-width: 450px;
+            max-width: 420px;
             box-shadow: 12px 12px 0px #111;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 15px;
         }
-        .modal-content h3 { color: #111; margin-top: 0; letter-spacing: 1px; font-size: 1.5rem; text-transform: uppercase; }
-        .modal-content input, .modal-content textarea {
+        .modal-content h3 { color: #111; margin-top: 0; font-size: 1.4rem; text-transform: uppercase; }
+        .modal-content input {
             background: #f4f6f9;
             border: 2px solid #ccc;
-            padding: 15px;
+            padding: 12px;
             border-radius: 8px;
             color: #111;
             font-family: 'Inter', sans-serif;
             font-size: 1rem;
-            resize: none;
-            transition: all 0.2s;
         }
-        .modal-content input:focus, .modal-content textarea:focus {
+        .modal-content input:focus {
             border-color: #111;
-            background: #fff;
             outline: none;
-            box-shadow: 4px 4px 0px var(--accent-cyan);
+            box-shadow: 3px 3px 0px var(--accent-cyan);
         }
-        .modal-buttons { display: flex; gap: 15px; margin-top: 10px; }
-        .modal-buttons button { flex: 1; padding: 15px; border-radius: 8px; font-weight: 800; cursor: pointer; text-transform: uppercase; font-size: 0.9rem; border: 2px solid #111; }
+        .modal-buttons { display: flex; gap: 10px; margin-top: 10px; }
+        .modal-buttons button { flex: 1; padding: 12px; border-radius: 8px; font-weight: 800; cursor: pointer; text-transform: uppercase; font-size: 0.9rem; border: 2px solid #111; }
         .btn-cancelar { background: #eee; color: #555; }
-        .btn-cancelar:hover { background: #ddd; color: #111; }
-        .btn-enviar { background: var(--accent-cyan); color: #000; box-shadow: 4px 4px 0px #111; }
-        .btn-enviar:hover { transform: translate(2px, 2px); box-shadow: 2px 2px 0px #111; }
-        
-        .lista-container { width: 100%; max-width: 850px; }
-        .lista { background: var(--card-bg); padding: 25px; border: 3px solid #111; border-radius: 12px; box-shadow: 8px 8px 0px #111; }
-        .lista h3 { margin-top: 0; font-size: 1.1rem; font-weight: 800; letter-spacing: 1px; color: #111; border-bottom: 3px solid #111; padding-bottom: 15px; }
-        ul { list-style: none; padding: 0; margin: 0; font-size: 1rem; }
-        li { padding: 12px 0; border-bottom: 1px dashed #ccc; display: flex; justify-content: space-between; font-weight: 500; }
-        
-        @media (max-width: 700px) { .cartel-grande { padding: 40px 20px; } }
+        .btn-enviar { background: var(--accent-cyan); color: #000; box-shadow: 3px 3px 0px #111; }
     </style>
 </head>
 <body>
 
     <h1>El Murazo</h1>
-    <p class="subtitle">Sé el último en hablar</p>
-
-    <div class="muro-container">
-        <div class="cartel cartel-grande">
-            <div class="precio-tag">1 €</div>
-            <p class="mensaje-texto" id="texto-grande">"CARGANDO..."</p>
-            <button class="btn-comprar" onclick="abrirModal('grande', 1)">Sobreescribir Muro</button>
-        </div>
+    <p class="subtitle">1 Millón de casillas. 1€ cada una. Tu espacio para siempre.</p>
+    
+    <div class="counter-box">
+        Casillas libres: <span id="contador-libres">1,000,000</span> / 1,000,000
     </div>
+
+    <div class="muro-canvas-container">
+        <canvas id="muroCanvas" width="2000" height="2000"></canvas>
+    </div>
+
+    <button class="btn-comprar-global" onclick="abrirModal()">Comprar tu casilla (1€)</button>
 
     <div id="modal-pago">
         <div class="modal-content">
-            <h3 id="modal-titulo">Configurar Muro</h3>
-            <input type="text" id="input-alias" placeholder="Tu Alias / Nombre" maxlength="25">
-            <textarea id="input-mensaje" placeholder="Escribe tu mensaje aquí..." rows="3" maxlength="100"></textarea>
+            <h3>Reclamar tu Casilla</h3>
+            <input type="text" id="input-alias" placeholder="Tu Nombre / Marca" maxlength="30">
+            <input type="url" id="input-url" placeholder="Tu enlace (Instagram, Web, TikTok...)">
+            <input type="text" id="input-coords" placeholder="Coordenada deseada (ej: 10,15)" maxlength="10">
             <div class="modal-buttons">
                 <button class="btn-cancelar" onclick="cerrarModal()">Cancelar</button>
-                <button class="btn-enviar" onclick="irAPagar()">Ir al Pago</button>
+                <button class="btn-enviar" onclick="irAPagar()">Ir al Pago (1€)</button>
             </div>
-        </div>
-    </div>
-
-    <div class="lista-container">
-        <div class="lista">
-            <h3><i class="fa-solid fa-bolt" style="color:var(--accent-cyan)"></i> ÚLTIMOS</h3>
-            <ul id="lista-ultimos">
-                <li><span>Cargando...</span></li>
-            </ul>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
-        import { getFirestore, doc, setDoc, onSnapshot, collection, addDoc, query, orderBy, limit, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, setDoc, doc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCFE0T4m16MOyn9JqMujJZZwMJCLen-LgA",
@@ -235,16 +186,49 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-        const cartelesRef = doc(db, "muro", "textos");
-        const historialRef = collection(db, "historial");
+        const casillasRef = collection(db, "casillas");
 
-        let tierActual = '';
-        let precioActual = 0;
+        const canvas = document.getElementById("muroCanvas");
+        const ctx = canvas.getContext("2d");
+        const gridSize = 20; // Tamaño visual de cada casilla en el canvas
+        let casillasOcupadas = new Map();
 
-        window.abrirModal = function(tamano, precio) {
-            tierActual = tamano;
-            precioActual = precio;
-            document.getElementById("modal-titulo").innerText = `Muro Principal (${precio}€)`;
+        function dibujarMuro() {
+            ctx.fillStyle = "#111115";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Dibujar cuadrícula base
+            ctx.strokeStyle = "rgba(0, 168, 204, 0.08)";
+            ctx.lineWidth = 0.5;
+            for (let x = 0; x < canvas.width; x += gridSize) {
+                ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke();
+            }
+            for (let y = 0; y < canvas.height; y += gridSize) {
+                ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
+            }
+
+            // Dibujar las casillas compradas
+            casillasOcupadas.forEach((data, key) => {
+                const [x, y] = key.split(',').map(Number);
+                ctx.fillStyle = "#00a8cc";
+                ctx.fillRect(x * gridSize, y * gridSize, gridSize - 1, gridSize - 1);
+            });
+
+            // Actualizar contador (1,000,000 total menos ocupadas)
+            const libres = 1000000 - casillasOcupadas.size;
+            document.getElementById("contador-libres").innerText = libres.toLocaleString();
+        }
+
+        async function cargarCasillas() {
+            const querySnapshot = await getDocs(casillasRef);
+            casillasOcupadas.clear();
+            querySnapshot.forEach((doc) => {
+                casillasOcupadas.set(doc.id, doc.data());
+            });
+            dibujarMuro();
+        }
+
+        window.abrirModal = function() {
             document.getElementById("modal-pago").style.display = "flex";
         }
 
@@ -254,91 +238,65 @@
 
         window.irAPagar = function() {
             const alias = document.getElementById("input-alias").value.trim();
-            const mensaje = document.getElementById("input-mensaje").value.trim();
+            const url = document.getElementById("input-url").value.trim();
+            const coords = document.getElementById("input-coords").value.trim();
 
-            if (!alias || !mensaje) {
-                alert("Por favor, rellena tu alias y el mensaje.");
+            if (!alias || !url || !coords) {
+                alert("Por favor, rellena todos los campos.");
                 return;
             }
 
-            localStorage.setItem("pending_alias", alias);
-            localStorage.setItem("pending_mensaje", mensaje);
-            localStorage.setItem("pending_tier", tierActual);
-            localStorage.setItem("pending_precio", precioActual);
+            localStorage.setItem("p_alias", alias);
+            localStorage.setItem("p_url", url);
+            localStorage.setItem("p_coords", coords);
 
-            const enlacesStripe = {
-                'grande': 'https://buy.stripe.com/4gM8wOdJia3g4U91kZ73G00' 
-            };
-
-            if (enlacesStripe[tierActual]) {
-                window.location.href = enlacesStripe[tierActual];
-            }
+            // Enlace de Stripe configurado para 1€
+            window.location.href = "https://buy.stripe.com/4gM8wOdJia3g4U91kZ73G00";
         }
 
-        onSnapshot(cartelesRef, (documento) => {
-            const elTexto = document.getElementById("texto-grande");
-            if (documento.exists()) {
-                const datos = documento.data();
-                const val = datos.grande;
-                if (val) {
-                    if (typeof val === 'object') {
-                        elTexto.innerText = `"${val.texto}"`;
-                    } else {
-                        elTexto.innerText = `"${val}"`;
-                    }
-                } else {
-                    elTexto.innerText = `"Muro vacío"`;
+        // Clic en el canvas para abrir enlace si la casilla está comprada
+        canvas.addEventListener("click", (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const x = Math.floor((e.clientX - rect.left + canvas.parentElement.scrollLeft) / gridSize);
+            const y = Math.floor((e.clientY - rect.top + canvas.parentElement.scrollTop) / gridSize);
+            const key = `${x},${y}`;
+
+            if (casillasOcupadas.has(key)) {
+                const data = casillasOcupadas.get(key);
+                if (confirm(`Visitar el espacio de ${data.alias} (${data.url})?`)) {
+                    window.open(data.url, '_blank');
                 }
             } else {
-                elTexto.innerText = `"Muro vacío"`;
+                document.getElementById("input-coords").value = `${x},${y}`;
+                abrirModal();
             }
-        });
-
-        onSnapshot(query(historialRef, orderBy("timestamp", "desc"), limit(5)), (snapshot) => {
-            const listaUltimos = document.getElementById("lista-ultimos");
-            listaUltimos.innerHTML = "";
-            if (snapshot.empty) {
-                listaUltimos.innerHTML = "<li><span>Sin registros</span></li>";
-                return;
-            }
-            snapshot.forEach((doc) => {
-                const d = doc.data();
-                listaUltimos.innerHTML += `<li><span>${d.alias}</span> <span style="color:var(--accent-cyan); font-weight:bold;">${d.precio}€</span></li>`;
-            });
         });
 
         window.addEventListener('load', async () => {
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('success') === 'true') {
-                const alias = localStorage.getItem("pending_alias");
-                const mensaje = localStorage.getItem("pending_mensaje");
-                const tier = localStorage.getItem("pending_tier");
-                const precio = Number(localStorage.getItem("pending_precio"));
+                const alias = localStorage.getItem("p_alias");
+                const url = localStorage.getItem("p_url");
+                const coords = localStorage.getItem("p_coords");
 
-                if (alias && mensaje && tier) {
+                if (alias && url && coords) {
                     try {
-                        document.getElementById("texto-" + tier).innerText = `"Publicando..."`;
-                        
-                        await setDoc(cartelesRef, { 
-                            [tier]: { texto: mensaje, autor: alias } 
-                        }, { merge: true });
-
-                        await addDoc(historialRef, {
+                        await setDoc(doc(db, "casillas", coords), {
                             alias: alias,
-                            precio: precio,
+                            url: url,
                             timestamp: serverTimestamp()
                         });
-
-                    } catch (error) {
-                        console.error(error);
+                        alert("¡Casilla comprada y publicada con éxito!");
+                    } catch (e) {
+                        console.error(e);
                     }
-                    localStorage.removeItem("pending_alias");
-                    localStorage.removeItem("pending_mensaje");
-                    localStorage.removeItem("pending_tier");
-                    localStorage.removeItem("pending_precio");
+                    localStorage.removeItem("p_alias");
+                    localStorage.removeItem("p_url");
+                    localStorage.removeItem("p_coords");
                 }
                 window.history.replaceState({}, document.title, window.location.pathname);
             }
+            cargarCasillas();
         });
     </script>
 </body>
