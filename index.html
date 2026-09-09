@@ -32,10 +32,10 @@
             align-items: center;
             min-height: 100vh;
             box-sizing: border-box;
-            overflow-y: auto; /* Scroll general de la página */
+            overflow-y: auto;
         }
         h1 { 
-            font-size: 4rem; /* Título mucho más grande */
+            font-size: 4rem; 
             text-transform: uppercase; 
             letter-spacing: 4px; 
             margin: 0 0 5px 0;
@@ -58,7 +58,6 @@
             border: 2px solid #111;
         }
         
-        /* Cuadrícula grande que ocupa buen espacio sin barras internas */
         .muro-canvas-container {
             width: 100%;
             max-width: 800px;
@@ -161,17 +160,17 @@
         <canvas id="muroCanvas" width="1000" height="1000"></canvas>
     </div>
 
-    <button class="btn-comprar-global" onclick="abrirModal()">Comprar casilla seleccionada (1€)</button>
+    <button class="btn-comprar-global" onclick="abrirModal()">Comprar casillas seleccionadas</button>
 
     <div id="modal-pago">
         <div class="modal-content">
-            <h3>Reclamar Casilla</h3>
+            <h3>Reclamar Espacio</h3>
             <input type="text" id="input-alias" placeholder="Tu Nombre / Marca" maxlength="30">
             <input type="url" id="input-url" placeholder="Tu enlace (Web, IG, TikTok...)">
-            <input type="text" id="input-coords" placeholder="Coordenada seleccionada" readonly style="background:#e2e8f0; font-weight:bold;">
+            <input type="text" id="input-info" placeholder="Casillas seleccionadas" readonly style="background:#e2e8f0; font-weight:bold;">
             <div class="modal-buttons">
                 <button class="btn-cancelar" onclick="cerrarModal()">Cancelar</button>
-                <button class="btn-enviar" onclick="irAPagar()">Ir al Pago (1€)</button>
+                <button class="btn-enviar" onclick="irAPagar()">Ir al Pago</button>
             </div>
         </div>
     </div>
@@ -199,7 +198,7 @@
         const gridCols = 100;
         const cellSize = canvas.width / gridCols;
         let casillasOcupadas = new Map();
-        let casillaSeleccionada = null;
+        let selectedCoords = new Set(); // Almacena las casillas seleccionadas por el usuario
 
         function dibujarMuro() {
             ctx.fillStyle = "#111115";
@@ -214,20 +213,22 @@
                 ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
             }
 
+            // Dibujar casillas ocupadas por otros
             casillasOcupadas.forEach((data, key) => {
                 const [x, y] = key.split(',').map(Number);
                 ctx.fillStyle = "#00a8cc";
                 ctx.fillRect(x * cellSize, y * cellSize, cellSize - 0.5, cellSize - 0.5);
             });
 
-            if (casillaSeleccionada) {
-                const [sx, sy] = casillaSeleccionada.split(',').map(Number);
-                ctx.fillStyle = "rgba(230, 0, 92, 0.5)";
-                ctx.fillRect(sx * cellSize, sy * cellSize, cellSize - 0.5, cellSize - 0.5);
+            // Dibujar casillas seleccionadas por el usuario actual
+            selectedCoords.forEach((key) => {
+                const [x, y] = key.split(',').map(Number);
+                ctx.fillStyle = "rgba(230, 0, 92, 0.7)";
+                ctx.fillRect(x * cellSize, y * cellSize, cellSize - 0.5, cellSize - 0.5);
                 ctx.strokeStyle = "#fff";
-                ctx.lineWidth = 2;
-                ctx.strokeRect(sx * cellSize, sy * cellSize, cellSize - 0.5, cellSize - 0.5);
-            }
+                ctx.lineWidth = 1.5;
+                ctx.strokeRect(x * cellSize, y * cellSize, cellSize - 0.5, cellSize - 0.5);
+            });
 
             const libres = 1000000 - casillasOcupadas.size;
             document.getElementById("contador-libres").innerText = libres.toLocaleString();
@@ -240,35 +241,6 @@
                 casillasOcupadas.set(doc.id, doc.data());
             });
             dibujarMuro();
-        }
-
-        window.abrirModal = function() {
-            if (!casillaSeleccionada) {
-                alert("Por favor, selecciona primero una casilla libre pulsando en el muro.");
-                return;
-            }
-            document.getElementById("modal-pago").style.display = "flex";
-        }
-
-        window.cerrarModal = function() {
-            document.getElementById("modal-pago").style.display = "none";
-        }
-
-        window.irAPagar = function() {
-            const alias = document.getElementById("input-alias").value.trim();
-            const url = document.getElementById("input-url").value.trim();
-            const coords = document.getElementById("input-coords").value.trim();
-
-            if (!alias || !url || !coords) {
-                alert("Por favor, rellena todos los campos.");
-                return;
-            }
-
-            localStorage.setItem("p_alias", alias);
-            localStorage.setItem("p_url", url);
-            localStorage.setItem("p_coords", coords);
-
-            window.location.href = "https://buy.stripe.com/4gM8wOdJia3g4U91kZ73G00";
         }
 
         canvas.addEventListener("click", (e) => {
@@ -285,27 +257,66 @@
                     window.open(data.url, '_blank');
                 }
             } else {
-                casillaSeleccionada = key;
-                document.getElementById("input-coords").value = key;
+                // Toggle selección (selecciona o deselecciona al hacer clic)
+                if (selectedCoords.has(key)) {
+                    selectedCoords.delete(key);
+                } else {
+                    selectedCoords.add(key);
+                }
                 dibujarMuro();
             }
         });
+
+        window.abrirModal = function() {
+            if (selectedCoords.size === 0) {
+                alert("Por favor, haz clic en al menos una casilla libre para seleccionarla.");
+                return;
+            }
+            const total = selectedCoords.size;
+            document.getElementById("input-info").value = `${total} casillas (${total}€)`;
+            document.getElementById("modal-pago").style.display = "flex";
+        }
+
+        window.cerrarModal = function() {
+            document.getElementById("modal-pago").style.display = "none";
+        }
+
+        window.irAPagar = function() {
+            const alias = document.getElementById("input-alias").value.trim();
+            const url = document.getElementById("input-url").value.trim();
+
+            if (!alias || !url || selectedCoords.size === 0) {
+                alert("Por favor, rellena todos los campos.");
+                return;
+            }
+
+            const listaCoords = Array.from(selectedCoords);
+
+            localStorage.setItem("p_alias", alias);
+            localStorage.setItem("p_url", url);
+            localStorage.setItem("p_coords", JSON.stringify(listaCoords));
+
+            window.location.href = "https://buy.stripe.com/4gM8wOdJia3g4U91kZ73G00";
+        }
 
         window.addEventListener('load', async () => {
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('success') === 'true') {
                 const alias = localStorage.getItem("p_alias");
                 const url = localStorage.getItem("p_url");
-                const coords = localStorage.getItem("p_coords");
+                const coordsJson = localStorage.getItem("p_coords");
 
-                if (alias && url && coords) {
+                if (alias && url && coordsJson) {
                     try {
-                        await setDoc(doc(db, "casillas", coords), {
-                            alias: alias,
-                            url: url,
-                            timestamp: serverTimestamp()
-                        });
-                        alert("¡Casilla comprada y publicada con éxito!");
+                        const listaCoords = JSON.parse(coordsJson);
+                        for (const coord of listaCoords) {
+                            await setDoc(doc(db, "casillas", coord), {
+                                alias: alias,
+                                url: url,
+                                timestamp: serverTimestamp()
+                            });
+                        }
+                        alert("¡Casillas compradas y publicadas con éxito!");
                     } catch (e) {
                         console.error(e);
                     }
