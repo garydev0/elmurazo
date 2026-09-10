@@ -136,6 +136,10 @@
             font-family: 'Inter', sans-serif;
             font-size: 0.95rem;
         }
+        .modal-content input[type="file"] {
+            padding: 6px;
+            background: #fff;
+        }
         .modal-content input:focus {
             border-color: #111;
             outline: none;
@@ -167,6 +171,8 @@
             <h3>Reclamar Casilla</h3>
             <input type="text" id="input-alias" placeholder="Tu Nombre / Marca" maxlength="30">
             <input type="url" id="input-url" placeholder="Tu enlace (Web, IG, TikTok...)">
+            <label style="font-size: 0.85rem; font-weight: 700;">Sube tu logo/imagen:</label>
+            <input type="file" id="input-imagen" accept="image/*">
             <input type="text" id="input-coords" placeholder="Casilla seleccionada" readonly style="background:#e2e8f0; font-weight:bold;">
             <div class="modal-buttons">
                 <button class="btn-cancelar" onclick="cerrarModal()">Cancelar</button>
@@ -199,6 +205,17 @@
         const cellSize = canvas.width / gridCols;
         let casillasOcupadas = new Map();
         let casillaSeleccionada = null;
+        let imagenesCache = new Map();
+
+        function obtenerImagen(urlBase64, key) {
+            if (!urlBase64) return null;
+            if (imagenesCache.has(key)) return imagenesCache.get(key);
+            const img = new Image();
+            img.src = urlBase64;
+            img.onload = () => { dibujarMuro(); };
+            imagenesCache.set(key, img);
+            return img;
+        }
 
         function dibujarMuro() {
             ctx.fillStyle = "#111115";
@@ -215,8 +232,18 @@
 
             casillasOcupadas.forEach((data, key) => {
                 const [x, y] = key.split(',').map(Number);
-                ctx.fillStyle = "#00a8cc";
-                ctx.fillRect(x * cellSize, y * cellSize, cellSize - 0.5, cellSize - 0.5);
+                if (data.imagen) {
+                    const img = obtenerImagen(data.imagen, key);
+                    if (img && img.complete) {
+                        ctx.drawImage(img, x * cellSize, y * cellSize, cellSize, cellSize);
+                    } else {
+                        ctx.fillStyle = "#00a8cc";
+                        ctx.fillRect(x * cellSize, y * cellSize, cellSize - 0.5, cellSize - 0.5);
+                    }
+                } else {
+                    ctx.fillStyle = "#00a8cc";
+                    ctx.fillRect(x * cellSize, y * cellSize, cellSize - 0.5, cellSize - 0.5);
+                }
             });
 
             if (casillaSeleccionada) {
@@ -274,21 +301,38 @@
             document.getElementById("modal-pago").style.display = "none";
         }
 
-        window.irAPagar = function() {
+        function archivoABase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
+        }
+
+        window.irAPagar = async function() {
             const alias = document.getElementById("input-alias").value.trim();
             const url = document.getElementById("input-url").value.trim();
             const coords = document.getElementById("input-coords").value.trim();
+            const archivoInput = document.getElementById("input-imagen").files[0];
 
-            if (!alias || !url || !coords) {
-                alert("Por favor, rellena todos los campos.");
+            if (!alias || !url || !coords || !archivoInput) {
+                alert("Por favor, rellena todos los campos y sube una imagen.");
                 return;
             }
 
-            localStorage.setItem("p_alias", alias);
-            localStorage.setItem("p_url", url);
-            localStorage.setItem("p_coords", coords);
+            try {
+                const imagenBase64 = await archivoABase64(archivoInput);
 
-            window.location.href = "https://buy.stripe.com/4gM8wOdJia3g4U91kZ73G00";
+                localStorage.setItem("p_alias", alias);
+                localStorage.setItem("p_url", url);
+                localStorage.setItem("p_coords", coords);
+                localStorage.setItem("p_imagen", imagenBase64);
+
+                window.location.href = "https://buy.stripe.com/4gM8wOdJia3g4U91kZ73G00";
+            } catch (e) {
+                alert("Error al procesar la imagen.");
+            }
         }
 
         window.addEventListener('load', async () => {
@@ -297,12 +341,14 @@
                 const alias = localStorage.getItem("p_alias");
                 const url = localStorage.getItem("p_url");
                 const coords = localStorage.getItem("p_coords");
+                const imagen = localStorage.getItem("p_imagen");
 
-                if (alias && url && coords) {
+                if (alias && url && coords && imagen) {
                     try {
                         await setDoc(doc(db, "casillas", coords), {
                             alias: alias,
                             url: url,
+                            imagen: imagen,
                             timestamp: serverTimestamp()
                         });
                         alert("¡Casilla comprada y publicada con éxito!");
@@ -312,6 +358,7 @@
                     localStorage.removeItem("p_alias");
                     localStorage.removeItem("p_url");
                     localStorage.removeItem("p_coords");
+                    localStorage.removeItem("p_imagen");
                 }
                 window.history.replaceState({}, document.title, window.location.pathname);
             }
