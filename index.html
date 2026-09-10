@@ -3,43 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>El Murazo</title>
+    <title>El Murazo | El Millón de Creadores</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
+        :root {
+            --bg-color: #f4f6f9;
+            --grid-color: rgba(0, 168, 204, 0.15);
+            --text-color: #111115;
+            --accent-cyan: #00a8cc;
+            --accent-pink: #e6005c;
+        }
         body {
-            background-color: #f4f6f9;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            background-image: 
+                linear-gradient(var(--grid-color) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+            background-size: 30px 30px;
+            color: var(--text-color);
             margin: 0;
-            padding: 40px;
-            font-family: sans-serif;
+            padding: 20px 10px 40px 10px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-width: max-content; /* Permite scroll infinito */
+            min-height: 100vh;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+        h1 { 
+            font-size: 4rem; 
+            text-transform: uppercase; 
+            letter-spacing: 4px; 
+            margin: 0 0 5px 0;
+            color: #111;
+            font-weight: 900;
+            text-shadow: 3px 3px 0px #fff, 6px 6px 0px var(--accent-cyan);
+            text-align: center;
+        }
+        .subtitle { margin-bottom: 12px; color: #555; font-size: 1rem; letter-spacing: 1px; font-weight: 700; text-transform: uppercase; background: #fff; padding: 5px 15px; border: 2px solid #111; border-radius: 20px; box-shadow: 3px 3px 0px #111;}
+        
+        .counter-box {
+            font-size: 1rem;
+            font-weight: 800;
+            background: #111;
+            color: #fff;
+            padding: 8px 18px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 3px 3px 0px var(--accent-cyan);
+            border: 2px solid #111;
         }
         
-        .header-container {
-            position: sticky;
-            top: 20px;
-            z-index: 50;
-            text-align: center;
-            background: rgba(244, 246, 249, 0.95);
-            padding: 20px 40px;
-            border: 3px solid #111;
-            border-radius: 12px;
-            box-shadow: 5px 5px 0px #111;
-            margin-bottom: 30px;
-        }
-
-        h1 { margin: 0 0 10px 0; text-transform: uppercase; }
-        .counter-box { font-weight: bold; background: #111; color: #fff; padding: 10px; border-radius: 5px; }
-
         .muro-canvas-container {
-            width: 3000px; /* Tamaño CSS gigante para hacer scroll por la web */
-            height: 2000px;
+            width: 95vw;
+            max-width: 1400px; /* Ampliado para que las cuadrículas se vean mejor */
+            aspect-ratio: 125 / 80; /* Proporción rectangular exacta para 1250x800 */
             background: #111;
             border: 4px solid #111;
+            border-radius: 12px;
             box-shadow: 10px 10px 0px #111;
             position: relative;
-            cursor: crosshair;
+            margin-bottom: 25px;
+            cursor: pointer;
+            overflow: hidden;
         }
 
         canvas {
@@ -47,45 +76,155 @@
             width: 100%;
             height: 100%;
             background: #1a1a1a;
+            border-radius: 8px;
         }
+
+        .btn-comprar-global {
+            background: var(--accent-pink);
+            color: #fff;
+            border: 3px solid #111;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            font-weight: 900;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 10px;
+            box-shadow: 5px 5px 0px #111;
+            transition: all 0.2s ease;
+            margin-bottom: 20px;
+        }
+        .btn-comprar-global:hover {
+            background: var(--accent-cyan);
+            color: #000;
+            transform: translate(-2px, -2px);
+            box-shadow: 7px 7px 0px #111;
+        }
+
+        /* Modal */
+        #modal-pago {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .modal-content {
+            background: #fff;
+            border: 3px solid #111;
+            padding: 25px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 380px;
+            box-shadow: 10px 10px 0px #111;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .modal-content h3 { color: #111; margin-top: 0; font-size: 1.2rem; text-transform: uppercase; }
+        .modal-content input {
+            background: #f4f6f9;
+            border: 2px solid #ccc;
+            padding: 10px;
+            border-radius: 8px;
+            color: #111;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+        }
+        .modal-content input[type="file"] { padding: 6px; background: #fff; }
+        .modal-content input:focus {
+            border-color: #111;
+            outline: none;
+            box-shadow: 3px 3px 0px var(--accent-cyan);
+        }
+        .modal-buttons { display: flex; gap: 10px; margin-top: 5px; }
+        .modal-buttons button { flex: 1; padding: 10px; border-radius: 8px; font-weight: 800; cursor: pointer; text-transform: uppercase; font-size: 0.85rem; border: 2px solid #111; }
+        .btn-cancelar { background: #eee; color: #555; }
+        .btn-enviar { background: var(--accent-cyan); color: #000; box-shadow: 3px 3px 0px #111; }
     </style>
 </head>
 <body>
 
-    <div class="header-container">
-        <h1>El Murazo</h1>
-        <p>60.000 casillas exclusivas</p>
-        <div class="counter-box">Casillas libres: <span id="contador-libres">60,000</span></div>
+    <h1>El Murazo</h1>
+    <p class="subtitle">1 Millón de casillas • 1€ cada una</p>
+    
+    <div class="counter-box">
+        Casillas libres: <span id="contador-libres">1,000,000</span>
     </div>
 
-    <!-- Canvas seguro para la memoria: 3000x2000 (6 megapíxeles) -->
     <div class="muro-canvas-container">
-        <canvas id="muroCanvas" width="3000" height="2000"></canvas>
+        <!-- Resolución segura para memoria (3750x2400) -->
+        <canvas id="muroCanvas" width="3750" height="2400"></canvas>
+    </div>
+
+    <button class="btn-comprar-global" onclick="abrirModal()">Comprar casilla (1€)</button>
+
+    <div id="modal-pago">
+        <div class="modal-content">
+            <h3>Reclamar Casilla</h3>
+            <input type="text" id="input-alias" placeholder="Tu Nombre / Marca" maxlength="30">
+            <input type="url" id="input-url" placeholder="Tu enlace (Web, IG, TikTok...)">
+            <label style="font-size: 0.85rem; font-weight: 700;">Sube tu logo/imagen:</label>
+            <input type="file" id="input-imagen" accept="image/*">
+            <input type="text" id="input-coords" placeholder="Casilla seleccionada" readonly style="background:#e2e8f0; font-weight:bold;">
+            <div class="modal-buttons">
+                <button class="btn-cancelar" onclick="cerrarModal()">Cancelar</button>
+                <button class="btn-enviar" onclick="irAPagar()">Ir al Pago (1€)</button>
+            </div>
+        </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
-        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, setDoc, doc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore.js";
 
-        // Aquí iría tu config de Firebase
-        
+        const firebaseConfig = {
+            apiKey: "AIzaSyCFE0T4m16MOyn9JqMujJZZwMJCLen-LgA",
+            authDomain: "elmurazo.firebaseapp.com",
+            projectId: "elmurazo",
+            storageBucket: "elmurazo.firebasestorage.app",
+            messagingSenderId: "722334671597",
+            appId: "1:722334671597:web:4b316572169de9c66262e4",
+            measurementId: "G-P003BX46Z4"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const casillasRef = collection(db, "casillas");
+
         const canvas = document.getElementById("muroCanvas");
         const ctx = canvas.getContext("2d");
         
-        // Cuadrícula: 300 columnas x 200 filas = 60.000 casillas.
-        const gridCols = 300;
-        const gridRows = 200;
-        const cellSize = 10; // 10x10 píxeles (suficiente para un logo mini)
-
+        // Matemáticas rectangulares: 1250 * 800 = 1.000.000 de casillas
+        const gridCols = 1250;
+        const gridRows = 800;
+        const cellSize = canvas.width / gridCols; 
+        
         let casillasOcupadas = new Map();
+        let casillaSeleccionada = null;
+        let imagenesCache = new Map();
+
+        function obtenerImagen(urlBase64, key) {
+            if (!urlBase64) return null;
+            if (imagenesCache.has(key)) return imagenesCache.get(key);
+            const img = new Image();
+            img.src = urlBase64;
+            img.onload = () => { dibujarMuro(); };
+            imagenesCache.set(key, img);
+            return img;
+        }
 
         function dibujarMuro() {
             ctx.fillStyle = "#111115";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // Red para ver las casillas
-            ctx.strokeStyle = "rgba(0, 168, 204, 0.2)";
-            ctx.lineWidth = 1;
+            ctx.strokeStyle = "rgba(0, 168, 204, 0.08)";
+            ctx.lineWidth = 0.5; // Ajustado para que la línea no tape la casilla pequeña
             for (let x = 0; x <= canvas.width; x += cellSize) {
                 ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke();
             }
@@ -93,10 +232,144 @@
                 ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
             }
 
-            document.getElementById("contador-libres").innerText = (60000 - casillasOcupadas.size).toLocaleString();
+            casillasOcupadas.forEach((data, key) => {
+                const [x, y] = key.split(',').map(Number);
+                if (data.imagen) {
+                    const img = obtenerImagen(data.imagen, key);
+                    if (img && img.complete) {
+                        ctx.drawImage(img, x * cellSize, y * cellSize, cellSize, cellSize);
+                    } else {
+                        ctx.fillStyle = "#00a8cc";
+                        ctx.fillRect(x * cellSize, y * cellSize, cellSize - 0.5, cellSize - 0.5);
+                    }
+                } else {
+                    ctx.fillStyle = "#00a8cc";
+                    ctx.fillRect(x * cellSize, y * cellSize, cellSize - 0.5, cellSize - 0.5);
+                }
+            });
+
+            if (casillaSeleccionada) {
+                const [sx, sy] = casillaSeleccionada.split(',').map(Number);
+                ctx.fillStyle = "rgba(230, 0, 92, 0.7)";
+                ctx.fillRect(sx * cellSize, sy * cellSize, cellSize - 0.5, cellSize - 0.5);
+                ctx.strokeStyle = "#fff";
+                ctx.lineWidth = 1;
+                ctx.strokeRect(sx * cellSize, sy * cellSize, cellSize - 0.5, cellSize - 0.5);
+            }
+
+            const totalCasillasTotales = gridCols * gridRows;
+            const libres = totalCasillasTotales - casillasOcupadas.size;
+            document.getElementById("contador-libres").innerText = libres.toLocaleString();
         }
 
-        dibujarMuro(); // Inicializa el muro vacío al instante
+        async function cargarCasillas() {
+            const querySnapshot = await getDocs(casillasRef);
+            casillasOcupadas.clear();
+            querySnapshot.forEach((doc) => {
+                casillasOcupadas.set(doc.id, doc.data());
+            });
+            dibujarMuro();
+        }
+
+        canvas.addEventListener("click", (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            const x = Math.floor(((e.clientX - rect.left) * scaleX) / cellSize);
+            const y = Math.floor(((e.clientY - rect.top) * scaleY) / cellSize);
+            
+            const safeX = Math.max(0, Math.min(gridCols - 1, x));
+            const safeY = Math.max(0, Math.min(gridRows - 1, y));
+            const key = `${safeX},${safeY}`;
+
+            if (casillasOcupadas.has(key)) {
+                const data = casillasOcupadas.get(key);
+                if (confirm(`Este espacio es de ${data.alias}. ¿Quieres visitar su enlace?`)) {
+                    window.open(data.url, '_blank');
+                }
+            } else {
+                casillaSeleccionada = key;
+                document.getElementById("input-coords").value = key;
+                dibujarMuro();
+                abrirModal();
+            }
+        });
+
+        window.abrirModal = function() {
+            if (!casillaSeleccionada) {
+                alert("Por favor, haz clic primero en una casilla libre del muro.");
+                return;
+            }
+            document.getElementById("modal-pago").style.display = "flex";
+        }
+
+        window.cerrarModal = function() {
+            document.getElementById("modal-pago").style.display = "none";
+        }
+
+        function archivoABase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
+        }
+
+        window.irAPagar = async function() {
+            const alias = document.getElementById("input-alias").value.trim();
+            const url = document.getElementById("input-url").value.trim();
+            const coords = document.getElementById("input-coords").value.trim();
+            const archivoInput = document.getElementById("input-imagen").files[0];
+
+            if (!alias || !url || !coords || !archivoInput) {
+                alert("Por favor, rellena todos los campos y sube una imagen.");
+                return;
+            }
+
+            try {
+                const imagenBase64 = await archivoABase64(archivoInput);
+
+                localStorage.setItem("p_alias", alias);
+                localStorage.setItem("p_url", url);
+                localStorage.setItem("p_coords", coords);
+                localStorage.setItem("p_imagen", imagenBase64);
+
+                window.location.href = "https://buy.stripe.com/4gM8wOdJia3g4U91kZ73G00";
+            } catch (e) {
+                alert("Error al procesar la imagen.");
+            }
+        }
+
+        window.addEventListener('load', async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('success') === 'true') {
+                const alias = localStorage.getItem("p_alias");
+                const url = localStorage.getItem("p_url");
+                const coords = localStorage.getItem("p_coords");
+                const imagen = localStorage.getItem("p_imagen");
+
+                if (alias && url && coords && imagen) {
+                    try {
+                        await setDoc(doc(db, "casillas", coords), {
+                            alias: alias,
+                            url: url,
+                            imagen: imagen,
+                            timestamp: serverTimestamp()
+                        });
+                        alert("¡Casilla comprada y publicada con éxito!");
+                    } catch (e) {
+                        console.error(e);
+                    }
+                    localStorage.removeItem("p_alias");
+                    localStorage.removeItem("p_url");
+                    localStorage.removeItem("p_coords");
+                    localStorage.removeItem("p_imagen");
+                }
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+            cargarCasillas();
+        });
     </script>
 </body>
 </html>
