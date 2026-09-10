@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>El Murazo | El Millón de Creadores</title>
+    <title>El Murazo | Tu espacio en Internet</title>
     <link rel="icon" type="image/png" href="logo.png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -59,8 +59,8 @@
         
         .muro-canvas-container {
             width: 95vw;
-            max-width: 1400px; /* Ampliado para que las cuadrículas se vean mejor */
-            aspect-ratio: 125 / 80; /* Proporción rectangular exacta para 1250x800 */
+            max-width: 1400px;
+            aspect-ratio: 125 / 80; /* Proporción para 125x80 casillas */
             background: #111;
             border: 4px solid #111;
             border-radius: 12px;
@@ -151,15 +151,16 @@
 <body>
 
     <h1>El Murazo</h1>
-    <p class="subtitle">1 Millón de casillas • 1€ cada una</p>
+    <!-- Textos actualizados a 10.000 -->
+    <p class="subtitle">10.000 casillas exclusivas • 1€ cada una</p>
     
     <div class="counter-box">
-        Casillas libres: <span id="contador-libres">1,000,000</span>
+        Casillas libres: <span id="contador-libres">10.000</span>
     </div>
 
     <div class="muro-canvas-container">
-        <!-- Resolución segura para memoria (3750x2400) -->
-        <canvas id="muroCanvas" width="3750" height="2400"></canvas>
+        <!-- Canvas con resolución ideal para que los logos se vean nítidos -->
+        <canvas id="muroCanvas" width="2500" height="1600"></canvas>
     </div>
 
     <button class="btn-comprar-global" onclick="abrirModal()">Comprar casilla (1€)</button>
@@ -200,10 +201,10 @@
         const canvas = document.getElementById("muroCanvas");
         const ctx = canvas.getContext("2d");
         
-        // Matemáticas rectangulares: 1250 * 800 = 1.000.000 de casillas
-        const gridCols = 1250;
-        const gridRows = 800;
-        const cellSize = canvas.width / gridCols; 
+        // Matemáticas: 125 cols * 80 rows = 10.000 casillas exactas
+        const gridCols = 125;
+        const gridRows = 80;
+        const cellSize = canvas.width / gridCols; // Celdas mucho más grandes visualmente
         
         let casillasOcupadas = new Map();
         let casillaSeleccionada = null;
@@ -223,8 +224,8 @@
             ctx.fillStyle = "#111115";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            ctx.strokeStyle = "rgba(0, 168, 204, 0.08)";
-            ctx.lineWidth = 0.5; // Ajustado para que la línea no tape la casilla pequeña
+            ctx.strokeStyle = "rgba(0, 168, 204, 0.15)"; // Cuadrícula un poco más visible
+            ctx.lineWidth = 1; 
             for (let x = 0; x <= canvas.width; x += cellSize) {
                 ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke();
             }
@@ -240,21 +241,21 @@
                         ctx.drawImage(img, x * cellSize, y * cellSize, cellSize, cellSize);
                     } else {
                         ctx.fillStyle = "#00a8cc";
-                        ctx.fillRect(x * cellSize, y * cellSize, cellSize - 0.5, cellSize - 0.5);
+                        ctx.fillRect(x * cellSize, y * cellSize, cellSize - 1, cellSize - 1);
                     }
                 } else {
                     ctx.fillStyle = "#00a8cc";
-                    ctx.fillRect(x * cellSize, y * cellSize, cellSize - 0.5, cellSize - 0.5);
+                    ctx.fillRect(x * cellSize, y * cellSize, cellSize - 1, cellSize - 1);
                 }
             });
 
             if (casillaSeleccionada) {
                 const [sx, sy] = casillaSeleccionada.split(',').map(Number);
                 ctx.fillStyle = "rgba(230, 0, 92, 0.7)";
-                ctx.fillRect(sx * cellSize, sy * cellSize, cellSize - 0.5, cellSize - 0.5);
+                ctx.fillRect(sx * cellSize, sy * cellSize, cellSize - 1, cellSize - 1);
                 ctx.strokeStyle = "#fff";
-                ctx.lineWidth = 1;
-                ctx.strokeRect(sx * cellSize, sy * cellSize, cellSize - 0.5, cellSize - 0.5);
+                ctx.lineWidth = 2;
+                ctx.strokeRect(sx * cellSize, sy * cellSize, cellSize - 1, cellSize - 1);
             }
 
             const totalCasillasTotales = gridCols * gridRows;
