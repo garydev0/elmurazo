@@ -12,7 +12,6 @@
         :root {
             --bg-color: #f4f6f9;
             --grid-color: rgba(0, 168, 204, 0.15);
-            --card-bg: #ffffff;
             --text-color: #111115;
             --accent-cyan: #00a8cc;
             --accent-pink: #e6005c;
@@ -32,7 +31,7 @@
             align-items: center;
             min-height: 100vh;
             box-sizing: border-box;
-            overflow-y: auto; /* Scroll general de la página */
+            overflow-y: auto;
         }
         h1 { 
             font-size: 4rem; 
@@ -58,11 +57,10 @@
             border: 2px solid #111;
         }
         
-        /* Muro rectangular panorámico y gigante sin scroll interno */
         .muro-canvas-container {
             width: 95vw;
-            max-width: 1200px;
-            aspect-ratio: 3 / 2; /* Formato rectangular horizontal */
+            max-width: 1000px;
+            aspect-ratio: 1 / 1;
             background: #111;
             border: 4px solid #111;
             border-radius: 12px;
@@ -138,10 +136,7 @@
             font-family: 'Inter', sans-serif;
             font-size: 0.95rem;
         }
-        .modal-content input[type="file"] {
-            padding: 6px;
-            background: #fff;
-        }
+        .modal-content input[type="file"] { padding: 6px; background: #fff; }
         .modal-content input:focus {
             border-color: #111;
             outline: none;
@@ -156,15 +151,15 @@
 <body>
 
     <h1>El Murazo</h1>
-    <p class="subtitle">1 Millón de casillas • 100€ cada una</p>
+    <p class="subtitle">1 Millón de casillas • 1€ cada una</p>
     
     <div class="counter-box">
         Casillas libres: <span id="contador-libres">1,000,000</span>
     </div>
 
     <div class="muro-canvas-container">
-        <!-- Canvas rectangular de 1500x1000 píxeles internos -->
-        <canvas id="muroCanvas" width="1500" height="1000"></canvas>
+        <!-- Canvas de 10000x10000 para dar soporte a 1000x1000 celdas con alta resolución -->
+        <canvas id="muroCanvas" width="10000" height="10000"></canvas>
     </div>
 
     <button class="btn-comprar-global" onclick="abrirModal()">Comprar casilla (1€)</button>
@@ -204,9 +199,9 @@
 
         const canvas = document.getElementById("muroCanvas");
         const ctx = canvas.getContext("2d");
-        const gridCols = 150; // 150 columnas
-        const gridRows = 100; // 100 filas
-        const cellSize = canvas.width / gridCols; // 1500 / 150 = 10px por celda
+        const gridCols = 1000;
+        const gridRows = 1000;
+        const cellSize = canvas.width / gridCols; // 10px por casilla
         let casillasOcupadas = new Map();
         let casillaSeleccionada = null;
         let imagenesCache = new Map();
@@ -226,7 +221,7 @@
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
             ctx.strokeStyle = "rgba(0, 168, 204, 0.08)";
-            ctx.lineWidth = 0.5;
+            ctx.lineWidth = 2;
             for (let x = 0; x < canvas.width; x += cellSize) {
                 ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke();
             }
@@ -242,21 +237,21 @@
                         ctx.drawImage(img, x * cellSize, y * cellSize, cellSize, cellSize);
                     } else {
                         ctx.fillStyle = "#00a8cc";
-                        ctx.fillRect(x * cellSize, y * cellSize, cellSize - 0.5, cellSize - 0.5);
+                        ctx.fillRect(x * cellSize, y * cellSize, cellSize - 2, cellSize - 2);
                     }
                 } else {
                     ctx.fillStyle = "#00a8cc";
-                    ctx.fillRect(x * cellSize, y * cellSize, cellSize - 0.5, cellSize - 0.5);
+                    ctx.fillRect(x * cellSize, y * cellSize, cellSize - 2, cellSize - 2);
                 }
             });
 
             if (casillaSeleccionada) {
                 const [sx, sy] = casillaSeleccionada.split(',').map(Number);
                 ctx.fillStyle = "rgba(230, 0, 92, 0.7)";
-                ctx.fillRect(sx * cellSize, sy * cellSize, cellSize - 0.5, cellSize - 0.5);
+                ctx.fillRect(sx * cellSize, sy * cellSize, cellSize - 2, cellSize - 2);
                 ctx.strokeStyle = "#fff";
-                ctx.lineWidth = 1.5;
-                ctx.strokeRect(sx * cellSize, sy * cellSize, cellSize - 0.5, cellSize - 0.5);
+                ctx.lineWidth = 4;
+                ctx.strokeRect(sx * cellSize, sy * cellSize, cellSize - 2, cellSize - 2);
             }
 
             const totalCasillasTotales = gridCols * gridRows;
