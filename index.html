@@ -4,12 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>El Murazo | Construcción Global</title>
-    <!-- Fuentes para el reloj LED (Share Tech Mono) y el grafiti (Black Ops One) -->
     <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Share+Tech+Mono&family=Inter:wght@900&display=swap" rel="stylesheet">
     <style>
         body { 
             margin: 0; 
-            /* Textura de asfalto/cemento oscuro */
             background-color: #1a1a1a; 
             background-image: radial-gradient(#333 2px, transparent 2px), radial-gradient(#333 2px, transparent 2px);
             background-size: 30px 30px;
@@ -23,7 +21,6 @@
             overflow-x: hidden; 
         }
         
-        /* Cinta de peligro amarilla y negra */
         .cinta-peligro {
             width: 100%;
             height: 15px;
@@ -59,9 +56,7 @@
             margin: 10px 0; 
             letter-spacing: 2px;
         }
-        .reloj.peligro { 
-            animation: latido 0.5s infinite alternate; 
-        }
+        .reloj.peligro { animation: latido 0.5s infinite alternate; }
         @keyframes latido { 
             from { text-shadow: 0 0 10px #ff0000; transform: scale(1); } 
             to { text-shadow: 0 0 30px #ff0000, 0 0 50px #ff0000; transform: scale(1.02); } 
@@ -75,7 +70,6 @@
             font-size: 1.2rem; 
             font-family: 'Black Ops One', cursive;
             cursor: pointer; 
-            border-radius: 0; 
             box-shadow: 5px 5px 0 #111; 
             transition: all 0.1s;
         }
@@ -93,34 +87,41 @@
             width: 100%; 
             max-width: 1200px; 
             padding: 40px 20px; 
-            gap: 2px; 
+            gap: 4px; 
         }
         
-        /* Diseño del Ladrillo de Cemento */
+        /* Ladrillos Marrones */
         .ladrillo { 
-            background: #737373; 
-            border: 2px solid #333; 
+            background: #8b3a2f; 
+            border: 2px solid #4a1c14; 
             border-radius: 2px; 
             padding: 15px 25px; 
-            font-family: 'Black Ops One', cursive; /* Tipografía Stencil */
+            font-family: 'Black Ops One', cursive; 
             font-size: 1.2rem; 
-            color: #111; /* Color spray negro */
+            color: #111; 
             text-shadow: 1px 1px 0 rgba(255,255,255,0.2); 
             box-shadow: inset 0 0 15px rgba(0,0,0,0.6), 2px 2px 5px rgba(0,0,0,0.4); 
             display: flex; 
             justify-content: center; 
             align-items: center; 
             position: relative;
-        }
-        /* Rotura falsa en algunos ladrillos para dar realismo */
-        .ladrillo::after {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(45deg, transparent 40%, rgba(0,0,0,0.1) 45%, transparent 50%);
-            pointer-events: none;
+            transition: transform 0.3s ease;
         }
         
+        /* El Rey (Último Ladrillo) */
+        .ladrillo.rey {
+            background: #ffd700;
+            border-color: #ffaa00;
+            box-shadow: 0 0 20px #ffd700, inset 0 0 10px rgba(0,0,0,0.3);
+            z-index: 5;
+            animation: brillar 1.5s infinite alternate;
+        }
+        .ladrillo.rey::before { content: '👑 '; margin-right: 5px; }
+        @keyframes brillar {
+            from { box-shadow: 0 0 10px #ffd700; }
+            to { box-shadow: 0 0 30px #ffea00; }
+        }
+
         #modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); justify-content: center; align-items: center; z-index: 20; }
         .modal-box { background: #222; padding: 30px; border: 4px solid #555; text-align: center; width: 90%; max-width: 400px; box-shadow: 10px 10px 0 #000; }
         .modal-box h2 { font-family: 'Black Ops One', cursive; color: #ffd700; margin-top: 0;}
@@ -144,7 +145,7 @@
     <div id="modal">
         <div class="modal-box">
             <h2>NUEVO BLOQUE</h2>
-            <p style="color:#aaa;">Pinta tu nombre en el cemento.</p>
+            <p style="color:#aaa;">Corónate como el Rey del Muro.</p>
             <input type="text" id="input-nombre" placeholder="TU NOMBRE" maxlength="15">
             <button class="btn-comprar" style="width: 100%;" onclick="irAPagar()">IR AL PAGO</button>
             <button onclick="document.getElementById('modal').style.display='none'" style="margin-top:15px; background:none; color:#777; font-weight:bold; border:none; cursor:pointer; text-decoration: underline;">ABORTAR</button>
@@ -178,13 +179,21 @@
             let ladrillos = [];
             snapshot.forEach(doc => ladrillos.push(doc.data()));
             ladrillos.sort((a, b) => (a.timestamp?.seconds || 0) - (b.timestamp?.seconds || 0));
-            ladrillos.forEach(l => {
+            
+            ladrillos.forEach((l, index) => {
                 const div = document.createElement("div");
                 div.className = "ladrillo";
+                
+                // Aplicar estilo de Rey al último ladrillo
+                if (index === ladrillos.length - 1) {
+                    div.classList.add("rey");
+                    div.style.transform = `rotate(0deg) scale(1.15)`; // Más grande y recto
+                } else {
+                    const rotacion = (Math.random() * 2 - 1).toFixed(1);
+                    div.style.transform = `rotate(${rotacion}deg)`;
+                }
+                
                 div.innerText = l.nombre;
-                // Rotación aleatoria muy sutil para dar imperfección realista al muro
-                const rotacion = (Math.random() * 2 - 1).toFixed(1);
-                div.style.transform = `rotate(${rotacion}deg)`;
                 muro.appendChild(div);
             });
         });
