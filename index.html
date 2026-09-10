@@ -32,7 +32,7 @@
             align-items: center;
             min-height: 100vh;
             box-sizing: border-box;
-            overflow-y: auto;
+            overflow-y: auto; /* Scroll general de la página */
         }
         h1 { 
             font-size: 4rem; 
@@ -58,11 +58,11 @@
             border: 2px solid #111;
         }
         
-        /* Muro maximizado a lo ancho para aprovechar la pantalla */
+        /* Muro rectangular panorámico y gigante sin scroll interno */
         .muro-canvas-container {
             width: 95vw;
-            max-width: 950px;
-            aspect-ratio: 1 / 1;
+            max-width: 1200px;
+            aspect-ratio: 3 / 2; /* Formato rectangular horizontal */
             background: #111;
             border: 4px solid #111;
             border-radius: 12px;
@@ -70,6 +70,7 @@
             position: relative;
             margin-bottom: 25px;
             cursor: pointer;
+            overflow: hidden;
         }
 
         canvas {
@@ -162,7 +163,8 @@
     </div>
 
     <div class="muro-canvas-container">
-        <canvas id="muroCanvas" width="1000" height="1000"></canvas>
+        <!-- Canvas rectangular de 1500x1000 píxeles internos -->
+        <canvas id="muroCanvas" width="1500" height="1000"></canvas>
     </div>
 
     <button class="btn-comprar-global" onclick="abrirModal()">Comprar casilla (1€)</button>
@@ -202,8 +204,9 @@
 
         const canvas = document.getElementById("muroCanvas");
         const ctx = canvas.getContext("2d");
-        const gridCols = 100;
-        const cellSize = canvas.width / gridCols;
+        const gridCols = 150; // 150 columnas
+        const gridRows = 100; // 100 filas
+        const cellSize = canvas.width / gridCols; // 1500 / 150 = 10px por celda
         let casillasOcupadas = new Map();
         let casillaSeleccionada = null;
         let imagenesCache = new Map();
@@ -256,7 +259,8 @@
                 ctx.strokeRect(sx * cellSize, sy * cellSize, cellSize - 0.5, cellSize - 0.5);
             }
 
-            const libres = 1000000 - casillasOcupadas.size;
+            const totalCasillasTotales = gridCols * gridRows;
+            const libres = totalCasillasTotales - casillasOcupadas.size;
             document.getElementById("contador-libres").innerText = libres.toLocaleString();
         }
 
@@ -275,7 +279,10 @@
             const scaleY = canvas.height / rect.height;
             const x = Math.floor(((e.clientX - rect.left) * scaleX) / cellSize);
             const y = Math.floor(((e.clientY - rect.top) * scaleY) / cellSize);
-            const key = `${x},${y}`;
+            
+            const safeX = Math.max(0, Math.min(gridCols - 1, x));
+            const safeY = Math.max(0, Math.min(gridRows - 1, y));
+            const key = `${safeX},${safeY}`;
 
             if (casillasOcupadas.has(key)) {
                 const data = casillasOcupadas.get(key);
