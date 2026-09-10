@@ -3,183 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>El Murazo | Tu espacio en Internet</title>
-    <link rel="icon" type="image/png" href="logo.png">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+    <title>El Murazo | Construcción Global</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@700;900&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --bg-color: #f4f6f9;
-            --grid-color: rgba(0, 168, 204, 0.15);
-            --text-color: #111115;
-            --accent-cyan: #00a8cc;
-            --accent-pink: #e6005c;
-        }
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-color);
-            background-image: 
-                linear-gradient(var(--grid-color) 1px, transparent 1px),
-                linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
-            background-size: 30px 30px;
-            color: var(--text-color);
-            margin: 0;
-            padding: 20px 10px 40px 10px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            box-sizing: border-box;
-            overflow-y: auto;
-        }
-        h1 { 
-            font-size: 4rem; 
-            text-transform: uppercase; 
-            letter-spacing: 4px; 
-            margin: 0 0 5px 0;
-            color: #111;
-            font-weight: 900;
-            text-shadow: 3px 3px 0px #fff, 6px 6px 0px var(--accent-cyan);
-            text-align: center;
-        }
-        .subtitle { margin-bottom: 12px; color: #555; font-size: 1rem; letter-spacing: 1px; font-weight: 700; text-transform: uppercase; background: #fff; padding: 5px 15px; border: 2px solid #111; border-radius: 20px; box-shadow: 3px 3px 0px #111;}
+        body { margin: 0; background: #111; color: #fff; font-family: 'Inter', sans-serif; display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow-x: hidden; }
+        .header { position: sticky; top: 0; background: rgba(17,17,17,0.9); padding: 20px; text-align: center; width: 100%; z-index: 10; border-bottom: 2px solid #333; }
+        h1 { margin: 0; font-size: 2.5rem; text-transform: uppercase; color: #e6005c; }
+        .reloj { font-size: 3rem; font-weight: 900; color: #00a8cc; text-shadow: 0 0 10px rgba(0, 168, 204, 0.5); margin: 10px 0; }
+        .reloj.peligro { color: #ff3333; text-shadow: 0 0 15px #ff3333; animation: latido 1s infinite; }
+        @keyframes latido { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
         
-        .counter-box {
-            font-size: 1rem;
-            font-weight: 800;
-            background: #111;
-            color: #fff;
-            padding: 8px 18px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            box-shadow: 3px 3px 0px var(--accent-cyan);
-            border: 2px solid #111;
-        }
+        .btn-comprar { background: #e6005c; color: #fff; border: none; padding: 15px 30px; font-size: 1.2rem; font-weight: 900; cursor: pointer; text-transform: uppercase; border-radius: 8px; box-shadow: 0 5px 15px rgba(230,0,92,0.4); margin-bottom: 10px; }
+        .btn-comprar:hover { background: #ff1a75; transform: scale(1.05); }
+
+        .muro { display: flex; flex-wrap: wrap-reverse; justify-content: center; align-content: flex-start; width: 100%; max-width: 1200px; padding: 20px; gap: 4px; }
+        .ladrillo { background: #b22222; border: 2px solid #8b0000; border-radius: 4px; padding: 12px 20px; font-weight: 700; font-size: 1rem; color: #fff; text-shadow: 1px 1px 0 #000; box-shadow: inset 0 0 10px rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; text-transform: uppercase; }
         
-        .muro-canvas-container {
-            width: 95vw;
-            max-width: 1400px;
-            aspect-ratio: 40 / 25;
-            background: #111;
-            border: 4px solid #111;
-            border-radius: 12px;
-            position: relative;
-            margin-bottom: 25px;
-            cursor: pointer;
-            overflow: hidden;
-        }
-
-        canvas {
-            display: block;
-            width: 100%;
-            height: 100%;
-            background: #1a1a1a;
-            border-radius: 8px;
-        }
-
-        .btn-comprar-global {
-            background: var(--accent-pink);
-            color: #fff;
-            border: 3px solid #111;
-            padding: 15px 30px;
-            font-size: 1.1rem;
-            font-weight: 900;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border-radius: 10px;
-            box-shadow: 5px 5px 0px #111;
-            transition: all 0.2s ease;
-            margin-bottom: 20px;
-        }
-        .btn-comprar-global:hover {
-            background: var(--accent-cyan);
-            color: #000;
-            transform: translate(-2px, -2px);
-            box-shadow: 7px 7px 0px #111;
-        }
-
-        /* Modal */
-        #modal-pago {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(10px);
-            justify-content: center;
-            align-items: center;
-            z-index: 100;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-        .modal-content {
-            background: #fff;
-            border: 3px solid #111;
-            padding: 25px;
-            border-radius: 12px;
-            width: 100%;
-            max-width: 380px;
-            box-shadow: 10px 10px 0px #111;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        .modal-content h3 { color: #111; margin-top: 0; font-size: 1.2rem; text-transform: uppercase; }
-        .modal-content input {
-            background: #f4f6f9;
-            border: 2px solid #ccc;
-            padding: 10px;
-            border-radius: 8px;
-            color: #111;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.95rem;
-        }
-        .modal-content input[type="file"] { padding: 6px; background: #fff; }
-        .modal-content input:focus {
-            border-color: #111;
-            outline: none;
-            box-shadow: 3px 3px 0px var(--accent-cyan);
-        }
-        .modal-buttons { display: flex; gap: 10px; margin-top: 5px; }
-        .modal-buttons button { flex: 1; padding: 10px; border-radius: 8px; font-weight: 800; cursor: pointer; text-transform: uppercase; font-size: 0.85rem; border: 2px solid #111; }
-        .btn-cancelar { background: #eee; color: #555; }
-        .btn-enviar { background: var(--accent-cyan); color: #000; box-shadow: 3px 3px 0px #111; }
+        /* Modal de compra */
+        #modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); justify-content: center; align-items: center; z-index: 20; }
+        .modal-box { background: #222; padding: 30px; border-radius: 12px; text-align: center; border: 2px solid #444; width: 90%; max-width: 400px; }
+        .modal-box input { width: 90%; padding: 12px; font-size: 1rem; font-weight: bold; border-radius: 6px; border: none; margin: 15px 0; text-align: center; text-transform: uppercase; }
     </style>
 </head>
 <body>
 
-    <h1>El Murazo</h1>
-    <p class="subtitle">1.000 casillas exclusivas • 9,99€ / mes</p>
-    
-    <div class="counter-box">
-        Casillas libres: <span id="contador-libres">1,000</span>
+    <div class="header">
+        <h1>El Murazo</h1>
+        <div id="reloj" class="reloj">Cargando...</div>
+        <p>Si el reloj llega a 0, el muro se destruye.</p>
+        <button class="btn-comprar" onclick="document.getElementById('modal').style.display='flex'">Poner Ladrillo (0,99€)</button>
     </div>
 
-    <div class="muro-canvas-container">
-        <canvas id="muroCanvas" width="2000" height="1250"></canvas>
-    </div>
+    <div class="muro" id="muro"></div>
 
-    <button class="btn-comprar-global" onclick="abrirModal()">Comprar casilla (9,99€/mes)</button>
-
-    <div id="modal-pago">
-        <div class="modal-content">
-            <h3>Reclamar Casilla</h3>
-            <input type="text" id="input-alias" placeholder="Tu Nombre / Marca" maxlength="30">
-            <input type="url" id="input-url" placeholder="Tu enlace (Web, IG, TikTok...)">
-            <label style="font-size: 0.85rem; font-weight: 700;">Sube tu logo/imagen:</label>
-            <input type="file" id="input-imagen" accept="image/*">
-            <input type="text" id="input-coords" placeholder="Casilla seleccionada" readonly style="background:#e2e8f0; font-weight:bold;">
-            <div class="modal-buttons">
-                <button class="btn-cancelar" onclick="cerrarModal()">Cancelar</button>
-                <button class="btn-enviar" onclick="irAPagar()">Ir al Pago</button>
-            </div>
+    <div id="modal">
+        <div class="modal-box">
+            <h2 style="margin-top:0;">Tu Ladrillo</h2>
+            <p>Escribe tu nombre o @usuario.</p>
+            <input type="text" id="input-nombre" placeholder="TU NOMBRE" maxlength="15">
+            <button class="btn-comprar" style="width: 100%;" onclick="irAPagar()">Ir al Pago</button>
+            <button onclick="document.getElementById('modal').style.display='none'" style="margin-top:10px; background:none; color:#888; border:none; cursor:pointer;">Cancelar</button>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
-        import { getFirestore, collection, getDocs, setDoc, doc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore.js";
+        import { getFirestore, collection, onSnapshot, setDoc, doc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCFE0T4m16MOyn9JqMujJZZwMJCLen-LgA",
@@ -187,176 +56,91 @@
             projectId: "elmurazo",
             storageBucket: "elmurazo.firebasestorage.app",
             messagingSenderId: "722334671597",
-            appId: "1:722334671597:web:4b316572169de9c66262e4",
-            measurementId: "G-P003BX46Z4"
+            appId: "1:722334671597:web:4b316572169de9c66262e4"
         };
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-        const casillasRef = collection(db, "casillas");
+        const ladrillosRef = collection(db, "ladrillos");
+        const estadoRef = doc(db, "estado", "global");
 
-        const canvas = document.getElementById("muroCanvas");
-        const ctx = canvas.getContext("2d");
-        
-        const gridCols = 40;
-        const gridRows = 25;
-        const cellSize = canvas.width / gridCols;
-        
-        let casillasOcupadas = new Map();
-        let casillaSeleccionada = null;
-        let imagenesCache = new Map();
+        let deadline = 0;
+        let timerInterval;
 
-        function obtenerImagen(urlBase64, key) {
-            if (!urlBase64) return null;
-            if (imagenesCache.has(key)) return imagenesCache.get(key);
-            const img = new Image();
-            img.src = urlBase64;
-            img.onload = () => { dibujarMuro(); };
-            imagenesCache.set(key, img);
-            return img;
-        }
-
-        function dibujarMuro() {
-            ctx.fillStyle = "#111115";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            ctx.strokeStyle = "rgba(0, 168, 204, 0.25)"; 
-            ctx.lineWidth = 2; 
-            for (let x = 0; x <= canvas.width; x += cellSize) {
-                ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke();
-            }
-            for (let y = 0; y <= canvas.height; y += cellSize) {
-                ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
-            }
-
-            casillasOcupadas.forEach((data, key) => {
-                const [x, y] = key.split(',').map(Number);
-                if (data.imagen) {
-                    const img = obtenerImagen(data.imagen, key);
-                    if (img && img.complete) {
-                        ctx.drawImage(img, x * cellSize, y * cellSize, cellSize, cellSize);
-                    } else {
-                        ctx.fillStyle = "#00a8cc";
-                        ctx.fillRect(x * cellSize, y * cellSize, cellSize - 2, cellSize - 2);
-                    }
-                } else {
-                    ctx.fillStyle = "#00a8cc";
-                    ctx.fillRect(x * cellSize, y * cellSize, cellSize - 2, cellSize - 2);
-                }
+        // Cargar ladrillos en tiempo real
+        onSnapshot(ladrillosRef, (snapshot) => {
+            const muro = document.getElementById("muro");
+            muro.innerHTML = "";
+            let ladrillos = [];
+            snapshot.forEach(doc => ladrillos.push(doc.data()));
+            // Ordenar para que los más nuevos estén arriba o se apilen natural
+            ladrillos.sort((a, b) => (a.timestamp?.seconds || 0) - (b.timestamp?.seconds || 0));
+            ladrillos.forEach(l => {
+                const div = document.createElement("div");
+                div.className = "ladrillo";
+                div.innerText = l.nombre;
+                muro.appendChild(div);
             });
+        });
 
-            if (casillaSeleccionada) {
-                const [sx, sy] = casillaSeleccionada.split(',').map(Number);
-                ctx.fillStyle = "rgba(230, 0, 92, 0.7)";
-                ctx.fillRect(sx * cellSize, sy * cellSize, cellSize - 2, cellSize - 2);
-                ctx.strokeStyle = "#fff";
-                ctx.lineWidth = 4;
-                ctx.strokeRect(sx * cellSize, sy * cellSize, cellSize - 2, cellSize - 2);
-            }
-
-            const totalCasillasTotales = gridCols * gridRows;
-            const libres = totalCasillasTotales - casillasOcupadas.size;
-            document.getElementById("contador-libres").innerText = libres.toLocaleString();
-        }
-
-        async function cargarCasillas() {
-            const querySnapshot = await getDocs(casillasRef);
-            casillasOcupadas.clear();
-            querySnapshot.forEach((doc) => {
-                const data = doc.data();
-                // SOLO carga y muestra las casillas que tienen el pago validado
-                if (data.pagado === true) {
-                    casillasOcupadas.set(doc.id, data);
-                }
-            });
-            dibujarMuro();
-        }
-
-        canvas.addEventListener("click", (e) => {
-            const rect = canvas.getBoundingClientRect();
-            const scaleX = canvas.width / rect.width;
-            const scaleY = canvas.height / rect.height;
-            const x = Math.floor(((e.clientX - rect.left) * scaleX) / cellSize);
-            const y = Math.floor(((e.clientY - rect.top) * scaleY) / cellSize);
-            
-            const safeX = Math.max(0, Math.min(gridCols - 1, x));
-            const safeY = Math.max(0, Math.min(gridRows - 1, y));
-            const key = `${safeX},${safeY}`;
-
-            if (casillasOcupadas.has(key)) {
-                const data = casillasOcupadas.get(key);
-                if (confirm(`Este espacio es de ${data.alias}. ¿Quieres visitar su enlace?`)) {
-                    window.open(data.url, '_blank');
-                }
-            } else {
-                casillaSeleccionada = key;
-                document.getElementById("input-coords").value = key;
-                dibujarMuro();
-                abrirModal();
+        // Cargar y gestionar reloj en tiempo real
+        onSnapshot(estadoRef, (docSnap) => {
+            if (docSnap.exists() && docSnap.data().deadline) {
+                deadline = docSnap.data().deadline;
+                actualizarReloj();
             }
         });
 
-        window.abrirModal = function() {
-            if (!casillaSeleccionada) {
-                alert("Por favor, haz clic primero en una casilla libre del muro.");
-                return;
-            }
-            document.getElementById("modal-pago").style.display = "flex";
-        }
+        function actualizarReloj() {
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                const ahora = Date.now();
+                const restante = deadline - ahora;
+                const display = document.getElementById("reloj");
 
-        window.cerrarModal = function() {
-            document.getElementById("modal-pago").style.display = "none";
-        }
+                if (restante <= 0) {
+                    display.innerText = "💥 DESTRUIDO 💥";
+                    display.className = "reloj peligro";
+                    document.getElementById("muro").innerHTML = ""; // Simula destrucción visual
+                    return;
+                }
 
-        function archivoABase64(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = () => resolve(reader.result);
-                reader.onerror = error => reject(error);
-            });
-        }
-
-        window.irAPagar = async function() {
-            const alias = document.getElementById("input-alias").value.trim();
-            const url = document.getElementById("input-url").value.trim();
-            const coords = document.getElementById("input-coords").value.trim();
-            const archivoInput = document.getElementById("input-imagen").files[0];
-
-            if (!alias || !url || !coords || !archivoInput) {
-                alert("Por favor, rellena todos los campos y sube una imagen.");
-                return;
-            }
-
-            try {
-                const imagenBase64 = await archivoABase64(archivoInput);
-
-                // 1. Guardar en Firebase como NO pagado ANTES de ir a Stripe
-                await setDoc(doc(db, "casillas", coords), {
-                    alias: alias,
-                    url: url,
-                    imagen: imagenBase64,
-                    pagado: false, // Clave de seguridad: Oculta hasta que el Webhook lo apruebe
-                    timestamp: serverTimestamp()
-                });
-
-                // 2. Redirigir a Stripe enviando las coordenadas en el ID de referencia
-                window.location.href = `https://buy.stripe.com/3cIfZgbBa6R4gCR5Bf73G03?client_reference_id=${coords}`;
+                const horas = Math.floor((restante / (1000 * 60 * 60)) % 24);
+                const mins = Math.floor((restante / 1000 / 60) % 60);
+                const secs = Math.floor((restante / 1000) % 60);
                 
-            } catch (e) {
-                // Si Firebase rechaza la escritura, es porque alguien más ya está comprando esa casilla
-                alert("Alguien está reservando esta casilla ahora mismo. Por favor, elige otra.");
-            }
+                display.innerText = `${horas.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+                
+                if (restante < 3600000) { display.className = "reloj peligro"; } 
+                else { display.className = "reloj"; }
+            }, 1000);
+        }
+
+        window.irAPagar = function() {
+            const nombre = document.getElementById("input-nombre").value.trim().toUpperCase();
+            if (!nombre) return alert("Pon un nombre");
+            localStorage.setItem("nuevo_ladrillo", nombre);
+            window.location.href = "https://buy.stripe.com/14A28q8oY5N05Yd2p373G04";
         }
 
         window.addEventListener('load', async () => {
             const urlParams = new URLSearchParams(window.location.search);
-            // El frontend ya no guarda nada. Solo muestra el aviso.
             if (urlParams.get('success') === 'true') {
-                alert("¡Pago iniciado! Si se confirma correctamente, tu casilla aparecerá en el muro en breve.");
+                const nombre = localStorage.getItem("nuevo_ladrillo");
+                if (nombre) {
+                    // Guardar ladrillo
+                    const id = Date.now().toString();
+                    await setDoc(doc(db, "ladrillos", id), { nombre: nombre, timestamp: serverTimestamp() });
+                    
+                    // Reiniciar el reloj a 24h desde ahora
+                    const nuevaDeadline = Date.now() + (24 * 60 * 60 * 1000);
+                    await setDoc(estadoRef, { deadline: nuevaDeadline }, { merge: true });
+                    
+                    localStorage.removeItem("nuevo_ladrillo");
+                    alert("¡Ladrillo colocado! Has salvado el muro 24 horas más.");
+                }
                 window.history.replaceState({}, document.title, window.location.pathname);
             }
-            cargarCasillas();
         });
     </script>
 </body>
