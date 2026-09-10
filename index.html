@@ -6,7 +6,6 @@
     <title>El Murazo | El Millón de Creadores</title>
     <link rel="icon" type="image/png" href="logo.png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root {
@@ -25,25 +24,40 @@
             background-size: 30px 30px;
             color: var(--text-color);
             margin: 0;
-            padding: 20px 10px 40px 10px;
+            padding: 40px;
+            /* Flexbox pero permitiendo scroll libre */
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-height: 100vh;
-            box-sizing: border-box;
-            overflow-y: auto;
+            min-width: max-content; /* Fuerza a que el body crezca con el muro */
         }
+        
+        .header-container {
+            position: sticky;
+            top: 20px;
+            z-index: 50;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(244, 246, 249, 0.9);
+            padding: 20px;
+            border-radius: 15px;
+            border: 2px solid #111;
+            box-shadow: 5px 5px 0px #111;
+            margin-bottom: 30px;
+            backdrop-filter: blur(5px);
+        }
+
         h1 { 
-            font-size: 4rem; 
+            font-size: 3rem; 
             text-transform: uppercase; 
             letter-spacing: 4px; 
             margin: 0 0 5px 0;
             color: #111;
             font-weight: 900;
-            text-shadow: 3px 3px 0px #fff, 6px 6px 0px var(--accent-cyan);
-            text-align: center;
+            text-shadow: 2px 2px 0px #fff, 4px 4px 0px var(--accent-cyan);
         }
-        .subtitle { margin-bottom: 12px; color: #555; font-size: 1rem; letter-spacing: 1px; font-weight: 700; text-transform: uppercase; background: #fff; padding: 5px 15px; border: 2px solid #111; border-radius: 20px; box-shadow: 3px 3px 0px #111;}
+        .subtitle { margin-bottom: 12px; color: #555; font-size: 0.9rem; font-weight: 700; text-transform: uppercase;}
         
         .counter-box {
             font-size: 1rem;
@@ -52,23 +66,19 @@
             color: #fff;
             padding: 8px 18px;
             border-radius: 8px;
-            margin-bottom: 20px;
             box-shadow: 3px 3px 0px var(--accent-cyan);
-            border: 2px solid #111;
         }
-        
+
+        /* Muro Rectangular y Gigante para que la página haga scroll */
         .muro-canvas-container {
-            width: 95vw;
-            max-width: 1000px;
-            aspect-ratio: 1 / 1;
+            width: 3125px; /* Tamaño visual enorme */
+            height: 2000px;
             background: #111;
             border: 4px solid #111;
-            border-radius: 12px;
             box-shadow: 10px 10px 0px #111;
             position: relative;
-            margin-bottom: 25px;
             cursor: pointer;
-            overflow: hidden;
+            margin-bottom: 50px;
         }
 
         canvas {
@@ -76,50 +86,25 @@
             width: 100%;
             height: 100%;
             background: #1a1a1a;
-            border-radius: 8px;
         }
 
-        .btn-comprar-global {
-            background: var(--accent-pink);
-            color: #fff;
-            border: 3px solid #111;
-            padding: 15px 30px;
-            font-size: 1.1rem;
-            font-weight: 900;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border-radius: 10px;
-            box-shadow: 5px 5px 0px #111;
-            transition: all 0.2s ease;
-            margin-bottom: 20px;
-        }
-        .btn-comprar-global:hover {
-            background: var(--accent-cyan);
-            color: #000;
-            transform: translate(-2px, -2px);
-            box-shadow: 7px 7px 0px #111;
-        }
-
-        /* Modal */
+        /* Modal Fijo en pantalla */
         #modal-pago {
             display: none;
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(10px);
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
             justify-content: center;
             align-items: center;
             z-index: 100;
-            padding: 20px;
-            box-sizing: border-box;
         }
         .modal-content {
             background: #fff;
             border: 3px solid #111;
             padding: 25px;
             border-radius: 12px;
-            width: 100%;
+            width: 90%;
             max-width: 380px;
             box-shadow: 10px 10px 0px #111;
             display: flex;
@@ -137,11 +122,6 @@
             font-size: 0.95rem;
         }
         .modal-content input[type="file"] { padding: 6px; background: #fff; }
-        .modal-content input:focus {
-            border-color: #111;
-            outline: none;
-            box-shadow: 3px 3px 0px var(--accent-cyan);
-        }
         .modal-buttons { display: flex; gap: 10px; margin-top: 5px; }
         .modal-buttons button { flex: 1; padding: 10px; border-radius: 8px; font-weight: 800; cursor: pointer; text-transform: uppercase; font-size: 0.85rem; border: 2px solid #111; }
         .btn-cancelar { background: #eee; color: #555; }
@@ -150,19 +130,18 @@
 </head>
 <body>
 
-    <h1>El Murazo</h1>
-    <p class="subtitle">1 Millón de casillas • 1€ cada una</p>
-    
-    <div class="counter-box">
-        Casillas libres: <span id="contador-libres">1,000,000</span>
+    <!-- Panel superior estático (no desaparece al hacer scroll) -->
+    <div class="header-container">
+        <h1>El Murazo</h1>
+        <p class="subtitle">1 Millón de casillas • 1€ cada una</p>
+        <div class="counter-box">Casillas libres: <span id="contador-libres">1,000,000</span></div>
     </div>
 
+    <!-- Contenedor del lienzo -->
     <div class="muro-canvas-container">
-        <!-- Canvas de 10000x10000 para dar soporte a 1000x1000 celdas con alta resolución -->
-        <canvas id="muroCanvas" width="10000" height="10000"></canvas>
+        <!-- Lienzo de 6250x4000 = formato rectangular (1250 columnas x 800 filas) -->
+        <canvas id="muroCanvas" width="6250" height="4000"></canvas>
     </div>
-
-    <button class="btn-comprar-global" onclick="abrirModal()">Comprar casilla (1€)</button>
 
     <div id="modal-pago">
         <div class="modal-content">
@@ -199,9 +178,12 @@
 
         const canvas = document.getElementById("muroCanvas");
         const ctx = canvas.getContext("2d");
-        const gridCols = 1000;
-        const gridRows = 1000;
-        const cellSize = canvas.width / gridCols; // 10px por casilla
+        
+        // Matemáticas: 1250 * 800 = 1.000.000 de casillas (rectangular)
+        const gridCols = 1250;
+        const gridRows = 800;
+        const cellSize = canvas.width / gridCols; // 6250 / 1250 = 5 píxeles internos por casilla
+
         let casillasOcupadas = new Map();
         let casillaSeleccionada = null;
         let imagenesCache = new Map();
@@ -220,15 +202,17 @@
             ctx.fillStyle = "#111115";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            ctx.strokeStyle = "rgba(0, 168, 204, 0.08)";
-            ctx.lineWidth = 2;
-            for (let x = 0; x < canvas.width; x += cellSize) {
+            // Dibujar cuadrícula
+            ctx.strokeStyle = "rgba(0, 168, 204, 0.1)";
+            ctx.lineWidth = 1;
+            for (let x = 0; x <= canvas.width; x += cellSize) {
                 ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke();
             }
-            for (let y = 0; y < canvas.height; y += cellSize) {
+            for (let y = 0; y <= canvas.height; y += cellSize) {
                 ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
             }
 
+            // Dibujar ocupadas
             casillasOcupadas.forEach((data, key) => {
                 const [x, y] = key.split(',').map(Number);
                 if (data.imagen) {
@@ -237,25 +221,25 @@
                         ctx.drawImage(img, x * cellSize, y * cellSize, cellSize, cellSize);
                     } else {
                         ctx.fillStyle = "#00a8cc";
-                        ctx.fillRect(x * cellSize, y * cellSize, cellSize - 2, cellSize - 2);
+                        ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
                     }
                 } else {
                     ctx.fillStyle = "#00a8cc";
-                    ctx.fillRect(x * cellSize, y * cellSize, cellSize - 2, cellSize - 2);
+                    ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
                 }
             });
 
+            // Dibujar selección actual
             if (casillaSeleccionada) {
                 const [sx, sy] = casillaSeleccionada.split(',').map(Number);
                 ctx.fillStyle = "rgba(230, 0, 92, 0.7)";
-                ctx.fillRect(sx * cellSize, sy * cellSize, cellSize - 2, cellSize - 2);
+                ctx.fillRect(sx * cellSize, sy * cellSize, cellSize, cellSize);
                 ctx.strokeStyle = "#fff";
-                ctx.lineWidth = 4;
-                ctx.strokeRect(sx * cellSize, sy * cellSize, cellSize - 2, cellSize - 2);
+                ctx.lineWidth = 2;
+                ctx.strokeRect(sx * cellSize, sy * cellSize, cellSize, cellSize);
             }
 
-            const totalCasillasTotales = gridCols * gridRows;
-            const libres = totalCasillasTotales - casillasOcupadas.size;
+            const libres = (gridCols * gridRows) - casillasOcupadas.size;
             document.getElementById("contador-libres").innerText = libres.toLocaleString();
         }
 
@@ -288,17 +272,9 @@
                 casillaSeleccionada = key;
                 document.getElementById("input-coords").value = key;
                 dibujarMuro();
-                abrirModal();
+                document.getElementById("modal-pago").style.display = "flex";
             }
         });
-
-        window.abrirModal = function() {
-            if (!casillaSeleccionada) {
-                alert("Por favor, haz clic primero en una casilla libre del muro.");
-                return;
-            }
-            document.getElementById("modal-pago").style.display = "flex";
-        }
 
         window.cerrarModal = function() {
             document.getElementById("modal-pago").style.display = "none";
@@ -326,12 +302,10 @@
 
             try {
                 const imagenBase64 = await archivoABase64(archivoInput);
-
                 localStorage.setItem("p_alias", alias);
                 localStorage.setItem("p_url", url);
                 localStorage.setItem("p_coords", coords);
                 localStorage.setItem("p_imagen", imagenBase64);
-
                 window.location.href = "https://buy.stripe.com/4gM8wOdJia3g4U91kZ73G00";
             } catch (e) {
                 alert("Error al procesar la imagen.");
@@ -349,19 +323,14 @@
                 if (alias && url && coords && imagen) {
                     try {
                         await setDoc(doc(db, "casillas", coords), {
-                            alias: alias,
-                            url: url,
-                            imagen: imagen,
-                            timestamp: serverTimestamp()
+                            alias: alias, url: url, imagen: imagen, timestamp: serverTimestamp()
                         });
                         alert("¡Casilla comprada y publicada con éxito!");
                     } catch (e) {
                         console.error(e);
                     }
-                    localStorage.removeItem("p_alias");
-                    localStorage.removeItem("p_url");
-                    localStorage.removeItem("p_coords");
-                    localStorage.removeItem("p_imagen");
+                    localStorage.removeItem("p_alias"); localStorage.removeItem("p_url");
+                    localStorage.removeItem("p_coords"); localStorage.removeItem("p_imagen");
                 }
                 window.history.replaceState({}, document.title, window.location.pathname);
             }
