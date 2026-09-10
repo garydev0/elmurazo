@@ -60,11 +60,11 @@
         .muro-canvas-container {
             width: 95vw;
             max-width: 1400px;
-            aspect-ratio: 125 / 80; /* Proporción para 125x80 casillas */
+            aspect-ratio: 40 / 25; /* Proporción para 40x25 casillas = 1000 */
             background: #111;
             border: 4px solid #111;
             border-radius: 12px;
-            box-shadow: 10px 10px 0px #111;
+            /* Sombra eliminada como pediste */
             position: relative;
             margin-bottom: 25px;
             cursor: pointer;
@@ -151,19 +151,18 @@
 <body>
 
     <h1>El Murazo</h1>
-    <!-- Textos actualizados a 10.000 -->
-    <p class="subtitle">10.000 casillas exclusivas • 1€ cada una</p>
+    <p class="subtitle">1.000 casillas exclusivas • 9,99€ / mes</p>
     
     <div class="counter-box">
-        Casillas libres: <span id="contador-libres">10.000</span>
+        Casillas libres: <span id="contador-libres">1,000</span>
     </div>
 
     <div class="muro-canvas-container">
-        <!-- Canvas con resolución ideal para que los logos se vean nítidos -->
-        <canvas id="muroCanvas" width="2500" height="1600"></canvas>
+        <!-- Canvas de alta resolución para 40x25 = 1000 casillas gigantes -->
+        <canvas id="muroCanvas" width="2000" height="1250"></canvas>
     </div>
 
-    <button class="btn-comprar-global" onclick="abrirModal()">Comprar casilla (1€)</button>
+    <button class="btn-comprar-global" onclick="abrirModal()">Comprar casilla (9,99€/mes)</button>
 
     <div id="modal-pago">
         <div class="modal-content">
@@ -175,7 +174,7 @@
             <input type="text" id="input-coords" placeholder="Casilla seleccionada" readonly style="background:#e2e8f0; font-weight:bold;">
             <div class="modal-buttons">
                 <button class="btn-cancelar" onclick="cerrarModal()">Cancelar</button>
-                <button class="btn-enviar" onclick="irAPagar()">Ir al Pago (1€)</button>
+                <button class="btn-enviar" onclick="irAPagar()">Ir al Pago</button>
             </div>
         </div>
     </div>
@@ -201,10 +200,10 @@
         const canvas = document.getElementById("muroCanvas");
         const ctx = canvas.getContext("2d");
         
-        // Matemáticas: 125 cols * 80 rows = 10.000 casillas exactas
-        const gridCols = 125;
-        const gridRows = 80;
-        const cellSize = canvas.width / gridCols; // Celdas mucho más grandes visualmente
+        // Matemáticas: 40 cols * 25 rows = 1.000 casillas exactas
+        const gridCols = 40;
+        const gridRows = 25;
+        const cellSize = canvas.width / gridCols; // Celdas 10 veces más grandes
         
         let casillasOcupadas = new Map();
         let casillaSeleccionada = null;
@@ -224,8 +223,8 @@
             ctx.fillStyle = "#111115";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            ctx.strokeStyle = "rgba(0, 168, 204, 0.15)"; // Cuadrícula un poco más visible
-            ctx.lineWidth = 1; 
+            ctx.strokeStyle = "rgba(0, 168, 204, 0.25)"; 
+            ctx.lineWidth = 2; 
             for (let x = 0; x <= canvas.width; x += cellSize) {
                 ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke();
             }
@@ -241,21 +240,21 @@
                         ctx.drawImage(img, x * cellSize, y * cellSize, cellSize, cellSize);
                     } else {
                         ctx.fillStyle = "#00a8cc";
-                        ctx.fillRect(x * cellSize, y * cellSize, cellSize - 1, cellSize - 1);
+                        ctx.fillRect(x * cellSize, y * cellSize, cellSize - 2, cellSize - 2);
                     }
                 } else {
                     ctx.fillStyle = "#00a8cc";
-                    ctx.fillRect(x * cellSize, y * cellSize, cellSize - 1, cellSize - 1);
+                    ctx.fillRect(x * cellSize, y * cellSize, cellSize - 2, cellSize - 2);
                 }
             });
 
             if (casillaSeleccionada) {
                 const [sx, sy] = casillaSeleccionada.split(',').map(Number);
                 ctx.fillStyle = "rgba(230, 0, 92, 0.7)";
-                ctx.fillRect(sx * cellSize, sy * cellSize, cellSize - 1, cellSize - 1);
+                ctx.fillRect(sx * cellSize, sy * cellSize, cellSize - 2, cellSize - 2);
                 ctx.strokeStyle = "#fff";
-                ctx.lineWidth = 2;
-                ctx.strokeRect(sx * cellSize, sy * cellSize, cellSize - 1, cellSize - 1);
+                ctx.lineWidth = 4;
+                ctx.strokeRect(sx * cellSize, sy * cellSize, cellSize - 2, cellSize - 2);
             }
 
             const totalCasillasTotales = gridCols * gridRows;
@@ -336,7 +335,8 @@
                 localStorage.setItem("p_coords", coords);
                 localStorage.setItem("p_imagen", imagenBase64);
 
-                window.location.href = "https://buy.stripe.com/4gM8wOdJia3g4U91kZ73G00";
+                // Nuevo enlace de Stripe
+                window.location.href = "https://buy.stripe.com/3cIfZgbBa6R4gCR5Bf73G03";
             } catch (e) {
                 alert("Error al procesar la imagen.");
             }
@@ -344,6 +344,7 @@
 
         window.addEventListener('load', async () => {
             const urlParams = new URLSearchParams(window.location.search);
+            // Revisa si existe success=true (coincide con tu nuevo enlace de retorno)
             if (urlParams.get('success') === 'true') {
                 const alias = localStorage.getItem("p_alias");
                 const url = localStorage.getItem("p_url");
@@ -358,7 +359,7 @@
                             imagen: imagen,
                             timestamp: serverTimestamp()
                         });
-                        alert("¡Casilla comprada y publicada con éxito!");
+                        alert("¡Suscripción confirmada y casilla publicada con éxito!");
                     } catch (e) {
                         console.error(e);
                     }
