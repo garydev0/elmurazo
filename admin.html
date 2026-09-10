@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin - El Murazo</title>
+    <style>
+        body { font-family: sans-serif; background: #222; color: white; padding: 20px; }
+        .panel { display: none; max-width: 600px; margin: 0 auto; background: #333; padding: 20px; border-radius: 8px; }
+        button { background: #00a8cc; color: white; border: none; padding: 10px 15px; margin: 5px; cursor: pointer; font-weight: bold; border-radius: 4px; }
+        button.red { background: #ff3333; }
+        input { padding: 10px; margin: 5px; }
+        .lista { margin-top: 20px; background: #111; padding: 10px; max-height: 400px; overflow-y: auto; }
+        .item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #444; }
+    </style>
+</head>
+<body>
+
+    <div id="login-box">
+        <h2>Acceso Admin</h2>
+        <input type="email" id="email" placeholder="Email"><br>
+        <input type="password" id="pass" placeholder="Contraseña"><br>
+        <button onclick="login()">Entrar</button>
+    </div>
+
+    <div id="admin-panel" class="panel">
+        <h2>Panel de Control Divino</h2>
+        
+        <h3>Tiempo Global</h3>
+        <button onclick="modificarTiempo(1)">+1 Hora</button>
+        <button class="red" onclick="modificarTiempo(-1)">-1 Hora (Pánico)</button>
+        <button onclick="reiniciar24h()">Reset a 24h</button>
+
+        <h3>Ladrillos Falsos</h3>
+        <input type="text" id="fake-name" placeholder="Nombre inventado" maxlength="15">
+        <button onclick="crearFake()">Crear Ladrillo Gratis</button>
+
+        <h3>Peligro</h3>
+        <button class="red" onclick="detonarMuro()">💣 BORRAR TODO EL MURO 💣</button>
+
+        <h3>Ladrillos Actuales</h3>
+        <div id="lista-ladrillos" class="lista"></div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-auth.js";
+        import { getFirestore, collection, getDocs, setDoc, doc, deleteDoc, onSnapshot, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCFE0T4m16MOyn9JqMujJZZwMJCLen-LgA",
+            authDomain: "elmurazo.firebaseapp.com",
+            projectId: "elmurazo",
+            storageBucket: "elmurazo.firebasestorage.app",
+            messagingSenderId: "722334671597",
+            appId: "1:722334671597:web:4b316572169de9c66262e4"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const estadoRef = doc(db, "estado", "global");
+
+        // Auth
+        window.login = () => {
+            const em = document.getElementById('email').value;
+            const pa = document.getElementById('pass').value;
+            signInWithEmailAndPassword(auth, em, pa).catch(e => alert("Error: " + e.message));
+        };
+
+        onAuthStateChanged(auth, user => {
+            if (user) {
+                document.getElementById('login-box').style.display = 'none';
+                document.getElementById('admin-panel').style.display = 'block';
+                cargarLista();
+            }
+        });
+
+        // Acciones
+        window.modificarTiempo = async (horas) => {
+            const docSnap = await getDoc(estadoRef);
+            let current = docSnap.exists() ? docSnap.data().deadline : Date.now();
+            await setDoc(estadoRef, { deadline: current + (horas * 3600000) }, { merge: true });
+        };
+
+        window.reiniciar24h = async () => {
+            await setDoc(estadoRef, { deadline: Date.now() + (24 * 3600000) }, { merge: true });
+        };
+
+        window.crearFake = async () => {
+            const name = document.getElementById('fake-name').value.toUpperCase();
+            if (!name) return;
+            await setDoc(doc(db, "ladrillos", Date.now().toString()), { nombre: name, timestamp: serverTimestamp() });
+            document.getElementById('fake-name').value = '';
+        };
+
+        window.detonarMuro = async () => {
+            if(!confirm("¿SEGURO? Esto borrará todo irrevocablemente.")) return;
+            const snap = await getDocs(collection(db, "ladrillos"));
+            snap.forEach(d => deleteDoc(d.ref));
+            await setDoc(estadoRef, { deadline: 0 }, { merge: true });
+        };
+
+        window.borrarLadrillo = async (id) => {
+            await deleteDoc(doc(db, "ladrillos", id));
+        };
+
+        function cargarLista() {
+            onSnapshot(collection(db, "ladrillos"), (snap) => {
+                const lista = document.getElementById('lista-ladrillos');
+                lista.innerHTML = '';
+                snap.forEach(d => {
+                    const l = d.data();
+                    lista.innerHTML += `<div class="item">
+                        <span>${l.nombre}</span>
+                        <button class="red" onclick="borrarLadrillo('${d.id}')">X</button>
+                    </div>`;
+                });
+            });
+        }
+    </script>
+</body>
+</html>
