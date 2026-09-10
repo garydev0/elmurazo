@@ -60,11 +60,10 @@
         .muro-canvas-container {
             width: 95vw;
             max-width: 1400px;
-            aspect-ratio: 40 / 25; /* Proporción para 40x25 casillas = 1000 */
+            aspect-ratio: 40 / 25;
             background: #111;
             border: 4px solid #111;
             border-radius: 12px;
-            /* Sombra eliminada como pediste */
             position: relative;
             margin-bottom: 25px;
             cursor: pointer;
@@ -158,7 +157,6 @@
     </div>
 
     <div class="muro-canvas-container">
-        <!-- Canvas de alta resolución para 40x25 = 1000 casillas gigantes -->
         <canvas id="muroCanvas" width="2000" height="1250"></canvas>
     </div>
 
@@ -200,10 +198,9 @@
         const canvas = document.getElementById("muroCanvas");
         const ctx = canvas.getContext("2d");
         
-        // Matemáticas: 40 cols * 25 rows = 1.000 casillas exactas
         const gridCols = 40;
         const gridRows = 25;
-        const cellSize = canvas.width / gridCols; // Celdas 10 veces más grandes
+        const cellSize = canvas.width / gridCols;
         
         let casillasOcupadas = new Map();
         let casillaSeleccionada = null;
@@ -266,7 +263,11 @@
             const querySnapshot = await getDocs(casillasRef);
             casillasOcupadas.clear();
             querySnapshot.forEach((doc) => {
-                casillasOcupadas.set(doc.id, doc.data());
+                const data = doc.data();
+                // SOLO carga y muestra las casillas que tienen el pago validado
+                if (data.pagado === true) {
+                    casillasOcupadas.set(doc.id, data);
+                }
             });
             dibujarMuro();
         }
@@ -330,44 +331,29 @@
             try {
                 const imagenBase64 = await archivoABase64(archivoInput);
 
-                localStorage.setItem("p_alias", alias);
-                localStorage.setItem("p_url", url);
-                localStorage.setItem("p_coords", coords);
-                localStorage.setItem("p_imagen", imagenBase64);
+                // 1. Guardar en Firebase como NO pagado ANTES de ir a Stripe
+                await setDoc(doc(db, "casillas", coords), {
+                    alias: alias,
+                    url: url,
+                    imagen: imagenBase64,
+                    pagado: false, // Clave de seguridad: Oculta hasta que el Webhook lo apruebe
+                    timestamp: serverTimestamp()
+                });
 
-                // Nuevo enlace de Stripe
-                window.location.href = "https://buy.stripe.com/3cIfZgbBa6R4gCR5Bf73G03";
+                // 2. Redirigir a Stripe enviando las coordenadas en el ID de referencia
+                window.location.href = `https://buy.stripe.com/3cIfZgbBa6R4gCR5Bf73G03?client_reference_id=${coords}`;
+                
             } catch (e) {
-                alert("Error al procesar la imagen.");
+                // Si Firebase rechaza la escritura, es porque alguien más ya está comprando esa casilla
+                alert("Alguien está reservando esta casilla ahora mismo. Por favor, elige otra.");
             }
         }
 
         window.addEventListener('load', async () => {
             const urlParams = new URLSearchParams(window.location.search);
-            // Revisa si existe success=true (coincide con tu nuevo enlace de retorno)
+            // El frontend ya no guarda nada. Solo muestra el aviso.
             if (urlParams.get('success') === 'true') {
-                const alias = localStorage.getItem("p_alias");
-                const url = localStorage.getItem("p_url");
-                const coords = localStorage.getItem("p_coords");
-                const imagen = localStorage.getItem("p_imagen");
-
-                if (alias && url && coords && imagen) {
-                    try {
-                        await setDoc(doc(db, "casillas", coords), {
-                            alias: alias,
-                            url: url,
-                            imagen: imagen,
-                            timestamp: serverTimestamp()
-                        });
-                        alert("¡Suscripción confirmada y casilla publicada con éxito!");
-                    } catch (e) {
-                        console.error(e);
-                    }
-                    localStorage.removeItem("p_alias");
-                    localStorage.removeItem("p_url");
-                    localStorage.removeItem("p_coords");
-                    localStorage.removeItem("p_imagen");
-                }
+                alert("¡Pago iniciado! Si se confirma correctamente, tu casilla aparecerá en el muro en breve.");
                 window.history.replaceState({}, document.title, window.location.pathname);
             }
             cargarCasillas();
