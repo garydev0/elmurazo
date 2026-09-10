@@ -4,51 +4,156 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>El Murazo | Construcción Global</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@700;900&display=swap" rel="stylesheet">
+    <!-- Fuentes para el reloj LED (Share Tech Mono) y el grafiti (Black Ops One) -->
+    <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Share+Tech+Mono&family=Inter:wght@900&display=swap" rel="stylesheet">
     <style>
-        body { margin: 0; background: #111; color: #fff; font-family: 'Inter', sans-serif; display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow-x: hidden; }
-        .header { position: sticky; top: 0; background: rgba(17,17,17,0.9); padding: 20px; text-align: center; width: 100%; z-index: 10; border-bottom: 2px solid #333; }
-        h1 { margin: 0; font-size: 2.5rem; text-transform: uppercase; color: #e6005c; }
-        .reloj { font-size: 3rem; font-weight: 900; color: #00a8cc; text-shadow: 0 0 10px rgba(0, 168, 204, 0.5); margin: 10px 0; }
-        .reloj.peligro { color: #ff3333; text-shadow: 0 0 15px #ff3333; animation: latido 1s infinite; }
-        @keyframes latido { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+        body { 
+            margin: 0; 
+            /* Textura de asfalto/cemento oscuro */
+            background-color: #1a1a1a; 
+            background-image: radial-gradient(#333 2px, transparent 2px), radial-gradient(#333 2px, transparent 2px);
+            background-size: 30px 30px;
+            background-position: 0 0, 15px 15px;
+            color: #fff; 
+            font-family: 'Inter', sans-serif; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            min-height: 100vh; 
+            overflow-x: hidden; 
+        }
         
-        .btn-comprar { background: #e6005c; color: #fff; border: none; padding: 15px 30px; font-size: 1.2rem; font-weight: 900; cursor: pointer; text-transform: uppercase; border-radius: 8px; box-shadow: 0 5px 15px rgba(230,0,92,0.4); margin-bottom: 10px; }
-        .btn-comprar:hover { background: #ff1a75; transform: scale(1.05); }
+        /* Cinta de peligro amarilla y negra */
+        .cinta-peligro {
+            width: 100%;
+            height: 15px;
+            background: repeating-linear-gradient(45deg, #ffd700, #ffd700 20px, #111 20px, #111 40px);
+            z-index: 11;
+        }
 
-        .muro { display: flex; flex-wrap: wrap-reverse; justify-content: center; align-content: flex-start; width: 100%; max-width: 1200px; padding: 20px; gap: 4px; }
-        .ladrillo { background: #b22222; border: 2px solid #8b0000; border-radius: 4px; padding: 12px 20px; font-weight: 700; font-size: 1rem; color: #fff; text-shadow: 1px 1px 0 #000; box-shadow: inset 0 0 10px rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; text-transform: uppercase; }
+        .header { 
+            position: sticky; 
+            top: 0; 
+            background: rgba(20, 20, 20, 0.95); 
+            padding: 20px; 
+            text-align: center; 
+            width: 100%; 
+            z-index: 10; 
+            border-bottom: 4px solid #111; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        }
+
+        h1 { 
+            margin: 0; 
+            font-size: 3rem; 
+            font-family: 'Black Ops One', cursive;
+            color: #888; 
+            text-shadow: 3px 3px 0 #000;
+        }
         
-        /* Modal de compra */
-        #modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); justify-content: center; align-items: center; z-index: 20; }
-        .modal-box { background: #222; padding: 30px; border-radius: 12px; text-align: center; border: 2px solid #444; width: 90%; max-width: 400px; }
-        .modal-box input { width: 90%; padding: 12px; font-size: 1rem; font-weight: bold; border-radius: 6px; border: none; margin: 15px 0; text-align: center; text-transform: uppercase; }
+        .reloj { 
+            font-family: 'Share Tech Mono', monospace; 
+            font-size: 4.5rem; 
+            color: #ff0000; 
+            text-shadow: 0 0 10px #ff0000, 0 0 20px #cc0000; 
+            margin: 10px 0; 
+            letter-spacing: 2px;
+        }
+        .reloj.peligro { 
+            animation: latido 0.5s infinite alternate; 
+        }
+        @keyframes latido { 
+            from { text-shadow: 0 0 10px #ff0000; transform: scale(1); } 
+            to { text-shadow: 0 0 30px #ff0000, 0 0 50px #ff0000; transform: scale(1.02); } 
+        }
+        
+        .btn-comprar { 
+            background: #ffd700; 
+            color: #111; 
+            border: 3px solid #111; 
+            padding: 15px 30px; 
+            font-size: 1.2rem; 
+            font-family: 'Black Ops One', cursive;
+            cursor: pointer; 
+            border-radius: 0; 
+            box-shadow: 5px 5px 0 #111; 
+            transition: all 0.1s;
+        }
+        .btn-comprar:hover { 
+            transform: translate(2px, 2px); 
+            box-shadow: 3px 3px 0 #111; 
+            background: #ffea00;
+        }
+
+        .muro { 
+            display: flex; 
+            flex-wrap: wrap-reverse; 
+            justify-content: center; 
+            align-content: flex-start; 
+            width: 100%; 
+            max-width: 1200px; 
+            padding: 40px 20px; 
+            gap: 2px; 
+        }
+        
+        /* Diseño del Ladrillo de Cemento */
+        .ladrillo { 
+            background: #737373; 
+            border: 2px solid #333; 
+            border-radius: 2px; 
+            padding: 15px 25px; 
+            font-family: 'Black Ops One', cursive; /* Tipografía Stencil */
+            font-size: 1.2rem; 
+            color: #111; /* Color spray negro */
+            text-shadow: 1px 1px 0 rgba(255,255,255,0.2); 
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.6), 2px 2px 5px rgba(0,0,0,0.4); 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            position: relative;
+        }
+        /* Rotura falsa en algunos ladrillos para dar realismo */
+        .ladrillo::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(45deg, transparent 40%, rgba(0,0,0,0.1) 45%, transparent 50%);
+            pointer-events: none;
+        }
+        
+        #modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); justify-content: center; align-items: center; z-index: 20; }
+        .modal-box { background: #222; padding: 30px; border: 4px solid #555; text-align: center; width: 90%; max-width: 400px; box-shadow: 10px 10px 0 #000; }
+        .modal-box h2 { font-family: 'Black Ops One', cursive; color: #ffd700; margin-top: 0;}
+        .modal-box input { width: 85%; padding: 15px; font-size: 1.2rem; font-family: 'Black Ops One', cursive; border: 2px solid #111; background: #999; margin: 15px 0; text-align: center; text-transform: uppercase; color: #111; }
+        .modal-box input::placeholder { color: #555; }
     </style>
 </head>
 <body>
 
+    <div class="cinta-peligro"></div>
     <div class="header">
-        <h1>El Murazo</h1>
-        <div id="reloj" class="reloj">Cargando...</div>
-        <p>Si el reloj llega a 0, el muro se destruye.</p>
-        <button class="btn-comprar" onclick="document.getElementById('modal').style.display='flex'">Poner Ladrillo (0,99€)</button>
+        <h1>EL MURAZO</h1>
+        <div id="reloj" class="reloj">--:--:--</div>
+        <p style="color: #aaa; font-weight: bold; letter-spacing: 1px;">SI EL RELOJ LLEGA A CERO, EL MURO SE DEMUELE.</p>
+        <button class="btn-comprar" onclick="document.getElementById('modal').style.display='flex'">GRABAR LADRILLO (0,99€)</button>
     </div>
+    <div class="cinta-peligro"></div>
 
     <div class="muro" id="muro"></div>
 
     <div id="modal">
         <div class="modal-box">
-            <h2 style="margin-top:0;">Tu Ladrillo</h2>
-            <p>Escribe tu nombre o @usuario.</p>
+            <h2>NUEVO BLOQUE</h2>
+            <p style="color:#aaa;">Pinta tu nombre en el cemento.</p>
             <input type="text" id="input-nombre" placeholder="TU NOMBRE" maxlength="15">
-            <button class="btn-comprar" style="width: 100%;" onclick="irAPagar()">Ir al Pago</button>
-            <button onclick="document.getElementById('modal').style.display='none'" style="margin-top:10px; background:none; color:#888; border:none; cursor:pointer;">Cancelar</button>
+            <button class="btn-comprar" style="width: 100%;" onclick="irAPagar()">IR AL PAGO</button>
+            <button onclick="document.getElementById('modal').style.display='none'" style="margin-top:15px; background:none; color:#777; font-weight:bold; border:none; cursor:pointer; text-decoration: underline;">ABORTAR</button>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
-        import { getFirestore, collection, onSnapshot, setDoc, doc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore.js";
+        import { getFirestore, collection, onSnapshot, setDoc, doc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCFE0T4m16MOyn9JqMujJZZwMJCLen-LgA",
@@ -67,23 +172,23 @@
         let deadline = 0;
         let timerInterval;
 
-        // Cargar ladrillos en tiempo real
         onSnapshot(ladrillosRef, (snapshot) => {
             const muro = document.getElementById("muro");
             muro.innerHTML = "";
             let ladrillos = [];
             snapshot.forEach(doc => ladrillos.push(doc.data()));
-            // Ordenar para que los más nuevos estén arriba o se apilen natural
             ladrillos.sort((a, b) => (a.timestamp?.seconds || 0) - (b.timestamp?.seconds || 0));
             ladrillos.forEach(l => {
                 const div = document.createElement("div");
                 div.className = "ladrillo";
                 div.innerText = l.nombre;
+                // Rotación aleatoria muy sutil para dar imperfección realista al muro
+                const rotacion = (Math.random() * 2 - 1).toFixed(1);
+                div.style.transform = `rotate(${rotacion}deg)`;
                 muro.appendChild(div);
             });
         });
 
-        // Cargar y gestionar reloj en tiempo real
         onSnapshot(estadoRef, (docSnap) => {
             if (docSnap.exists() && docSnap.data().deadline) {
                 deadline = docSnap.data().deadline;
@@ -99,9 +204,9 @@
                 const display = document.getElementById("reloj");
 
                 if (restante <= 0) {
-                    display.innerText = "💥 DESTRUIDO 💥";
+                    display.innerText = "00:00:00";
                     display.className = "reloj peligro";
-                    document.getElementById("muro").innerHTML = ""; // Simula destrucción visual
+                    document.getElementById("muro").innerHTML = ""; 
                     return;
                 }
 
@@ -118,7 +223,7 @@
 
         window.irAPagar = function() {
             const nombre = document.getElementById("input-nombre").value.trim().toUpperCase();
-            if (!nombre) return alert("Pon un nombre");
+            if (!nombre) return alert("Escribe un nombre para el muro.");
             localStorage.setItem("nuevo_ladrillo", nombre);
             window.location.href = "https://buy.stripe.com/14A28q8oY5N05Yd2p373G04";
         }
@@ -128,16 +233,11 @@
             if (urlParams.get('success') === 'true') {
                 const nombre = localStorage.getItem("nuevo_ladrillo");
                 if (nombre) {
-                    // Guardar ladrillo
                     const id = Date.now().toString();
                     await setDoc(doc(db, "ladrillos", id), { nombre: nombre, timestamp: serverTimestamp() });
-                    
-                    // Reiniciar el reloj a 24h desde ahora
                     const nuevaDeadline = Date.now() + (24 * 60 * 60 * 1000);
                     await setDoc(estadoRef, { deadline: nuevaDeadline }, { merge: true });
-                    
                     localStorage.removeItem("nuevo_ladrillo");
-                    alert("¡Ladrillo colocado! Has salvado el muro 24 horas más.");
                 }
                 window.history.replaceState({}, document.title, window.location.pathname);
             }
