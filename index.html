@@ -32,7 +32,7 @@
             position: sticky; 
             top: 0; 
             background: rgba(20, 20, 20, 0.95); 
-            padding: 20px; 
+            padding: 20px 0 0 0; 
             text-align: center; 
             width: 100%; 
             z-index: 10; 
@@ -40,92 +40,43 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.8);
         }
 
-        h1 { 
-            margin: 0; 
-            font-size: 3rem; 
-            font-family: 'Black Ops One', cursive;
-            color: #888; 
-            text-shadow: 3px 3px 0 #000;
-        }
+        h1 { margin: 0; font-size: 3rem; font-family: 'Black Ops One', cursive; color: #888; text-shadow: 3px 3px 0 #000; }
         
-        .reloj { 
-            font-family: 'Share Tech Mono', monospace; 
-            font-size: 4.5rem; 
-            color: #ff0000; 
-            text-shadow: 0 0 10px #ff0000, 0 0 20px #cc0000; 
-            margin: 10px 0; 
-            letter-spacing: 2px;
-        }
+        .reloj { font-family: 'Share Tech Mono', monospace; font-size: 4.5rem; color: #ff0000; text-shadow: 0 0 10px #ff0000, 0 0 20px #cc0000; margin: 10px 0; letter-spacing: 2px;}
         .reloj.peligro { animation: latido 0.5s infinite alternate; }
-        @keyframes latido { 
-            from { text-shadow: 0 0 10px #ff0000; transform: scale(1); } 
-            to { text-shadow: 0 0 30px #ff0000, 0 0 50px #ff0000; transform: scale(1.02); } 
-        }
+        @keyframes latido { from { text-shadow: 0 0 10px #ff0000; transform: scale(1); } to { text-shadow: 0 0 30px #ff0000, 0 0 50px #ff0000; transform: scale(1.02); } }
         
-        .btn-comprar { 
-            background: #ffd700; 
-            color: #111; 
-            border: 3px solid #111; 
-            padding: 15px 30px; 
-            font-size: 1.2rem; 
-            font-family: 'Black Ops One', cursive;
-            cursor: pointer; 
-            box-shadow: 5px 5px 0 #111; 
-            transition: all 0.1s;
-        }
-        .btn-comprar:hover { 
-            transform: translate(2px, 2px); 
-            box-shadow: 3px 3px 0 #111; 
-            background: #ffea00;
-        }
+        .btn-comprar { background: #ffd700; color: #111; border: 3px solid #111; padding: 15px 30px; font-size: 1.2rem; font-family: 'Black Ops One', cursive; cursor: pointer; box-shadow: 5px 5px 0 #111; transition: all 0.1s; margin-bottom: 20px;}
+        .btn-comprar:hover { transform: translate(2px, 2px); box-shadow: 3px 3px 0 #111; background: #ffea00; }
 
-        .muro { 
-            display: flex; 
-            flex-wrap: wrap-reverse; 
-            justify-content: center; 
-            align-content: flex-start; 
-            width: 100%; 
-            max-width: 1200px; 
-            padding: 40px 20px; 
-            gap: 4px; 
+        /* BANNER DEL REY */
+        #banner-rey {
+            display: none;
+            width: 100%;
+            background: #111;
+            color: #fff;
+            text-decoration: none;
+            padding: 15px 0;
+            font-family: 'Black Ops One', cursive;
+            font-size: 1.2rem;
+            border-top: 2px solid #ffd700;
+            transition: background 0.2s;
         }
+        #banner-rey:hover { background: #222; }
+        .rey-destacado { color: #ffd700; font-size: 1.5rem; }
+
+        .muro { display: flex; flex-wrap: wrap-reverse; justify-content: center; align-content: flex-start; width: 100%; max-width: 1200px; padding: 40px 20px; gap: 4px; }
         
-        /* Ladrillos Marrones */
-        .ladrillo { 
-            background: #8b3a2f; 
-            border: 2px solid #4a1c14; 
-            border-radius: 2px; 
-            padding: 15px 25px; 
-            font-family: 'Black Ops One', cursive; 
-            font-size: 1.2rem; 
-            color: #111; 
-            text-shadow: 1px 1px 0 rgba(255,255,255,0.2); 
-            box-shadow: inset 0 0 15px rgba(0,0,0,0.6), 2px 2px 5px rgba(0,0,0,0.4); 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            position: relative;
-            transition: transform 0.3s ease;
-        }
+        .ladrillo { background: #8b3a2f; border: 2px solid #4a1c14; border-radius: 2px; padding: 15px 25px; font-family: 'Black Ops One', cursive; font-size: 1.2rem; color: #111; text-shadow: 1px 1px 0 rgba(255,255,255,0.2); box-shadow: inset 0 0 15px rgba(0,0,0,0.6), 2px 2px 5px rgba(0,0,0,0.4); display: flex; justify-content: center; align-items: center; position: relative; transition: transform 0.3s ease; }
         
-        /* El Rey (Último Ladrillo) */
-        .ladrillo.rey {
-            background: #ffd700;
-            border-color: #ffaa00;
-            box-shadow: 0 0 20px #ffd700, inset 0 0 10px rgba(0,0,0,0.3);
-            z-index: 5;
-            animation: brillar 1.5s infinite alternate;
-        }
+        .ladrillo.rey { background: #ffd700; border-color: #ffaa00; box-shadow: 0 0 20px #ffd700, inset 0 0 10px rgba(0,0,0,0.3); z-index: 5; animation: brillar 1.5s infinite alternate; }
         .ladrillo.rey::before { content: '👑 '; margin-right: 5px; }
-        @keyframes brillar {
-            from { box-shadow: 0 0 10px #ffd700; }
-            to { box-shadow: 0 0 30px #ffea00; }
-        }
+        @keyframes brillar { from { box-shadow: 0 0 10px #ffd700; } to { box-shadow: 0 0 30px #ffea00; } }
 
         #modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); justify-content: center; align-items: center; z-index: 20; }
         .modal-box { background: #222; padding: 30px; border: 4px solid #555; text-align: center; width: 90%; max-width: 400px; box-shadow: 10px 10px 0 #000; }
         .modal-box h2 { font-family: 'Black Ops One', cursive; color: #ffd700; margin-top: 0;}
-        .modal-box input { width: 85%; padding: 15px; font-size: 1.2rem; font-family: 'Black Ops One', cursive; border: 2px solid #111; background: #999; margin: 15px 0; text-align: center; text-transform: uppercase; color: #111; }
+        .modal-box input { width: 85%; padding: 15px; font-size: 1.1rem; font-family: 'Black Ops One', cursive; border: 2px solid #111; background: #999; margin: 10px 0; text-align: center; color: #111; }
         .modal-box input::placeholder { color: #555; }
     </style>
 </head>
@@ -135,8 +86,11 @@
     <div class="header">
         <h1>EL MURAZO</h1>
         <div id="reloj" class="reloj">--:--:--</div>
-        <p style="color: #aaa; font-weight: bold; letter-spacing: 1px;">SI EL RELOJ LLEGA A CERO, EL MURO SE DEMUELE.</p>
-        <button class="btn-comprar" onclick="document.getElementById('modal').style.display='flex'">GRABAR LADRILLO (0,99€)</button>
+        <button class="btn-comprar" onclick="document.getElementById('modal').style.display='flex'">ROBAR LA CORONA (0,99€)</button>
+        <a id="banner-rey" href="#" target="_blank">
+            👑 REY ACTUAL: <span class="rey-destacado" id="nombre-rey">NADIE</span><br>
+            <span style="font-size: 0.8rem; color: #aaa; letter-spacing: 2px; margin-top:5px; display:block;">CLICK PARA VISITAR SU PERFIL ➔</span>
+        </a>
     </div>
     <div class="cinta-peligro"></div>
 
@@ -145,9 +99,9 @@
     <div id="modal">
         <div class="modal-box">
             <h2>NUEVO BLOQUE</h2>
-            <p style="color:#aaa;">Corónate como el Rey del Muro.</p>
             <input type="text" id="input-nombre" placeholder="TU NOMBRE" maxlength="15">
-            <button class="btn-comprar" style="width: 100%;" onclick="irAPagar()">IR AL PAGO</button>
+            <input type="text" id="input-link" placeholder="TU @ O ENLACE WEB (Opcional)">
+            <button class="btn-comprar" style="width: 100%; margin: 15px 0 0 0;" onclick="irAPagar()">IR AL PAGO</button>
             <button onclick="document.getElementById('modal').style.display='none'" style="margin-top:15px; background:none; color:#777; font-weight:bold; border:none; cursor:pointer; text-decoration: underline;">ABORTAR</button>
         </div>
     </div>
@@ -184,10 +138,27 @@
                 const div = document.createElement("div");
                 div.className = "ladrillo";
                 
-                // Aplicar estilo de Rey al último ladrillo
                 if (index === ladrillos.length - 1) {
                     div.classList.add("rey");
-                    div.style.transform = `rotate(0deg) scale(1.15)`; // Más grande y recto
+                    div.style.transform = `rotate(0deg) scale(1.15)`;
+                    
+                    // Configurar el Banner del Rey
+                    const banner = document.getElementById("banner-rey");
+                    document.getElementById("nombre-rey").innerText = l.nombre;
+                    
+                    if (l.link && l.link.trim() !== "") {
+                        let linkFinal = l.link.trim();
+                        if (linkFinal.startsWith('@')) {
+                            linkFinal = 'https://tiktok.com/' + linkFinal;
+                        } else if (!linkFinal.startsWith('http')) {
+                            linkFinal = 'https://' + linkFinal;
+                        }
+                        banner.href = linkFinal;
+                        banner.style.display = "block";
+                    } else {
+                        banner.style.display = "none";
+                    }
+
                 } else {
                     const rotacion = (Math.random() * 2 - 1).toFixed(1);
                     div.style.transform = `rotate(${rotacion}deg)`;
@@ -216,13 +187,13 @@
                     display.innerText = "00:00:00";
                     display.className = "reloj peligro";
                     document.getElementById("muro").innerHTML = ""; 
+                    document.getElementById("banner-rey").style.display = "none";
                     return;
                 }
 
                 const horas = Math.floor((restante / (1000 * 60 * 60)) % 24);
                 const mins = Math.floor((restante / 1000 / 60) % 60);
                 const secs = Math.floor((restante / 1000) % 60);
-                
                 display.innerText = `${horas.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
                 
                 if (restante < 3600000) { display.className = "reloj peligro"; } 
@@ -232,8 +203,11 @@
 
         window.irAPagar = function() {
             const nombre = document.getElementById("input-nombre").value.trim().toUpperCase();
-            if (!nombre) return alert("Escribe un nombre para el muro.");
+            const link = document.getElementById("input-link").value.trim();
+            if (!nombre) return alert("Escribe un nombre.");
+            
             localStorage.setItem("nuevo_ladrillo", nombre);
+            localStorage.setItem("nuevo_link", link);
             window.location.href = "https://buy.stripe.com/14A28q8oY5N05Yd2p373G04";
         }
 
@@ -241,12 +215,20 @@
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.get('success') === 'true') {
                 const nombre = localStorage.getItem("nuevo_ladrillo");
+                const link = localStorage.getItem("nuevo_link") || "";
+                
                 if (nombre) {
                     const id = Date.now().toString();
-                    await setDoc(doc(db, "ladrillos", id), { nombre: nombre, timestamp: serverTimestamp() });
+                    await setDoc(doc(db, "ladrillos", id), { 
+                        nombre: nombre, 
+                        link: link,
+                        timestamp: serverTimestamp() 
+                    });
                     const nuevaDeadline = Date.now() + (24 * 60 * 60 * 1000);
                     await setDoc(estadoRef, { deadline: nuevaDeadline }, { merge: true });
+                    
                     localStorage.removeItem("nuevo_ladrillo");
+                    localStorage.removeItem("nuevo_link");
                 }
                 window.history.replaceState({}, document.title, window.location.pathname);
             }
