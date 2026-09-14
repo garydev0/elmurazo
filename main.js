@@ -7,19 +7,23 @@ const grid = document.getElementById('grid-productos');
 const buscador = document.getElementById('buscador');
 
 async function cargarProductos() {
-    const q = query(collection(db, "productos"), orderBy("fecha", "desc"));
-    const querySnapshot = await getDocs(q);
-    productosGlobales = [];
-    querySnapshot.forEach((doc) => {
-        productosGlobales.push({ id: doc.id, ...doc.data() });
-    });
-    renderProductos(productosGlobales);
+    try {
+        const q = query(collection(db, "productos"), orderBy("fecha", "desc"));
+        const querySnapshot = await getDocs(q);
+        productosGlobales = [];
+        querySnapshot.forEach((doc) => {
+            productosGlobales.push({ id: doc.id, ...doc.data() });
+        });
+        filtrarYBuscar();
+    } catch (e) {
+        console.error("Error cargando productos: ", e);
+    }
 }
 
 function renderProductos(productos) {
     grid.innerHTML = "";
     if (productos.length === 0) {
-        grid.innerHTML = `<p style="grid-column: 1/-1; text-align:center; color:#64748b; padding:40px;">No se encontraron chollos.</p>`;
+        grid.innerHTML = `<p style="grid-column: 1/-1; text-align:center; color:#64748b; padding:40px;">No hay chollos disponibles en esta categoría.</p>`;
         return;
     }
 
@@ -42,23 +46,23 @@ function renderProductos(productos) {
     });
 }
 
-// Filtrar por categoría
+// Filtro por categorías corregido con e.currentTarget
 document.querySelectorAll('.cat-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
         document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-        e.target.classList.add('active');
-        categoriaActual = e.target.getAttribute('data-cat');
+        e.currentTarget.classList.add('active');
+        categoriaActual = e.currentTarget.getAttribute('data-cat');
         filtrarYBuscar();
     });
 });
 
-// Buscador
 buscador.addEventListener('input', filtrarYBuscar);
 
 function filtrarYBuscar() {
     const texto = buscador.value.toLowerCase();
     const filtrados = productosGlobales.filter(p => {
-        const coincideCat = categoriaActual === "todos" || p.categoria === categoriaActual;
+        const catProducto = (p.categoria || "").trim();
+        const coincideCat = categoriaActual === "todos" || catProducto.toLowerCase() === categoriaActual.toLowerCase();
         const coincideTexto = p.titulo.toLowerCase().includes(texto);
         return coincideCat && coincideTexto;
     });
