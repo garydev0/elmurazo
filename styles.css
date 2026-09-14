@@ -55,3 +55,11 @@ header h1 span { color: var(--primary); }
 .btn-edit { background: #3b82f6; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; }
 .btn-delete { background: var(--danger); color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; }
 .hidden { display: none; }
+/* Hero / Sección de bienvenida profesional */
+.hero-section { background: white; border-bottom: 1px solid #e2e8f0; padding: 30px 0; margin-bottom: 25px; }
+.hero-section h2 { font-size: 1.5rem; color: #0f172a; margin-bottom: 8px; font-weight: 800; }
+.hero-section p { color: #64748b; font-size: 0.95rem; line-height: 1.5; max-width: 800px; }
+
+/* Footer legal de afiliados */
+footer { background: #0f172a; color: #94a3b8; text-align: center; padding: 30px 0; margin-top: 60px; font-size: 0.85rem; line-height: 1.6; }
+footer p { max-width: 800px; margin: 0 auto; padding: 0 20px; }
