@@ -4,25 +4,98 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EL MURAZO - Chollos y Ofertas Top de Amazon</title>
-    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #090d16;
+            --surface: #111827;
+            --surface-card: #1f2937;
+            --border: #374151;
+            --text: #f9fafb;
+            --text-muted: #9ca3af;
+            --primary: #f59e0b;
+            --primary-hover: #fbbf24;
+            --accent: #ef4444;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background-color: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
+        .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; width: 100%; }
+
+        /* Header */
+        header { background: rgba(17, 24, 39, 0.8); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; padding: 18px 0; }
+        .header-content { display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; }
+        h1 { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px; }
+        h1 span { color: var(--primary); }
+        
+        #buscador { 
+            background: var(--bg); border: 1px solid var(--border); padding: 12px 20px; 
+            border-radius: 12px; color: white; width: 100%; max-width: 340px; outline: none; 
+            transition: all 0.2s ease; font-size: 0.95rem;
+        }
+        #buscador:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15); }
+
+        /* Hero */
+        .hero { padding: 40px 0 20px; text-align: center; }
+        .hero h2 { font-size: 2rem; font-weight: 800; margin-bottom: 10px; letter-spacing: -1px; background: linear-gradient(to right, #fff, #9ca3af); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero p { color: var(--text-muted); font-size: 1.05rem; max-width: 600px; margin: 0 auto; }
+
+        /* Categorías */
+        .categories { display: flex; gap: 10px; overflow-x: auto; padding: 20px 0; justify-content: center; flex-wrap: wrap; }
+        .cat-btn { 
+            background: var(--surface); border: 1px solid var(--border); color: var(--text-muted); 
+            padding: 10px 18px; border-radius: 99px; font-weight: 600; font-size: 0.9rem; 
+            cursor: pointer; transition: all 0.2s; white-space: nowrap; 
+        }
+        .cat-btn:hover, .cat-btn.active { background: var(--primary); color: #000; border-color: var(--primary); transform: translateY(-1px); }
+
+        /* Grid & Cards */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; padding: 20px 0 60px; }
+        .card { 
+            background: var(--surface); border: 1px solid var(--border); border-radius: 20px; 
+            padding: 20px; display: flex; flex-direction: column; position: relative; 
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); 
+        }
+        .card:hover { transform: translateY(-6px); border-color: var(--primary); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.3); }
+        
+        .badge { position: absolute; top: 16px; left: 16px; background: rgba(255,255,255,0.08); backdrop-filter: blur(4px); font-size: 0.7rem; font-weight: 700; padding: 5px 10px; border-radius: 6px; text-transform: uppercase; color: var(--text-muted); }
+        .card img { width: 100%; height: 200px; object-filter: contain; margin: 20px 0; transition: transform 0.3s; }
+        .card:hover img { transform: scale(1.03); }
+        
+        .card h3 { font-size: 1rem; font-weight: 600; line-height: 1.4; margin-bottom: 14px; height: 44px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+        
+        .price-box { display: flex; align-items: baseline; gap: 10px; margin-bottom: 20px; }
+        .precio-actual { font-size: 1.5rem; font-weight: 800; color: var(--accent); }
+        .precio-anterior { text-decoration: line-through; color: var(--text-muted); font-size: 0.9rem; }
+        .descuento { background: rgba(239, 68, 68, 0.15); color: var(--accent); padding: 3px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; margin-left: auto; }
+
+        .btn-primary { 
+            background: var(--primary); color: #000; padding: 12px; border-radius: 12px; 
+            font-weight: 700; font-size: 0.95rem; text-align: center; text-decoration: none; 
+            transition: background 0.2s, transform 0.1s; margin-top: auto; display: block; 
+        }
+        .btn-primary:hover { background: var(--primary-hover); }
+
+        /* Footer */
+        footer { margin-top: auto; border-top: 1px solid var(--border); padding: 30px 0; text-align: center; color: var(--text-muted); font-size: 0.8rem; line-height: 1.5; }
+        footer p { max-width: 800px; margin: 0 auto; padding: 0 20px; }
+    </style>
 </head>
 <body>
     <header>
         <div class="container header-content">
             <h1>EL <span>MURAZO</span></h1>
-            <input type="text" id="buscador" placeholder="🔍 Buscar chollos...">
+            <input type="text" id="buscador" placeholder="🔍 Buscar chollos en directo...">
         </div>
     </header>
 
-    <section class="hero-section">
-        <div class="container">
-            <h2>Chollos Amazon (última hora). Ofertas más destacadas de hoy</h2>
-            <p>Descubre la mejor selección diaria de ofertas y chollos en Amazon España. Precios rebajados en tecnología, gaming, hogar y accesorios actualizados al instante.</p>
-        </div>
+    <section class="hero container">
+        <h2>Chollos Amazon de Última Hora</h2>
+        <p>Las mejores ofertas seleccionadas diariamente en tecnología, gaming y hogar con descuento real.</p>
     </section>
 
     <main class="container">
-        <div class="categories-bar" id="categorias-filtro">
+        <div class="categories" id="categorias-filtro">
             <button class="cat-btn active" data-cat="todos">🔥 Todos</button>
             <button class="cat-btn" data-cat="Tecnología">💻 Tecnología</button>
             <button class="cat-btn" data-cat="Gaming">🎮 Gaming</button>
