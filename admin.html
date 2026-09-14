@@ -8,30 +8,38 @@
 </head>
 <body>
     <header>
-        <div class="container"><h1>Panel de Administración</h1></div>
+        <div class="container"><h1>Panel de Control - EL MURAZO</h1></div>
     </header>
     <main class="container">
-        <!-- Login -->
-        <div id="login-section" class="card admin-box">
+        <div id="login-section" class="card-admin" style="max-width: 400px; margin: 40px auto;">
             <h2>Iniciar Sesión</h2>
-            <input type="email" id="email" placeholder="Email">
+            <input type="email" id="email" placeholder="Correo electrónico">
             <input type="password" id="password" placeholder="Contraseña">
-            <button id="btn-login" class="btn-primary">Entrar</button>
+            <button id="btn-login" class="btn-primary" style="width:100%;">Entrar</button>
         </div>
 
-        <!-- Dashboard (Oculto hasta login) -->
-        <div id="dashboard-section" class="hidden">
-            <div class="card admin-box">
-                <h2>Añadir Nuevo Chollo</h2>
+        <div id="dashboard-section" class="hidden admin-layout">
+            <div class="card-admin">
+                <h2 id="form-title">➕ Publicar Nuevo Chollo</h2>
+                <input type="hidden" id="producto-id">
                 <input type="text" id="titulo" placeholder="Título del producto">
                 <input type="text" id="imagen" placeholder="URL de la imagen">
-                <input type="number" id="precio-actual" placeholder="Precio actual (€)">
-                <input type="number" id="precio-anterior" placeholder="Precio anterior (€)">
-                <input type="text" id="enlace" placeholder="Enlace de afiliado">
-                <button id="btn-add" class="btn-primary">Publicar</button>
+                <select id="categoria">
+                    <option value="Tecnología">Tecnología</option>
+                    <option value="Gaming">Gaming</option>
+                    <option value="Hogar">Hogar</option>
+                    <option value="Accesorios">Accesorios</option>
+                </select>
+                <input type="number" step="0.01" id="precio-actual" placeholder="Precio actual (€)">
+                <input type="number" step="0.01" id="precio-anterior" placeholder="Precio anterior (€)">
+                <input type="text" id="enlace" placeholder="Enlace de afiliado Amazon">
+                <button id="btn-save" class="btn-primary" style="width:100%;">Publicar Chollo</button>
+                <button id="btn-cancel" class="hidden" style="width:100%; margin-top:10px; background:#64748b; color:white; border:none; padding:10px; border-radius:8px; cursor:pointer;">Cancelar Edición</button>
             </div>
-            <h3>Chollos Activos</h3>
-            <div id="admin-productos" class="grid"></div>
+            <div>
+                <h2>📦 Chollos Publicados</h2>
+                <div id="admin-productos"></div>
+            </div>
         </div>
     </main>
     <script type="module" src="firebase-config.js"></script>
