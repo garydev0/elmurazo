@@ -1,0 +1,38 @@
+:root {
+    --bg-color: #f3f4f6;
+    --card-bg: #ffffff;
+    --text-main: #1f2937;
+    --text-muted: #6b7280;
+    --amazon-btn: #ff9900;
+    --amazon-btn-hover: #e38800;
+    --discount-color: #e53e3e;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+body { background-color: var(--bg-color); color: var(--text-main); }
+.container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+header { background-color: #111827; color: white; padding: 20px 0; margin-bottom: 30px; }
+.header-content { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
+#buscador { padding: 10px; border-radius: 6px; border: none; width: 100%; max-width: 300px; }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+
+/* Tarjetas de Producto */
+.card { background: var(--card-bg); border-radius: 12px; padding: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); transition: transform 0.2s; display: flex; flex-direction: column; }
+.card:hover { transform: translateY(-5px); box-shadow: 0 10px 15px rgba(0,0,0,0.1); }
+.card img { width: 100%; height: 200px; object-fit: contain; margin-bottom: 15px; }
+.card h3 { font-size: 1.1rem; margin-bottom: 10px; height: 45px; overflow: hidden; }
+
+.price-box { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
+.precio-actual { font-size: 1.5rem; font-weight: bold; color: var(--discount-color); }
+.precio-anterior { text-decoration: line-through; color: var(--text-muted); font-size: 1rem; }
+.descuento { background: var(--discount-color); color: white; padding: 3px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; }
+
+.btn-primary { background-color: var(--amazon-btn); color: #111; padding: 12px; border: none; border-radius: 8px; font-weight: bold; font-size: 1rem; cursor: pointer; text-align: center; text-decoration: none; transition: background 0.2s; margin-top: auto; }
+.btn-primary:hover { background-color: var(--amazon-btn-hover); }
+
+/* Admin */
+.admin-box { max-width: 500px; margin: 0 auto 30px auto; }
+.admin-box input { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 6px; }
+.hidden { display: none; }
