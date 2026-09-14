@@ -16,14 +16,18 @@ async function cargarProductos() {
         });
         filtrarYBuscar();
     } catch (e) {
-        console.error("Error cargando productos: ", e);
+        console.error("Error en Firebase:", e);
+        if (grid) {
+            grid.innerHTML = `<p style="grid-column: 1/-1; text-align:center; color:#ef4444; padding:20px;">Error al cargar: ${e.message}</p>`;
+        }
     }
 }
 
 function renderProductos(productos) {
+    if (!grid) return;
     grid.innerHTML = "";
     if (productos.length === 0) {
-        grid.innerHTML = `<p style="grid-column: 1/-1; text-align:center; color:#64748b; padding:40px;">No hay chollos disponibles en esta categoría.</p>`;
+        grid.innerHTML = `<p style="grid-column: 1/-1; text-align:center; color:var(--text-muted); padding:40px;">No hay chollos disponibles.</p>`;
         return;
     }
 
@@ -32,7 +36,7 @@ function renderProductos(productos) {
         
         grid.innerHTML += `
             <div class="card">
-                <span class="badge-cat">${p.categoria || 'General'}</span>
+                <span class="badge">${p.categoria || 'General'}</span>
                 <img src="${p.imagen}" alt="${p.titulo}">
                 <h3>${p.titulo}</h3>
                 <div class="price-box">
@@ -46,20 +50,23 @@ function renderProductos(productos) {
     });
 }
 
-// Filtro por categorías corregido con e.currentTarget
-document.querySelectorAll('.cat-btn').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-        document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-        e.currentTarget.classList.add('active');
-        categoriaActual = e.currentTarget.getAttribute('data-cat');
-        filtrarYBuscar();
+if (document.querySelectorAll('.cat-btn')) {
+    document.querySelectorAll('.cat-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+            e.currentTarget.classList.add('active');
+            categoriaActual = e.currentTarget.getAttribute('data-cat');
+            filtrarYBuscar();
+        });
     });
-});
+}
 
-buscador.addEventListener('input', filtrarYBuscar);
+if (buscador) {
+    buscador.addEventListener('input', filtrarYBuscar);
+}
 
 function filtrarYBuscar() {
-    const texto = buscador.value.toLowerCase();
+    const texto = buscador ? buscador.value.toLowerCase() : "";
     const filtrados = productosGlobales.filter(p => {
         const catProducto = (p.categoria || "").trim();
         const coincideCat = categoriaActual === "todos" || catProducto.toLowerCase() === categoriaActual.toLowerCase();
