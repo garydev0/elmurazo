@@ -1,57 +1,149 @@
 :root {
-    --bg-dark: #050510; /* Azul marino casi negro */
-    --crt-green: #39ff14; /* Verde retro */
-    --brick-bg: #1a1a2e;
+    /* Paleta de colores */
+    --bg-dark: #05050A; /* Negro azulado */
+    --panel-gray: #1A1A24; /* Gris oscuro */
+    --text-cream: #F5EEDB; /* Crema */
+    --brick-red: #C23B22; /* Rojo identidad */
+    --gold: #FFD700; /* Amarillo dorado */
+    --crt-green: #39FF14; /* Verde retro */
+    --electric-blue: #00F0FF; /* Azul interactivo */
+    
+    /* Tipografías */
+    --font-pixel: 'Press Start 2P', cursive;
+    --font-modern: 'Inter', sans-serif;
 }
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
     background-color: var(--bg-dark);
-    color: white;
-    font-family: 'Courier New', Courier, monospace; /* Tipografía limpia/retro temporal */
-    margin: 0;
+    color: var(--text-cream);
+    font-family: var(--font-modern);
+    overflow-x: hidden;
+    background-image: radial-gradient(circle at center, #11111a 0%, var(--bg-dark) 100%);
+}
+
+/* Tipografía retro para títulos */
+h1, h2, .logo, .pixel-text, .btn-claim {
+    font-family: var(--font-pixel);
+    text-transform: uppercase;
+}
+
+/* Barra Superior */
+.topbar {
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
     align-items: center;
+    padding: 15px 30px;
+    background-color: var(--panel-gray);
+    border-bottom: 2px solid #333;
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 
-header {
+.logo { color: var(--text-cream); font-size: 18px; letter-spacing: 2px; }
+.btn-claim { background: var(--electric-blue); color: #000; border: none; padding: 10px 15px; font-size: 10px; cursor: pointer; transition: 0.2s; }
+.btn-claim:hover { box-shadow: 0 0 10px var(--electric-blue); }
+.btn-login { background: transparent; color: var(--text-cream); border: 1px solid var(--text-cream); padding: 8px 15px; cursor: pointer; font-family: var(--font-modern); margin-left: 10px;}
+
+/* Hero */
+.hero {
     text-align: center;
-    color: var(--crt-green);
-    text-shadow: 0 0 8px rgba(57, 255, 20, 0.5); /* Brillo suave */
-    margin-bottom: 20px;
+    padding: 40px 20px;
+}
+.hero h1 { font-size: 24px; color: var(--crt-green); margin-bottom: 15px; text-shadow: 0 0 5px rgba(57, 255, 20, 0.4); line-height: 1.4;}
+.hero p { font-size: 16px; max-width: 600px; margin: 0 auto 20px; color: #aaa; }
+.hero-stats { font-family: var(--font-pixel); font-size: 10px; color: var(--gold); }
+
+/* Contenedor del Muro */
+.wall-container {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    overflow: auto; /* Permite scroll en móvil */
 }
 
-#wall-container {
+/* La Cuadrícula */
+.wall {
     display: grid;
-    /* Cuadrícula adaptable para escritorio y móvil */
-    grid-template-columns: repeat(auto-fill, 64px); 
-    gap: 2px;
-    width: 95vw;
-    max-width: 800px; 
-    background-color: #111;
-    padding: 2px;
+    /* Ladrillos de 64x64px. Si el ancho da, mete más. Si no, baja de línea. */
+    grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
+    gap: 2px; /* Separación mínima */
+    width: 100%;
+    max-width: 1200px;
+    background-color: #000;
     border: 2px solid #333;
+    padding: 2px;
 }
 
-/* Ladrillo de prueba (luego se crearán en JS) */
+/* Ladrillo Base */
 .brick {
-    width: 64px;
-    height: 64px;
-    background-color: var(--brick-bg);
-    border: 1px solid #444;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background-color: var(--panel-gray);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 10px;
+    font-size: 8px;
     font-weight: bold;
     cursor: pointer;
-    transition: all 0.2s ease;
-    text-align: center;
+    transition: all 0.15s ease-in-out;
+    position: relative;
+    overflow: hidden;
+    color: transparent; /* Oculta texto por defecto */
 }
 
+/* Interacción Hover */
 .brick:hover {
-    border-color: var(--crt-green);
-    box-shadow: 0 0 10px var(--crt-green);
-    background-color: #2a2a4e;
+    transform: translateY(-2px) scale(1.05);
     z-index: 10;
+    color: #fff; /* Muestra el texto */
+    box-shadow: 0 0 12px var(--crt-green);
+    border: 1px solid var(--crt-green);
+}
+
+/* Tipos de Ladrillos Extras */
+.brick.founder { border: 2px solid var(--gold); }
+.brick.founder:hover { box-shadow: 0 0 12px var(--gold); }
+.brick.empty { background-color: #111; cursor: crosshair; }
+.brick.empty:hover { border: 1px dashed var(--electric-blue); box-shadow: none; color: var(--electric-blue); }
+
+/* Modal (Panel de Información) */
+.modal {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex; justify-content: center; align-items: center;
+    z-index: 1000;
+}
+.modal.hidden { display: none; }
+.modal-content {
+    background: var(--panel-gray);
+    width: 90%; max-width: 400px;
+    border: 2px solid var(--electric-blue);
+    padding: 20px; position: relative;
+    text-align: center;
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
+}
+.close-btn {
+    position: absolute; top: 10px; right: 10px;
+    background: transparent; color: var(--text-cream); border: none;
+    font-family: var(--font-pixel); font-size: 12px; cursor: pointer;
+}
+.modal-color-header { width: 100%; height: 60px; margin-bottom: 15px; border: 1px solid #333; }
+.modal h2 { font-size: 16px; margin-bottom: 10px; color: var(--text-cream); }
+.badge { background: var(--gold); color: #000; font-family: var(--font-pixel); font-size: 8px; padding: 4px 8px; display: inline-block; margin-bottom: 15px; }
+.modal-desc { margin-bottom: 20px; font-size: 14px; line-height: 1.5; color: #ccc; }
+.modal-stats { display: flex; justify-content: space-around; font-size: 12px; color: #888; margin-bottom: 20px; }
+.btn-visit {
+    display: inline-block; background: var(--brick-red); color: var(--text-cream);
+    text-decoration: none; padding: 10px 20px; font-family: var(--font-pixel); font-size: 10px; transition: 0.2s;
+}
+.btn-visit:hover { background: #e04428; box-shadow: 0 0 10px var(--brick-red); }
+
+/* Responsive móvil */
+@media (max-width: 600px) {
+    .wall { grid-template-columns: repeat(auto-fill, minmax(48px, 1fr)); }
+    .hero h1 { font-size: 18px; }
+    .btn-claim { padding: 8px 10px; font-size: 8px; }
 }
