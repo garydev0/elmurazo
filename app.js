@@ -84,6 +84,18 @@ function bindUI() {
     $("google-login").classList.toggle("hidden", !!user);
     $("auth-status").textContent = user ? `Signed in as ${user.email}` : "";
   });
+
+  $("claim-color").addEventListener("input", (e) => {
+  const brickId = $("claim-brick-id").value;
+  if (brickId) {
+    const brickEl = document.querySelector(`.brick[data-id="${brickId}"]`);
+    if (brickEl) {
+      brickEl.style.setProperty("--brick-color", e.target.value);
+      brickEl.classList.remove("empty");
+      brickEl.classList.add("claimed");
+    }
+  }
+});
 }
 
 async function loadSettings() {
