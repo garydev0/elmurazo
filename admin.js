@@ -18,7 +18,7 @@ const firebaseConfig = {
 };
 
 // Set this to the exact Google account that must have admin access.
-const ADMIN_EMAIL = "REPLACE_WITH_YOUR_EMAIL@example.com";
+const ADMIN_EMAIL = "gerardlopezgarcia1@gmail.com";
 
 const DEFAULT_SETTINGS = {
   totalBricks: 500,
