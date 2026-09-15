@@ -10,7 +10,7 @@ service cloud.firestore {
     // Replace with the exact administrator email.
     function isAdmin() {
       return signedIn() &&
-        request.auth.token.email == "REPLACE_WITH_YOUR_EMAIL@example.com";
+        request.auth.token.email == "gerardlopezgarcia1@gmail.com";
     }
 
     match /settings/public {
