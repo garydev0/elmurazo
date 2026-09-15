@@ -1,0 +1,40 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    // Replace with the exact administrator email.
+    function isAdmin() {
+      return signedIn() &&
+        request.auth.token.email == "REPLACE_WITH_YOUR_EMAIL@example.com";
+    }
+
+    match /settings/public {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /bricks/{brickId} {
+      allow read: if true;
+
+      // Public users may claim only an unclaimed brick for themselves.
+      allow create: if signedIn()
+        && request.resource.data.claimed == true
+        && request.resource.data.ownerUid == request.auth.uid;
+
+      allow update: if isAdmin()
+        || (
+          signedIn()
+          && resource.data.claimed == false
+          && request.resource.data.claimed == true
+          && request.resource.data.ownerUid == request.auth.uid
+        );
+
+      allow delete: if isAdmin();
+    }
+  }
+}
