@@ -65,17 +65,21 @@ function bindUI() {
   $("logout-btn").addEventListener("click", async () => { await signOut(auth); });
   $("close-modal").addEventListener("click", closeModal);
   $("close-auth").addEventListener("click", closeAuth);
+  
   $("close-claim").addEventListener("click", () => {
-  closeClaim();
-  renderWall(); // Esto vuelve a cargar el color original si cierran sin guardar
-});
+    closeClaim();
+    renderWall(); 
+  });
+  
   $("modal-claim").addEventListener("click", () => {
     closeModal();
     if (selectedBrick) openClaimModal(selectedBrick.id);
   });
+  
   $("claim-form").addEventListener("submit", handleClaim);
   $("zoom-in").addEventListener("click", () => setZoom(Math.min(1.5, +(zoom + 0.1).toFixed(2))));
   $("zoom-out").addEventListener("click", () => setZoom(Math.max(0.7, +(zoom - 0.1).toFixed(2))));
+  
   window.addEventListener("click", (e) => {
     if (e.target.classList.contains("modal")) e.target.classList.add("hidden");
   });
@@ -88,17 +92,22 @@ function bindUI() {
     $("auth-status").textContent = user ? `Signed in as ${user.email}` : "";
   });
 
+  // Evento para previsualizar el color en tiempo real
   $("claim-color").addEventListener("input", (e) => {
-  const brickId = $("claim-brick-id").value;
-  if (brickId) {
-    const brickEl = document.querySelector(`.brick[data-id="${brickId}"]`);
-    if (brickEl) {
-      brickEl.style.setProperty("--brick-color", e.target.value);
-      brickEl.classList.remove("empty");
-      brickEl.classList.add("claimed");
+    // 1. Pinta el fondo del selector en el modal
+    e.target.style.backgroundColor = e.target.value;
+    
+    // 2. Pinta el ladrillo en el muro de fondo
+    const brickId = $("claim-brick-id").value || findFirstAvailableBrick();
+    if (brickId) {
+      const brickEl = document.querySelector(`.brick[data-id="${brickId}"]`);
+      if (brickEl) {
+        brickEl.style.setProperty("--brick-color", e.target.value);
+        brickEl.classList.remove("empty");
+        brickEl.classList.add("claimed");
+      }
     }
-  }
-});
+  });
 }
 
 async function loadSettings() {
@@ -219,6 +228,12 @@ function openClaimModal(brickId = "") {
   $("claim-form").reset();
   $("claim-brick-id").value = brickId;
   $("claim-error").textContent = "";
+  
+  // Establecer el color por defecto visualmente en el campo al abrir
+  const defaultColor = "#c23b22";
+  $("claim-color").value = defaultColor;
+  $("claim-color").style.backgroundColor = defaultColor;
+  
   $("claim-modal").classList.remove("hidden");
 }
 
