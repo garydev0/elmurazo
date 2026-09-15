@@ -3,18 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>El Murazo</title>
+    <title>EL MURAZO — The Internet's Digital Wall</title>
+    <!-- Tipografías: Press Start 2P (Pixel) y Inter (Moderna) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Press+Start+2P&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <h1>EL MURAZO</h1>
-        <p>Un monumento digital construido por Internet.</p>
+    <!-- Barra Superior -->
+    <nav class="topbar">
+        <div class="logo">EL MURAZO</div>
+        <div class="nav-actions">
+            <button class="btn-claim">Claim your brick</button>
+            <button class="btn-login">Login</button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <h1>CLAIM YOUR PLACE ON THE INTERNET</h1>
+        <p>A digital wall built brick by brick by people, creators and businesses from around the world.</p>
+        <div class="hero-stats">
+            <span>Occupied: <strong id="stat-occupied">0</strong></span> | 
+            <span>Visitors: <strong id="stat-visitors">0</strong></span>
+        </div>
     </header>
-    
-    <main id="wall-container">
-        <!-- Los ladrillos se generarán aquí con JavaScript -->
+
+    <!-- El Muro -->
+    <main class="wall-container">
+        <div id="wall" class="wall">
+            <!-- Los ladrillos se inyectan desde app.js -->
+        </div>
     </main>
+
+    <!-- Panel Modal (Oculto por defecto) -->
+    <div id="brick-modal" class="modal hidden">
+        <div class="modal-content">
+            <button id="close-modal" class="close-btn">X</button>
+            <div id="modal-brick-color" class="modal-color-header"></div>
+            <h2 id="modal-title" class="pixel-text">Nombre</h2>
+            <span id="modal-badge" class="badge hidden">FOUNDER</span>
+            <p id="modal-desc" class="modern-text">Descripción corta aquí...</p>
+            <div class="modal-stats">
+                <p>Brick #<span id="modal-id">000</span></p>
+                <p>Visits: <span id="modal-visits">0</span></p>
+            </div>
+            <a id="modal-link" href="#" target="_blank" class="btn-visit">Visit Link</a>
+        </div>
+    </div>
 
     <script type="module" src="app.js"></script>
 </body>
