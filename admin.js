@@ -8,7 +8,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-auth.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCFEQ0T4m16MOyn9JqMujJZZwMJCLen-LgA",
+  apiKey: "AIzaSyCFE0T4m16MOyn9JqMujJZZwMJCLen-LgA",
   authDomain: "elmurazo.firebaseapp.com",
   projectId: "elmurazo",
   storageBucket: "elmurazo.firebasestorage.app",
