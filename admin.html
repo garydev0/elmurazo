@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EL MURAZO — Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <div id="login-screen" class="login-screen">
+    <div class="login-card">
+      <div class="admin-mark">EM</div>
+      <div class="eyebrow">PRIVATE AREA</div>
+      <h1>EL MURAZO<br>ADMIN</h1>
+      <p>Only the configured administrator account can access this dashboard.</p>
+      <button id="admin-google-login" class="button button-primary button-full">SIGN IN WITH GOOGLE</button>
+      <p id="login-message" class="message"></p>
+    </div>
+  </div>
+
+  <div id="admin-app" class="admin-app hidden">
+    <header class="admin-topbar">
+      <a href="./" class="brand">EL MURAZO / ADMIN</a>
+      <div class="admin-user">
+        <span id="admin-email"></span>
+        <button id="admin-logout" class="button button-ghost">SIGN OUT</button>
+      </div>
+    </header>
+
+    <main class="admin-main">
+      <div class="dashboard-header">
+        <div>
+          <div class="eyebrow">CONTROL ROOM</div>
+          <h1>ADMIN DASHBOARD</h1>
+          <p>Manage the wall, activity display and public site settings from one place.</p>
+        </div>
+        <a href="./" class="button button-dark">VIEW PUBLIC SITE</a>
+      </div>
+
+      <section class="kpi-grid">
+        <div class="kpi"><span>CLAIMED BRICKS</span><strong id="kpi-claimed">0</strong></div>
+        <div class="kpi"><span>AVAILABLE BRICKS</span><strong id="kpi-available">0</strong></div>
+        <div class="kpi"><span>ACTIVITY NOW</span><strong id="kpi-activity">0</strong></div>
+        <div class="kpi"><span>WALL SIZE</span><strong id="kpi-size">0</strong></div>
+      </section>
+
+      <section class="panel-grid">
+        <article class="panel">
+          <div class="panel-head">
+            <div><div class="eyebrow">ACTIVITY</div><h2>AMBIENT ACTIVITY</h2></div>
+            <span class="pill">PUBLIC DISPLAY</span>
+          </div>
+          <p class="panel-copy">This is a simulated ambient counter. It is not a real visitor count. You control the range and movement used on the public page.</p>
+          <div class="form-grid">
+            <label>Minimum<input id="activity-min" type="number" min="0"></label>
+            <label>Maximum<input id="activity-max" type="number" min="0"></label>
+            <label>Step size<input id="activity-step" type="number" min="1" value="1"></label>
+            <label>Update interval (ms)<input id="activity-interval" type="number" min="1000" step="500"></label>
+          </div>
+          <div class="toggle-row">
+            <div><strong>Enable public activity</strong><small>Animate the public counter between your configured limits.</small></div>
+            <label class="switch"><input id="activity-enabled" type="checkbox"><span></span></label>
+          </div>
+          <button id="save-activity" class="button button-primary">SAVE ACTIVITY SETTINGS</button>
+          <span id="activity-save-msg" class="save-msg"></span>
+        </article>
+
+        <article class="panel">
+          <div class="panel-head">
+            <div><div class="eyebrow">WALL</div><h2>WALL SETTINGS</h2></div>
+          </div>
+          <div class="form-grid">
+            <label>Total bricks<input id="wall-total" type="number" min="1" max="5000"></label>
+            <label>Brick gap (px)<input id="wall-gap" type="number" min="0" max="8"></label>
+          </div>
+          <p class="panel-copy warning">Changing total bricks only affects newly created brick documents; existing brick data is preserved.</p>
+          <button id="save-wall" class="button button-primary">SAVE WALL SETTINGS</button>
+          <span id="wall-save-msg" class="save-msg"></span>
+        </article>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <div><div class="eyebrow">BRICK MANAGER</div><h2>MANAGE EVERY BRICK</h2></div>
+          <div class="table-actions">
+            <input id="brick-search" class="search" placeholder="Search name / ID">
+            <button id="seed-bricks" class="button button-dark">SYNC EMPTY BRICKS</button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>ID</th><th>Status</th><th>Name</th><th>Founder</th><th>Visits</th><th>Actions</th></tr>
+            </thead>
+            <tbody id="brick-table-body"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <div><div class="eyebrow">EDITOR</div><h2>BRICK EDITOR</h2></div>
+          <span id="editor-status" class="pill">NONE SELECTED</span>
+        </div>
+        <form id="brick-editor-form">
+          <input type="hidden" id="edit-id">
+          <div class="form-grid four">
+            <label>Brick ID<input id="edit-brick-id" type="number" readonly></label>
+            <label>Name<input id="edit-name" maxlength="20"></label>
+            <label>Visits<input id="edit-visits" type="number" min="0"></label>
+            <label>Color<input id="edit-color" type="color" value="#c23b22"></label>
+          </div>
+          <div class="form-grid">
+            <label>Description<textarea id="edit-desc" maxlength="140"></textarea></label>
+            <label>Link<input id="edit-link" type="url" placeholder="https://example.com"></label>
+          </div>
+          <div class="toggle-row">
+            <div><strong>Claimed</strong><small>Turn a brick on/off without deleting its document.</small></div>
+            <label class="switch"><input id="edit-claimed" type="checkbox"><span></span></label>
+          </div>
+          <div class="toggle-row">
+            <div><strong>Founder</strong><small>Add the Founder badge.</small></div>
+            <label class="switch"><input id="edit-founder" type="checkbox"><span></span></label>
+          </div>
+          <div class="editor-actions">
+            <button type="submit" class="button button-primary">SAVE BRICK</button>
+            <button id="delete-brick" type="button" class="button button-danger">DELETE DATA</button>
+            <span id="editor-msg" class="save-msg"></span>
+          </div>
+        </form>
+      </section>
+    </main>
+  </div>
+
+  <script type="module" src="admin.js"></script>
+</body>
+</html>
