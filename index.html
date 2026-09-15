@@ -1,56 +1,142 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EL MURAZO — The Internet's Digital Wall</title>
-    <!-- Tipografías: Press Start 2P (Pixel) y Inter (Moderna) -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Press+Start+2P&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#070810">
+  <meta name="description" content="El Murazo — The Internet's Digital Wall. Claim your place on the internet.">
+  <title>EL MURAZO — The Internet's Digital Wall</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Barra Superior -->
-    <nav class="topbar">
-        <div class="logo">EL MURAZO</div>
-        <div class="nav-actions">
-            <button class="btn-claim">Claim your brick</button>
-            <button class="btn-login">Login</button>
-        </div>
-    </nav>
+  <div class="site-noise" aria-hidden="true"></div>
 
-    <!-- Hero Section -->
-    <header class="hero">
-        <h1>CLAIM YOUR PLACE ON THE INTERNET</h1>
-        <p>A digital wall built brick by brick by people, creators and businesses from around the world.</p>
-        <div class="hero-stats">
-            <span>Occupied: <strong id="stat-occupied">0</strong></span> | 
-            <span>Visitors: <strong id="stat-visitors">0</strong></span>
-        </div>
-    </header>
-
-    <!-- El Muro -->
-    <main class="wall-container">
-        <div id="wall" class="wall">
-            <!-- Los ladrillos se inyectan desde app.js -->
-        </div>
-    </main>
-
-    <!-- Panel Modal (Oculto por defecto) -->
-    <div id="brick-modal" class="modal hidden">
-        <div class="modal-content">
-            <button id="close-modal" class="close-btn">X</button>
-            <div id="modal-brick-color" class="modal-color-header"></div>
-            <h2 id="modal-title" class="pixel-text">Nombre</h2>
-            <span id="modal-badge" class="badge hidden">FOUNDER</span>
-            <p id="modal-desc" class="modern-text">Descripción corta aquí...</p>
-            <div class="modal-stats">
-                <p>Brick #<span id="modal-id">000</span></p>
-                <p>Visits: <span id="modal-visits">0</span></p>
-            </div>
-            <a id="modal-link" href="#" target="_blank" class="btn-visit">Visit Link</a>
-        </div>
+  <header class="topbar">
+    <a class="brand" href="./" aria-label="El Murazo home">EL MURAZO</a>
+    <div class="topbar-actions">
+      <button id="claim-btn" class="button button-primary">CLAIM A BRICK</button>
+      <button id="login-btn" class="button button-ghost">LOGIN</button>
     </div>
+  </header>
 
-    <script type="module" src="app.js"></script>
+  <main>
+    <section class="hero">
+      <div class="eyebrow"><span class="status-dot"></span> THE DIGITAL WALL OF THE INTERNET</div>
+      <h1>CLAIM YOUR PLACE<br><span>ON THE INTERNET.</span></h1>
+      <p class="hero-copy">A living digital monument, built brick by brick by people, creators and businesses from around the world.</p>
+      <div class="hero-actions">
+        <button id="hero-claim-btn" class="button button-primary button-large">CLAIM YOUR BRICK</button>
+        <button id="explore-btn" class="button button-dark button-large">EXPLORE THE WALL</button>
+      </div>
+
+      <div class="stats-row" aria-live="polite">
+        <div class="stat-card">
+          <div class="stat-label">BRICKS CLAIMED</div>
+          <div id="stat-occupied" class="stat-value">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">WALL ACTIVITY</div>
+          <div id="stat-visitors" class="stat-value stat-live">—</div>
+          <div class="stat-note">simulated ambient activity</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">WALL SIZE</div>
+          <div id="stat-total" class="stat-value">500</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="wall-section" class="wall-section">
+      <div class="section-heading">
+        <div>
+          <div class="section-kicker">THE WALL</div>
+          <h2>EXPLORE THE MURAZO</h2>
+        </div>
+        <div class="wall-tools">
+          <button id="zoom-out" class="square-button" aria-label="Zoom out">−</button>
+          <span id="zoom-label">100%</span>
+          <button id="zoom-in" class="square-button" aria-label="Zoom in">+</button>
+        </div>
+      </div>
+
+      <div class="wall-shell">
+        <div id="wall-viewport" class="wall-viewport">
+          <div id="wall" class="wall"></div>
+        </div>
+      </div>
+
+      <div class="wall-legend">
+        <span><i class="legend-swatch empty"></i> AVAILABLE</span>
+        <span><i class="legend-swatch claimed"></i> CLAIMED</span>
+        <span><i class="legend-swatch founder"></i> FOUNDER</span>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div>© <span id="year"></span> EL MURAZO</div>
+    <div>THE INTERNET'S DIGITAL WALL</div>
+  </footer>
+
+  <!-- Brick details -->
+  <div id="brick-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-card brick-modal-card">
+      <button id="close-modal" class="modal-close" aria-label="Close">×</button>
+      <div id="modal-color" class="modal-color"></div>
+      <div class="modal-content">
+        <div id="modal-badge" class="badge hidden">FOUNDER</div>
+        <div class="modal-id">BRICK #<span id="modal-id-value">000</span></div>
+        <h2 id="modal-title">Untitled Brick</h2>
+        <p id="modal-desc">This brick is available.</p>
+        <div class="modal-meta">
+          <div><span>VISITS</span><strong id="modal-visits">0</strong></div>
+          <div><span>STATUS</span><strong id="modal-status">AVAILABLE</strong></div>
+        </div>
+        <a id="modal-link" href="#" target="_blank" rel="noopener noreferrer" class="button button-primary modal-link hidden">VISIT LINK</a>
+        <button id="modal-claim" class="button button-primary modal-claim">CLAIM THIS BRICK</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Auth -->
+  <div id="auth-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="auth-title">
+    <div class="modal-card auth-card">
+      <button id="close-auth" class="modal-close" aria-label="Close">×</button>
+      <div class="auth-mark">EM</div>
+      <div class="section-kicker">ACCOUNT</div>
+      <h2 id="auth-title">SIGN IN TO EL MURAZO</h2>
+      <p class="auth-copy">Use your Google account to manage your bricks. Administration access is restricted separately.</p>
+      <button id="google-login" class="button button-primary button-full">CONTINUE WITH GOOGLE</button>
+      <button id="logout-btn" class="button button-ghost button-full hidden">SIGN OUT</button>
+      <p id="auth-status" class="auth-status"></p>
+    </div>
+  </div>
+
+  <!-- Claim form -->
+  <div id="claim-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="claim-title">
+    <div class="modal-card form-card">
+      <button id="close-claim" class="modal-close" aria-label="Close">×</button>
+      <div class="section-kicker">NEW BRICK</div>
+      <h2 id="claim-title">CLAIM YOUR BRICK</h2>
+      <p class="form-copy">Create your place on the wall. Keep it short, clean and memorable.</p>
+      <form id="claim-form">
+        <input type="hidden" id="claim-brick-id">
+        <label>Display name<input id="claim-name" maxlength="20" required placeholder="Your name or brand"></label>
+        <label>Description<textarea id="claim-desc" maxlength="140" required placeholder="A short description"></textarea></label>
+        <label>Link (optional)<input id="claim-link" type="url" placeholder="https://example.com"></label>
+        <label>Brick color
+          <input id="claim-color" type="color" value="#c23b22">
+        </label>
+        <label class="check-line"><input id="claim-founder" type="checkbox"> I am an early supporter / founder</label>
+        <button class="button button-primary button-full" type="submit">CLAIM BRICK</button>
+        <p id="claim-error" class="form-error"></p>
+      </form>
+    </div>
+  </div>
+
+  <script type="module" src="app.js"></script>
 </body>
 </html>
