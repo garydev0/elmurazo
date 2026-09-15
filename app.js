@@ -65,7 +65,10 @@ function bindUI() {
   $("logout-btn").addEventListener("click", async () => { await signOut(auth); });
   $("close-modal").addEventListener("click", closeModal);
   $("close-auth").addEventListener("click", closeAuth);
-  $("close-claim").addEventListener("click", closeClaim);
+  $("close-claim").addEventListener("click", () => {
+  closeClaim();
+  renderWall(); // Esto vuelve a cargar el color original si cierran sin guardar
+});
   $("modal-claim").addEventListener("click", () => {
     closeModal();
     if (selectedBrick) openClaimModal(selectedBrick.id);
