@@ -1,0 +1,19 @@
+// Firestore Security Rules para El Murazo
+// Reemplaza las reglas actuales de Firestore por estas y publícalas.
+//
+// IMPORTANTE: la restricción también se aplica al backend. El correo de administrador
+// debe coincidir con la cuenta creada en Firebase Authentication.
+
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    match /productos/{productoId} {
+      allow read: if true;
+
+      allow create, update, delete: if request.auth != null
+        && request.auth.token.email == "gerardlopezgarcia1@gmail.com";
+    }
+  }
+}
