@@ -1,41 +1,127 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - El Murazo</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b0c10">
+  <title>Admin — El Murazo</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-<body>
-    <header>
-        <h1>Panel de Administración</h1>
-        <button id="btn-logout" style="display:none;">Cerrar Sesión</button>
+<body class="admin-page">
+  <div class="site-shell">
+    <header class="topbar">
+      <a class="brand" href="index.html" aria-label="Volver a El Murazo">
+        <span class="brand-mark">M</span>
+        <span>
+          <strong>EL MURAZO</strong>
+          <small>PANEL DE ADMIN</small>
+        </span>
+      </a>
+      <div class="topbar-actions">
+        <a class="admin-link" href="index.html">Ver muro</a>
+        <button class="icon-btn" id="theme-toggle" type="button" aria-label="Cambiar tema"><span id="theme-icon">☾</span></button>
+      </div>
     </header>
 
-    <main class="admin-container">
-        <!-- Formulario de Login -->
-        <div id="login-section">
-            <h2>Acceso Restringido</h2>
-            <input type="email" id="email" placeholder="Correo electrónico" required>
-            <input type="password" id="password" placeholder="Contraseña" required>
-            <button id="btn-login">Entrar</button>
-            <p id="login-error" style="color: red;"></p>
+    <main class="admin-main">
+      <section id="login-section" class="auth-card">
+        <div class="auth-icon">🔒</div>
+        <span class="eyebrow">ÁREA PRIVADA</span>
+        <h1>Bienvenido al panel</h1>
+        <p>Inicia sesión para publicar y gestionar las ofertas de El Murazo.</p>
+
+        <form id="login-form" class="stack-form">
+          <label>
+            Correo electrónico
+            <input id="email" type="email" placeholder="Tu correo" autocomplete="email" required>
+          </label>
+          <label>
+            Contraseña
+            <div class="password-wrap">
+              <input id="password" type="password" placeholder="Tu contraseña" autocomplete="current-password" required>
+              <button id="toggle-password" class="password-toggle" type="button" aria-label="Mostrar contraseña">Mostrar</button>
+            </div>
+          </label>
+          <button class="primary-btn full" type="submit">Entrar al panel</button>
+          <p id="login-error" class="form-message error"></p>
+        </form>
+      </section>
+
+      <section id="admin-section" class="hidden">
+        <div class="admin-heading">
+          <div>
+            <span class="eyebrow">CONTROL TOTAL</span>
+            <h1>Gestiona tus chollos</h1>
+            <p>Añade nuevas ofertas o edita y elimina las que ya están publicadas.</p>
+          </div>
+          <button id="btn-logout" class="ghost-btn" type="button">Cerrar sesión</button>
         </div>
 
-        <!-- Formulario para añadir productos (Oculto hasta hacer login) -->
-        <div id="upload-section" style="display: none;">
-            <h2>Colgar Ladrillo en el Muro</h2>
-            <form id="product-form">
-                <input type="text" id="prod-title" placeholder="Título corto (ej. SSD 2TB M.2)" required>
-                <input type="text" id="prod-img" placeholder="URL de la imagen" required>
-                <input type="text" id="prod-price" placeholder="Precio (ej. 129,99€)" required>
-                <input type="url" id="prod-link" placeholder="Enlace de afiliado Amazon" required>
-                <button type="submit">Publicar Oferta</button>
+        <div class="admin-layout">
+          <section class="panel-card">
+            <div class="panel-title">
+              <div>
+                <span class="panel-kicker">PUBLICAR / EDITAR</span>
+                <h2 id="form-title">Nuevo chollo</h2>
+              </div>
+              <button id="cancel-edit" class="text-btn hidden" type="button">Cancelar edición</button>
+            </div>
+
+            <form id="product-form" class="stack-form">
+              <input id="edit-id" type="hidden">
+
+              <label>
+                Título
+                <input id="prod-title" type="text" maxlength="140" placeholder="Ej. SSD NVMe 2 TB" required>
+              </label>
+
+              <label>
+                URL de la imagen
+                <input id="prod-img" type="url" placeholder="https://..." required>
+              </label>
+
+              <div class="form-grid-2">
+                <label>
+                  Precio
+                  <input id="prod-price" type="text" maxlength="40" placeholder="129,99 €" required>
+                </label>
+                <label>
+                  Enlace de oferta
+                  <input id="prod-link" type="url" placeholder="https://amzn.to/..." required>
+                </label>
+              </div>
+
+              <div class="image-preview" id="image-preview">
+                <div class="image-preview-placeholder">La vista previa aparecerá aquí</div>
+              </div>
+
+              <button id="submit-product" class="primary-btn full" type="submit">Publicar oferta</button>
+              <p id="upload-msg" class="form-message"></p>
             </form>
-            <p id="upload-msg"></p>
+          </section>
+
+          <section class="panel-card products-panel">
+            <div class="panel-title products-title">
+              <div>
+                <span class="panel-kicker">MURAL</span>
+                <h2>Ofertas publicadas <span id="admin-count" class="count-pill">0</span></h2>
+              </div>
+              <div class="admin-search">
+                <span>⌕</span>
+                <input id="admin-search" type="search" placeholder="Buscar...">
+              </div>
+            </div>
+
+            <div id="admin-products" class="admin-products" aria-live="polite"></div>
+            <div id="admin-empty" class="state-inline hidden">No hay productos que coincidan.</div>
+          </section>
         </div>
+      </section>
     </main>
 
-    <script type="module" src="app.js"></script>
+    <div id="toast" class="toast" role="status"></div>
+  </div>
+
+  <script type="module" src="app.js"></script>
 </body>
 </html>
