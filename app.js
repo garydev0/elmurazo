@@ -18,41 +18,62 @@ let bricks = new Map();
 let currentUser = null;
 let selectedBrick = null;
 
-// Cámara isométrica
-let cameraX = 0, cameraY = -300; 
-let isDragging = false, startX, startY;
+// Cámara: Bloqueada solo en el Eje X (Movimiento lateral exclusivo)
+let cameraX = 0; 
+let isDragging = false, startX;
 const camera = document.getElementById("camera");
 
 document.getElementById("viewport").addEventListener("mousedown", (e) => {
   if(e.target.closest('.modal')) return;
   isDragging = true;
   startX = e.clientX - cameraX;
-  startY = e.clientY - cameraY;
 });
 window.addEventListener("mouseup", () => isDragging = false);
 window.addEventListener("mousemove", (e) => {
   if (!isDragging) return;
   cameraX = e.clientX - startX;
-  cameraY = e.clientY - startY;
-  camera.style.transform = `translate(${cameraX}px, ${cameraY}px)`;
+  // translateY se mantiene fijo para evitar saltos o zoom indeseado
+  camera.style.transform = `translateX(${cameraX}px) translateY(120px)`; 
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-  camera.style.transform = `translate(${cameraX}px, ${cameraY}px)`;
+  camera.style.transform = `translateX(${cameraX}px) translateY(120px)`;
   spawnCars();
+  spawnStreetlights();
   bindUI();
   loadBricks();
 });
 
-// Generar tráfico en la autopista
 function spawnCars() {
   const highway = document.getElementById("highway");
-  for (let i = 0; i < 40; i++) {
+  for (let i = 0; i < 60; i++) {
     const car = document.createElement("div");
-    car.className = `car ${Math.random() > 0.5 ? 'right' : 'left'}`;
-    car.style.animationDelay = `-${Math.random() * 200}s`;
-    car.style.animationDuration = `${100 + Math.random() * 50}s`; // Coches cruzando la pista enorme
+    const isRight = Math.random() > 0.5;
+    const hue = Math.floor(Math.random() * 360);
+    const color = `hsl(${hue}, 80%, 60%)`;
+    
+    car.className = `car ${isRight ? 'right' : 'left'}`;
+    car.style.backgroundColor = color;
+    
+    // Luces delanteras blancas y traseras rojas dependiendo de la dirección
+    if (isRight) {
+      car.style.boxShadow = `15px 0 15px #fff, -15px 0 10px red, 0 0 20px ${color}`;
+    } else {
+      car.style.boxShadow = `-15px 0 15px #fff, 15px 0 10px red, 0 0 20px ${color}`;
+    }
+    
+    car.style.animationDelay = `-${Math.random() * 300}s`;
+    car.style.animationDuration = `${80 + Math.random() * 60}s`;
     highway.appendChild(car);
+  }
+}
+
+function spawnStreetlights() {
+  const container = document.getElementById("streetlights-container");
+  for(let i = 0; i < 50; i++) {
+    const light = document.createElement("div");
+    light.className = "streetlight";
+    container.appendChild(light);
   }
 }
 
@@ -81,7 +102,6 @@ function bindUI() {
     document.getElementById("auth-status").textContent = user ? `Conectado como ${user.email}` : "";
   });
 
-  // Previsualización de Cartel (Blanco con marco)
   function updatePreview() {
     const brickId = document.getElementById("claim-brick-id").value || findFirstAvailableBrick();
     if (!brickId) return;
@@ -91,15 +111,14 @@ function bindUI() {
     plot.classList.remove("empty"); 
     plot.classList.add("claimed");
 
-    const billboard = plot.querySelector('.billboard-base');
+    const billboard = plot.querySelector('.billboard-frame');
     const color = document.getElementById("claim-color").value;
     const isMega = document.getElementById("claim-founder").checked;
     const logoUrl = document.getElementById("claim-logo").value.trim();
-    const name = document.getElementById("claim-name").value.trim() || "PREVIEW";
+    const name = document.getElementById("claim-name").value.trim() || "PREVISUALIZACIÓN";
 
     document.getElementById("claim-color").style.backgroundColor = color;
     billboard.style.setProperty("--brick-color", color);
-    billboard.style.background = "#fff"; // Fondo blanco como en la foto
     
     if(isMega) billboard.classList.add("mega");
     else billboard.classList.remove("mega");
@@ -128,7 +147,7 @@ function renderWall() {
   let occupied = 0;
 
   for (let i = 1; i <= 500; i++) {
-    const data = bricks.get(i) ?? { id: i, claimed: false, color: "#8a8d91" };
+    const data = bricks.get(i) ?? { id: i, claimed: false, color: "#444" };
     if(data.claimed) occupied++;
     
     const plot = document.createElement("div");
@@ -136,8 +155,8 @@ function renderWall() {
     plot.dataset.id = i;
     
     const billboard = document.createElement("div");
-    billboard.className = `billboard-base ${data.founder ? "mega" : ""}`;
-    billboard.style.setProperty("--brick-color", data.claimed ? data.color : "#8a8d91");
+    billboard.className = `billboard-frame ${data.founder ? "mega" : ""}`;
+    billboard.style.setProperty("--brick-color", data.claimed ? data.color : "#444");
     
     if (data.claimed) {
       let contentHTML = "";
@@ -145,11 +164,12 @@ function renderWall() {
       contentHTML += `<span class="billboard-name">${escapeHtml(data.name.slice(0,15))}</span>`;
       billboard.innerHTML = `<div class="billboard-content">${contentHTML}</div>`;
     } else {
-      billboard.innerHTML = `YOUR AD HERE<br>#${i}`; // Mensaje genérico de cartel vacío
+      billboard.innerHTML = `DISPONIBLE<br>#${i}`; 
     }
     
     plot.appendChild(billboard);
     plot.addEventListener("click", (e) => {
+      // Ignorar el clic si se estaba arrastrando
       if(isDragging && (Math.abs(e.clientX - startX - cameraX) > 5)) return;
       openBrick(i);
     });
@@ -159,11 +179,11 @@ function renderWall() {
 }
 
 function openBrick(id) {
-  const b = bricks.get(id) || { id, claimed: false, color: "#8a8d91" };
+  const b = bricks.get(id) || { id, claimed: false, color: "#444" };
   selectedBrick = b;
   document.getElementById("modal-color").style.backgroundColor = b.color;
   document.getElementById("modal-title").textContent = b.claimed ? b.name : "Cartel Disponible";
-  document.getElementById("modal-desc").textContent = b.claimed ? b.description : "Anuncia tu proyecto en este cartel.";
+  document.getElementById("modal-desc").textContent = b.claimed ? b.description : "Anuncia tu proyecto en esta valla.";
   document.getElementById("modal-id-value").textContent = b.id;
   document.getElementById("modal-visits").textContent = b.visits || 0;
   document.getElementById("modal-status").textContent = b.claimed ? "ALQUILADO" : "LIBRE";
@@ -184,7 +204,7 @@ function openClaimModal(brickId) {
   document.getElementById("claim-brick-id").value = brickId;
   document.getElementById("claim-form").reset();
   document.getElementById("claim-logo").value = "";
-  const defColor = "#8a8d91";
+  const defColor = "#00f0ff";
   document.getElementById("claim-color").value = defColor;
   document.getElementById("claim-color").style.backgroundColor = defColor;
   document.getElementById("claim-error").textContent = "";
