@@ -1,5 +1,5 @@
 :root {
-  --bg: #0b0d13;
+  --bg: #090b0f;
   --panel: #111420;
   --line: #202638;
   --text: #f0f0f5;
@@ -11,7 +11,7 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { background: var(--bg); color: var(--text); font-family: var(--sans); overflow: hidden; user-select: none; }
 
-.topbar { position: fixed; top: 0; width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; background: rgba(11, 13, 19, 0.9); z-index: 100; border-bottom: 1px solid var(--line); }
+.topbar { position: fixed; top: 0; width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; background: rgba(9, 11, 15, 0.95); z-index: 100; border-bottom: 1px solid var(--line); }
 .brand, h2, .badge, .button, .modal-id { font-family: var(--pixel); }
 .brand { color: var(--text); text-decoration: none; font-size: 14px; text-shadow: 0 0 10px var(--cyan); }
 .stats { font-size: 12px; font-weight: bold; color: #888; }
@@ -22,56 +22,54 @@ body { background: var(--bg); color: var(--text); font-family: var(--sans); over
 .button-ghost { border-color: var(--line); }
 .button-full { width: 100%; margin-top: 10px; }
 
-/* 3D World Setup */
-.viewport { width: 100vw; height: 100vh; cursor: grab; perspective: 1500px; background: radial-gradient(circle at center, #1a1e2d, #0b0d13); }
+/* Setup 3D y Cámara Fija (Solo ajustamos Y para centrar visualmente) */
+.viewport { width: 100vw; height: 100vh; cursor: grab; perspective: 1500px; background: radial-gradient(circle at center, #151824, #06070a); }
 .viewport:active { cursor: grabbing; }
-.camera { width: 100%; height: 100%; position: absolute; transform-style: preserve-3d; transition: transform 0.05s linear; }
+.camera { width: 100%; height: 100%; position: absolute; transform-style: preserve-3d; transform: translateY(150px); }
 
-/* El Mapa Inclinado */
-.world { position: absolute; top: 50%; left: 50%; transform: rotateX(60deg) rotateZ(-20deg); transform-style: preserve-3d; }
+/* El Mundo (Gira isométricamente) */
+.world { position: absolute; top: 50%; left: 50%; transform-style: preserve-3d; }
 
-/* La Autopista (Horizontal) */
-.highway { position: absolute; left: -25000px; top: 0; width: 50000px; height: 350px; background: #0c0e14; border-top: 3px solid #333; border-bottom: 3px solid #333; transform-style: preserve-3d; }
+/* Autopista ampliada para caber todos los carteles */
+.highway { position: absolute; left: -60000px; top: 0; width: 120000px; height: 350px; background: #0c0e14; border-top: 3px solid #333; border-bottom: 3px solid #333; transform-style: preserve-3d; }
 .highway::after { content: ""; position: absolute; top: 50%; left: 0; width: 100%; height: 6px; background: repeating-linear-gradient(90deg, #fff 0, #fff 60px, transparent 60px, transparent 120px); opacity: 0.3; }
 
-/* Contenedor de Carteles (Borde de la carretera al fondo) */
-.plots-container { position: absolute; left: -25000px; top: -10px; display: flex; gap: 40px; align-items: flex-end; transform-style: preserve-3d; }
-
-/* Cada Parcela */
+/* Contenedor Carteles al fondo */
+.plots-container { position: absolute; left: -55000px; top: -10px; display: flex; gap: 40px; align-items: flex-end; transform-style: preserve-3d; }
 .plot { width: 180px; height: 20px; transform-style: preserve-3d; position: relative; cursor: pointer; }
 
-/* Estructura 3D del Cartel */
-.billboard-frame { position: absolute; bottom: 60px; left: 0; width: 100%; height: 110px; transform-origin: bottom; transform: rotateX(-90deg); background: #111; border: 4px solid var(--brick-color, #444); border-bottom-width: 10px; display: flex; align-items: center; justify-content: center; box-shadow: inset 0 0 30px rgba(0,0,0,0.9), 0 15px 30px rgba(0,0,0,0.7); transition: 0.2s; transform-style: preserve-3d; }
+/* Marco 3D del cartel con postes */
+.billboard-frame { position: absolute; bottom: 60px; left: 0; width: 100%; height: 110px; transform-origin: bottom; transform: rotateX(-90deg); background: #111; border: 4px solid var(--brick-color, #444); border-bottom-width: 10px; display: flex; align-items: center; justify-content: center; box-shadow: inset 0 0 40px rgba(0,0,0,0.9), 0 15px 30px rgba(0,0,0,0.7); transition: 0.2s; transform-style: preserve-3d; }
 .billboard-frame.mega { height: 180px; width: 130%; left: -15%; z-index: 10; border-width: 6px; border-bottom-width: 12px; bottom: 90px; }
-.billboard-frame:hover { filter: brightness(1.2); }
+.billboard-frame:hover { filter: brightness(1.2); transform: rotateX(-90deg) scale(1.02); }
 
-/* Postes de anclaje */
-.billboard-frame::before, .billboard-frame::after { content: ""; position: absolute; bottom: -68px; width: 8px; height: 60px; background: linear-gradient(90deg, #666, #222); box-shadow: 2px 5px 10px rgba(0,0,0,0.8); }
+/* Los 2 postes */
+.billboard-frame::before, .billboard-frame::after { content: ""; position: absolute; bottom: -68px; width: 8px; height: 60px; background: linear-gradient(90deg, #555, #111); box-shadow: 2px 5px 10px rgba(0,0,0,0.8); }
 .billboard-frame.mega::before, .billboard-frame.mega::after { height: 90px; bottom: -100px; width: 12px; }
 .billboard-frame::before { left: 15%; }
 .billboard-frame::after { right: 15%; }
 
-/* Contenido del cartel */
+/* Contenido */
 .plot.empty .billboard-frame { background: #1a1a24; border-color: #333; color: #555; font-family: var(--sans); font-size: 12px; font-weight: bold; }
 .billboard-content { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 5px; background: #fff; overflow: hidden; }
 .billboard-logo { max-width: 90%; max-height: 60%; object-fit: contain; margin-bottom: 5px; }
 .billboard-name { font-size: 12px; font-weight: bold; color: #111; text-transform: uppercase; text-align: center; }
 
-/* Farolas en primer plano */
-.streetlights-container { position: absolute; left: -25000px; top: 350px; display: flex; gap: 600px; transform-style: preserve-3d; }
+/* Farolas delante */
+.streetlights-container { position: absolute; left: -55000px; top: 350px; display: flex; gap: 600px; transform-style: preserve-3d; }
 .streetlight { position: relative; width: 6px; height: 120px; background: linear-gradient(90deg, #444, #111); transform-origin: bottom; transform: rotateX(-90deg); }
 .streetlight::before { content: ""; position: absolute; top: 0; left: -25px; width: 30px; height: 6px; background: #333; }
 .streetlight::after { content: ""; position: absolute; top: 6px; left: -20px; width: 15px; height: 15px; border-radius: 50%; background: #ffea99; box-shadow: 0 0 30px 10px #ffea99, 0 0 60px 20px #ffea99; opacity: 0.9; }
 
-/* Coches */
+/* Tráfico - Coches de todos los colores */
 .car { position: absolute; width: 45px; height: 16px; border-radius: 4px; }
 .car.right { top: 220px; animation: driveRight linear infinite; }
 .car.left { top: 80px; animation: driveLeft linear infinite; }
 
-@keyframes driveRight { 0% { transform: translateX(0); } 100% { transform: translateX(50000px); } }
-@keyframes driveLeft { 0% { transform: translateX(50000px); } 100% { transform: translateX(0); } }
+@keyframes driveRight { 0% { transform: translateX(0); } 100% { transform: translateX(120000px); } }
+@keyframes driveLeft { 0% { transform: translateX(120000px); } 100% { transform: translateX(0); } }
 
-/* Modales */
+/* UI Modales */
 .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 200; }
 .modal.hidden { display: none; }
 .modal-card { width: min(100%, 450px); background: var(--panel); border: 1px solid var(--line); padding: 25px; position: relative; }
