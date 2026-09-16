@@ -1,91 +1,131 @@
+/* Variables de tema */
 :root {
-  --bg: #030408;
-  --panel: #0a0c14;
-  --line: #1e2233;
-  --text: #e0e5ff;
-  --cyan: #00e5ff;
-  --pink: #ff0055;
-  --gold: #ffaa00;
-  --pixel: "Press Start 2P", monospace;
-  --sans: "Inter", sans-serif;
+    --bg-color: #121212;
+    --text-color: #ffffff;
+    --card-bg: #1e1e1e;
+    --accent-color: #ff3b3b; /* Rojo agresivo para precios/llamadas a la acción */
+    --border-color: #333;
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { background: var(--bg); color: var(--text); font-family: var(--sans); overflow: hidden; user-select: none; }
+[data-theme="light"] {
+    --bg-color: #f4f4f9;
+    --text-color: #121212;
+    --card-bg: #ffffff;
+    --border-color: #ddd;
+}
 
-.topbar { position: fixed; top: 0; width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; background: rgba(3, 4, 8, 0.9); z-index: 100; border-bottom: 1px solid var(--line); backdrop-filter: blur(10px); }
-.brand, h2, .badge, .button, .modal-id, .zone-indicator { font-family: var(--pixel); }
-.brand { color: var(--text); text-decoration: none; font-size: 14px; text-shadow: 0 0 10px var(--cyan); }
-.stats { font-size: 12px; font-weight: bold; color: #888; }
-.neon-text { color: var(--cyan); text-shadow: 0 0 8px var(--cyan); }
-.topbar-actions { display: flex; gap: 10px; }
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    transition: background-color 0.3s, color 0.3s;
+}
 
-.button { background: transparent; border: 1px solid; padding: 12px; font-size: 10px; cursor: pointer; color: var(--text); transition: 0.2s; text-transform: uppercase; }
-.button-primary { background: rgba(0, 229, 255, 0.1); border-color: var(--cyan); color: var(--cyan); box-shadow: inset 0 0 10px rgba(0,229,255,0.2); }
-.button-primary:hover { background: var(--cyan); color: #000; box-shadow: 0 0 20px var(--cyan); }
-.button-ghost { border-color: var(--line); }
-.button-full { width: 100%; margin-top: 10px; }
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 5%;
+    border-bottom: 2px solid var(--accent-color);
+}
 
-/* Indicador de Zona */
-.zone-indicator { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); font-size: 12px; color: var(--pink); text-shadow: 0 0 10px var(--pink); z-index: 100; background: rgba(0,0,0,0.7); padding: 10px 20px; border: 1px solid var(--pink); border-radius: 4px; pointer-events: none; transition: 0.3s; }
+h1 {
+    margin: 0;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
 
-/* Entorno 3D */
-.cyber-bg { position: absolute; inset: 0; background: radial-gradient(circle at 50% 20%, #1a0b1f 0%, var(--bg) 60%); z-index: -1; }
-.viewport { width: 100vw; height: 100vh; cursor: grab; perspective: 1000px; }
-.viewport:active { cursor: grabbing; }
-.camera { width: 100%; height: 100%; position: absolute; transform-style: preserve-3d; }
-.world { position: absolute; top: 50%; left: 50%; transform-style: preserve-3d; transition: transform 0.1s ease-out; }
+.theme-btn {
+    background: none;
+    border: none;
+    color: var(--text-color);
+    font-size: 1.5rem;
+    cursor: pointer;
+}
 
-.cyber-grid { position: absolute; left: -10000px; top: -5000px; width: 80000px; height: 10000px; background-image: linear-gradient(rgba(255,0,85,0.2) 2px, transparent 2px), linear-gradient(90deg, rgba(255,0,85,0.2) 2px, transparent 2px); background-size: 80px 80px; transform: translateZ(-1px); }
+/* El Muro (Grid) */
+.grid-muro {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
+    padding: 20px 5%;
+}
 
-/* Autopista */
-.highway { position: absolute; left: -200px; top: 0; width: 70000px; height: 350px; background: #050608; border-top: 4px solid var(--pink); border-bottom: 4px solid var(--cyan); transform-style: preserve-3d; box-shadow: inset 0 0 80px rgba(0,0,0,1), 0 0 30px rgba(255,0,85,0.1); }
-.highway::after { content: ""; position: absolute; top: 50%; left: 0; width: 100%; height: 6px; background: repeating-linear-gradient(90deg, rgba(255,255,255,0.8) 0, rgba(255,255,255,0.8) 100px, transparent 100px, transparent 200px); filter: drop-shadow(0 0 8px rgba(255,255,255,0.6)); }
+.ladrillo {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+    text-align: center;
+    transition: transform 0.2s;
+    display: flex;
+    flex-direction: column;
+}
 
-/* Carteles */
-.plots-container { position: absolute; left: 0; top: -10px; display: flex; gap: 40px; align-items: flex-end; transform-style: preserve-3d; }
-.plot { width: 180px; height: 20px; transform-style: preserve-3d; position: relative; cursor: pointer; }
+.ladrillo:hover {
+    transform: translateY(-5px);
+    border-color: var(--accent-color);
+}
 
-/* Marcos 3D */
-.billboard-frame { position: absolute; bottom: 60px; left: 0; width: 100%; height: 110px; transform-origin: bottom; transform: rotateX(-90deg); background: #000; border: 4px solid var(--brick-color, #222); border-bottom-width: 12px; display: flex; align-items: center; justify-content: center; box-shadow: inset 0 0 20px rgba(0,0,0,1), 0 10px 40px rgba(0,0,0,0.8); transition: 0.2s; transform-style: preserve-3d; }
-.billboard-frame.mega { height: 190px; width: 130%; left: -15%; z-index: 10; border-width: 6px; border-bottom-width: 14px; bottom: 90px; box-shadow: 0 0 30px var(--brick-color); }
-.billboard-frame:hover { filter: brightness(1.3); transform: rotateX(-90deg) scale(1.05) translateY(-5px); }
+.ladrillo img {
+    width: 100%;
+    height: 200px;
+    object-fit: contain;
+    background-color: white; /* Para que los productos de Amazon destaquen */
+    padding: 10px;
+}
 
-.billboard-frame::before, .billboard-frame::after { content: ""; position: absolute; bottom: -72px; width: 10px; height: 60px; background: linear-gradient(90deg, #333, #000, #222); box-shadow: 5px 5px 15px rgba(0,0,0,0.9); }
-.billboard-frame.mega::before, .billboard-frame.mega::after { height: 94px; bottom: -108px; width: 14px; }
-.billboard-frame::before { left: 15%; }
-.billboard-frame::after { right: 15%; }
+.ladrillo h3 {
+    margin: 15px 10px 5px;
+    font-size: 1.1rem;
+}
 
-/* Contenido Autogenerado */
-.plot.empty .billboard-frame { background: #080a11; border-color: #1a1c29; color: #444; font-family: var(--sans); font-size: 11px; font-weight: bold; }
-.plot.empty.zone-premium .billboard-frame { border-color: rgba(255, 170, 0, 0.3); color: var(--gold); }
-.plot.empty:hover .billboard-frame { border-color: var(--cyan); color: var(--cyan); box-shadow: 0 0 20px rgba(0,229,255,0.2); }
+.precio {
+    color: var(--accent-color);
+    font-weight: bold;
+    font-size: 1.5rem;
+    margin: 10px 0;
+}
 
-.billboard-content { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 5px; background: #fff; overflow: hidden; box-shadow: inset 0 0 15px rgba(0,0,0,0.7); }
-.billboard-logo { max-width: 90%; max-height: 55%; object-fit: contain; margin-bottom: 5px; }
-.billboard-name { font-size: 12px; font-weight: 900; color: #000; text-transform: uppercase; text-align: center; }
+.btn-comprar {
+    background-color: var(--accent-color);
+    color: white;
+    text-decoration: none;
+    padding: 12px;
+    font-weight: bold;
+    display: block;
+    margin-top: auto;
+}
 
-/* Coches */
-.car { position: absolute; width: 65px; height: 22px; border-radius: 4px; background: linear-gradient(to bottom, #222, #000); border: 1px solid #111; }
-.car::after { content: ""; position: absolute; top: 4px; left: 15px; right: 15px; bottom: 4px; background: rgba(0, 255, 255, 0.1); }
-.car.right { top: 230px; border-right: 3px solid #fff; border-left: 3px solid var(--pink); box-shadow: 30px 0 30px rgba(255,255,255,0.8), -20px 0 20px rgba(255,0,85,0.9); animation: driveRight linear infinite; }
-.car.left { top: 70px; border-left: 3px solid #fff; border-right: 3px solid var(--pink); box-shadow: -30px 0 30px rgba(255,255,255,0.8), 20px 0 20px rgba(255,0,85,0.9); animation: driveLeft linear infinite; }
+.btn-comprar:hover {
+    background-color: #d12e2e;
+}
 
-@keyframes driveRight { 0% { transform: translateX(-1000px); } 100% { transform: translateX(70000px); } }
-@keyframes driveLeft { 0% { transform: translateX(70000px); } 100% { transform: translateX(-1000px); } }
+/* Estilos de Admin */
+.admin-container {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    background: var(--card-bg);
+    border-radius: 8px;
+}
 
-/* Modales */
-.modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: flex; align-items: center; justify-content: center; z-index: 200; backdrop-filter: blur(5px); }
-.modal.hidden { display: none; }
-.modal-card { width: min(100%, 450px); background: var(--panel); border: 1px solid var(--line); padding: 25px; position: relative; box-shadow: 0 0 50px rgba(0,0,0,0.5); }
-.modal-close { position: absolute; top: 10px; right: 15px; background: transparent; border: none; color: #888; font-size: 20px; cursor: pointer; }
-.modal-color { height: 6px; margin: -25px -25px 25px; }
-.modal-meta { display: flex; justify-content: space-between; margin: 20px 0; padding: 15px; background: #030408; border: 1px solid var(--line); }
-.modal-meta span { display: block; font-size: 8px; color: #888; margin-bottom: 5px; }
-.modal-meta strong { font-size: 12px; font-family: var(--pixel); color: #fff; }
-.status-free { color: var(--cyan) !important; }
-.form-card input, .form-card textarea { width: 100%; background: #030408; border: 1px solid var(--line); color: #fff; padding: 12px; margin: 8px 0 15px; }
-.form-card input:focus { border-color: var(--cyan); outline: none; }
-.form-error { color: var(--pink); font-size: 12px; margin-top: 10px; }
-.check-line { display: flex; align-items: center; gap: 10px; font-size: 12px; }
-.check-line input { width: auto; margin: 0; }
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    box-sizing: border-box;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+}
