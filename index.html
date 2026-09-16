@@ -1,28 +1,80 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>El Murazo | Ofertas que golpean</title>
-    <link rel="stylesheet" href="style.css">
-    <!-- Iconos para Sol/Luna -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="El Murazo — chollos seleccionados de tecnología y gadgets.">
+  <meta name="theme-color" content="#0b0c10">
+  <title>El Murazo — Chollos que merecen la pena</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <h1>EL MURAZO</h1>
-        <button id="theme-toggle" class="theme-btn">
-            <i class="fas fa-sun" id="icon-sun"></i>
-            <i class="fas fa-moon" id="icon-moon" style="display: none;"></i>
+  <div class="site-shell">
+    <header class="topbar">
+      <a class="brand" href="index.html" aria-label="El Murazo, inicio">
+        <span class="brand-mark">M</span>
+        <span>
+          <strong>EL MURAZO</strong>
+          <small>CHOLLOS SIN RUIDO</small>
+        </span>
+      </a>
+
+      <div class="topbar-actions">
+        <button class="icon-btn" id="theme-toggle" type="button" aria-label="Cambiar tema" title="Cambiar tema">
+          <span id="theme-icon">☾</span>
         </button>
+      </div>
     </header>
 
     <main>
-        <!-- Aquí se inyectarán los productos desde Firebase -->
-        <div id="muro-container" class="grid-muro"></div>
+      <section class="hero">
+        <div>
+          <span class="eyebrow">⚡ OFERTAS CURADAS</span>
+          <h1>Encuentra el chollo.<br><span>Sin perder tiempo.</span></h1>
+          <p>Hardware, accesorios y gadgets que hemos seleccionado para que no tengas que rebuscar entre cientos de resultados.</p>
+        </div>
+        <div class="hero-badge">
+          <span class="live-dot"></span>
+          <div>
+            <strong id="offer-count">0</strong>
+            <small>ofertas activas</small>
+          </div>
+        </div>
+      </section>
+
+      <section class="toolbar" aria-label="Filtros del muro">
+        <div class="search-wrap">
+          <span class="search-icon">⌕</span>
+          <input id="search-input" type="search" placeholder="Buscar chollo..." autocomplete="off">
+        </div>
+        <div class="toolbar-meta">
+          <span id="results-count">Cargando...</span>
+          <button id="refresh-btn" class="ghost-btn" type="button">↻ Actualizar</button>
+        </div>
+      </section>
+
+      <section id="muro-container" class="products-grid" aria-live="polite"></section>
+
+      <div id="empty-state" class="state-card hidden">
+        <div class="state-icon">⌁</div>
+        <h2>No hay chollos todavía</h2>
+        <p>Cuando publiquemos una oferta aparecerá aquí.</p>
+      </div>
+
+      <div id="error-state" class="state-card hidden">
+        <div class="state-icon">!</div>
+        <h2>No se han podido cargar las ofertas</h2>
+        <p>Comprueba la conexión o la configuración de Firebase.</p>
+        <button id="retry-btn" class="primary-btn" type="button">Reintentar</button>
+      </div>
     </main>
 
-    <!-- Scripts de Firebase y lógica principal -->
-    <script type="module" src="app.js"></script>
+    <footer class="footer">
+      <span>© <span id="current-year"></span> El Murazo</span>
+      <span>Los enlaces pueden ser de afiliación de Amazon.</span>
+    </footer>
+  </div>
+
+  <script type="module" src="app.js"></script>
 </body>
 </html>
