@@ -18,59 +18,62 @@ let bricks = new Map();
 let currentUser = null;
 let selectedBrick = null;
 
-// Cámara: Bloqueada solo en el Eje X (Movimiento lateral exclusivo)
+// Cámara: Anclada a la autopista (modificamos translateX dentro del mundo)
 let cameraX = 0; 
-let isDragging = false, startX;
-const camera = document.getElementById("camera");
+let isDragging = false, startX, clickStartX;
+const world = document.getElementById("world");
 
 document.getElementById("viewport").addEventListener("mousedown", (e) => {
   if(e.target.closest('.modal')) return;
   isDragging = true;
+  clickStartX = e.clientX;
   startX = e.clientX - cameraX;
 });
 window.addEventListener("mouseup", () => isDragging = false);
 window.addEventListener("mousemove", (e) => {
   if (!isDragging) return;
   cameraX = e.clientX - startX;
-  // translateY se mantiene fijo para evitar saltos o zoom indeseado
-  camera.style.transform = `translateX(${cameraX}px) translateY(120px)`; 
+  // Movemos el mundo localmente por su eje X (siguiendo la autopista)
+  world.style.transform = `rotateX(60deg) rotateZ(-20deg) translateX(${cameraX}px)`; 
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-  camera.style.transform = `translateX(${cameraX}px) translateY(120px)`;
+  world.style.transform = `rotateX(60deg) rotateZ(-20deg) translateX(${cameraX}px)`;
   spawnCars();
   spawnStreetlights();
   bindUI();
   loadBricks();
 });
 
+// Generar Coches de colores
 function spawnCars() {
   const highway = document.getElementById("highway");
-  for (let i = 0; i < 60; i++) {
+  for (let i = 0; i < 150; i++) {
     const car = document.createElement("div");
     const isRight = Math.random() > 0.5;
     const hue = Math.floor(Math.random() * 360);
-    const color = `hsl(${hue}, 80%, 60%)`;
+    const color = `hsl(${hue}, 90%, 65%)`; // Colores brillantes aleatorios
     
     car.className = `car ${isRight ? 'right' : 'left'}`;
     car.style.backgroundColor = color;
     
-    // Luces delanteras blancas y traseras rojas dependiendo de la dirección
+    // Luces faros
     if (isRight) {
       car.style.boxShadow = `15px 0 15px #fff, -15px 0 10px red, 0 0 20px ${color}`;
     } else {
       car.style.boxShadow = `-15px 0 15px #fff, 15px 0 10px red, 0 0 20px ${color}`;
     }
     
-    car.style.animationDelay = `-${Math.random() * 300}s`;
-    car.style.animationDuration = `${80 + Math.random() * 60}s`;
+    car.style.animationDelay = `-${Math.random() * 400}s`;
+    car.style.animationDuration = `${150 + Math.random() * 100}s`;
     highway.appendChild(car);
   }
 }
 
+// Generar Farolas
 function spawnStreetlights() {
   const container = document.getElementById("streetlights-container");
-  for(let i = 0; i < 50; i++) {
+  for(let i = 0; i < 200; i++) {
     const light = document.createElement("div");
     light.className = "streetlight";
     container.appendChild(light);
@@ -102,6 +105,7 @@ function bindUI() {
     document.getElementById("auth-status").textContent = user ? `Conectado como ${user.email}` : "";
   });
 
+  // Previsualización en tiempo real
   function updatePreview() {
     const brickId = document.getElementById("claim-brick-id").value || findFirstAvailableBrick();
     if (!brickId) return;
@@ -115,7 +119,7 @@ function bindUI() {
     const color = document.getElementById("claim-color").value;
     const isMega = document.getElementById("claim-founder").checked;
     const logoUrl = document.getElementById("claim-logo").value.trim();
-    const name = document.getElementById("claim-name").value.trim() || "PREVISUALIZACIÓN";
+    const name = document.getElementById("claim-name").value.trim() || "PREVIEW";
 
     document.getElementById("claim-color").style.backgroundColor = color;
     billboard.style.setProperty("--brick-color", color);
@@ -169,8 +173,8 @@ function renderWall() {
     
     plot.appendChild(billboard);
     plot.addEventListener("click", (e) => {
-      // Ignorar el clic si se estaba arrastrando
-      if(isDragging && (Math.abs(e.clientX - startX - cameraX) > 5)) return;
+      // Ignorar el clic si se estaba arrastrando la pantalla (tolerancia de 5px)
+      if(Math.abs(e.clientX - clickStartX) > 5) return;
       openBrick(i);
     });
     container.appendChild(plot);
@@ -183,7 +187,7 @@ function openBrick(id) {
   selectedBrick = b;
   document.getElementById("modal-color").style.backgroundColor = b.color;
   document.getElementById("modal-title").textContent = b.claimed ? b.name : "Cartel Disponible";
-  document.getElementById("modal-desc").textContent = b.claimed ? b.description : "Anuncia tu proyecto en esta valla.";
+  document.getElementById("modal-desc").textContent = b.claimed ? b.description : "Anuncia tu proyecto en esta valla publicitaria 3D.";
   document.getElementById("modal-id-value").textContent = b.id;
   document.getElementById("modal-visits").textContent = b.visits || 0;
   document.getElementById("modal-status").textContent = b.claimed ? "ALQUILADO" : "LIBRE";
