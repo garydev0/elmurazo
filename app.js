@@ -18,7 +18,7 @@ let bricks = new Map();
 let currentUser = null;
 let selectedBrick = null;
 
-// Lógica de cámara isométrica y arrastre
+// Cámara isométrica
 let cameraX = 0, cameraY = -500;
 let isDragging = false, startX, startY;
 const camera = document.getElementById("camera");
@@ -54,7 +54,7 @@ function bindUI() {
   document.getElementById("claim-btn").addEventListener("click", () => openClaimModal(""));
   document.getElementById("close-claim").addEventListener("click", () => {
     document.getElementById("claim-modal").classList.add("hidden");
-    renderWall(); // Resetea la previsualización del color
+    renderWall(); // Resetea la previsualización a su estado original
   });
   
   document.getElementById("modal-claim").addEventListener("click", () => {
@@ -72,26 +72,42 @@ function bindUI() {
     document.getElementById("auth-status").textContent = user ? `Conectado como ${user.email}` : "";
   });
 
-  // Previsualización de color en 3D
-  document.getElementById("claim-color").addEventListener("input", (e) => {
-    e.target.style.backgroundColor = e.target.value;
+  // Previsualización en vivo (Color, Nombre, Logo, y Altura 3D)
+  function updatePreview() {
     const brickId = document.getElementById("claim-brick-id").value || findFirstAvailableBrick();
-    if (brickId) {
-      const plot = document.querySelector(`.plot[data-id="${brickId}"]`);
-      if (plot) {
-        plot.classList.remove("empty");
-        const billboard = plot.querySelector('.billboard-base');
-        billboard.style.setProperty("--brick-color", e.target.value);
-        if(document.getElementById("claim-founder").checked) billboard.classList.add("mega");
-        else billboard.classList.remove("mega");
-      }
-    }
-  });
+    if (!brickId) return;
+    
+    const plot = document.querySelector(`.plot[data-id="${brickId}"]`);
+    if (!plot) return;
 
-  document.getElementById("claim-founder").addEventListener("change", (e) => {
-     const event = new Event('input');
-     document.getElementById("claim-color").dispatchEvent(event);
-  });
+    plot.classList.remove("empty"); // Al quitar empty, el CSS hace que el cartel "crezca" desde el suelo
+    plot.classList.add("claimed");
+
+    const billboard = plot.querySelector('.billboard-base');
+    const color = document.getElementById("claim-color").value;
+    const isMega = document.getElementById("claim-founder").checked;
+    const logoUrl = document.getElementById("claim-logo").value.trim();
+    const name = document.getElementById("claim-name").value.trim() || "PREVIEW";
+
+    document.getElementById("claim-color").style.backgroundColor = color;
+    billboard.style.setProperty("--brick-color", color);
+    
+    if(isMega) billboard.classList.add("mega");
+    else billboard.classList.remove("mega");
+
+    let contentHTML = "";
+    if (logoUrl) {
+      contentHTML += `<img src="${escapeHtml(logoUrl)}" class="billboard-logo" onerror="this.style.display='none'">`;
+    }
+    contentHTML += `<span class="billboard-name">${escapeHtml(name.slice(0, 15))}</span>`;
+    
+    billboard.innerHTML = `<div class="billboard-content">${contentHTML}</div>`;
+  }
+
+  document.getElementById("claim-color").addEventListener("input", updatePreview);
+  document.getElementById("claim-name").addEventListener("input", updatePreview);
+  document.getElementById("claim-logo").addEventListener("input", updatePreview);
+  document.getElementById("claim-founder").addEventListener("change", updatePreview);
 }
 
 async function loadBricks() {
@@ -105,7 +121,6 @@ function renderWall() {
   container.innerHTML = "";
   let occupied = 0;
 
-  // Generamos 100 filas de parcelas (500 parcelas en total)
   for (let i = 1; i <= 500; i++) {
     const data = bricks.get(i) ?? { id: i, claimed: false, color: "#202638" };
     if(data.claimed) occupied++;
@@ -119,14 +134,18 @@ function renderWall() {
     billboard.style.setProperty("--brick-color", data.claimed ? data.color : "#202638");
     
     if (data.claimed) {
-      billboard.innerHTML = `<span class="billboard-name">${data.name.slice(0,10)}</span>`;
+      let contentHTML = "";
+      if (data.logo) {
+        contentHTML += `<img src="${escapeHtml(data.logo)}" class="billboard-logo" onerror="this.style.display='none'">`;
+      }
+      contentHTML += `<span class="billboard-name">${escapeHtml(data.name.slice(0,15))}</span>`;
+      billboard.innerHTML = `<div class="billboard-content">${contentHTML}</div>`;
     } else {
-      billboard.innerHTML = `<span class="billboard-name">#${i}</span>`;
+      billboard.innerHTML = `<span class="billboard-name">+</span>`;
     }
     
     plot.appendChild(billboard);
     
-    // Evitamos clics mientras se arrastra la cámara
     plot.addEventListener("click", (e) => {
       if(isDragging && (Math.abs(e.clientX - startX - cameraX) > 5)) return;
       openBrick(i);
@@ -164,9 +183,13 @@ function openBrick(id) {
 function openClaimModal(brickId) {
   document.getElementById("claim-brick-id").value = brickId;
   document.getElementById("claim-form").reset();
+  
+  // Limpiar logo y color por defecto
+  document.getElementById("claim-logo").value = "";
   const defColor = "#00f0ff";
   document.getElementById("claim-color").value = defColor;
   document.getElementById("claim-color").style.backgroundColor = defColor;
+  
   document.getElementById("claim-error").textContent = "";
   document.getElementById("claim-modal").classList.remove("hidden");
 }
@@ -190,6 +213,7 @@ async function handleClaim(e) {
         name: document.getElementById("claim-name").value.trim(),
         description: document.getElementById("claim-desc").value.trim(),
         link: document.getElementById("claim-link").value.trim(),
+        logo: document.getElementById("claim-logo").value.trim(),
         color: document.getElementById("claim-color").value,
         founder: document.getElementById("claim-founder").checked,
         visits: 0, ownerUid: currentUser.uid, updatedAt: serverTimestamp()
@@ -209,4 +233,10 @@ function findFirstAvailableBrick() {
     if (!bricks.get(i)?.claimed) return i;
   }
   return null;
+}
+
+function escapeHtml(value) {
+  return String(value).replace(/[&<>"']/g, (char) => ({
+    "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#039;"
+  })[char]);
 }
