@@ -1,9 +1,10 @@
 :root {
-  --bg: #090b0f;
-  --panel: #111420;
-  --line: #202638;
-  --text: #f0f0f5;
+  --bg: #05060a;
+  --panel: #0d0f18;
+  --line: #1e2233;
+  --text: #e0e5ff;
   --cyan: #00f0ff;
+  --pink: #ff007f;
   --pixel: "Press Start 2P", monospace;
   --sans: "Inter", sans-serif;
 }
@@ -11,73 +12,78 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { background: var(--bg); color: var(--text); font-family: var(--sans); overflow: hidden; user-select: none; }
 
-.topbar { position: fixed; top: 0; width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; background: rgba(9, 11, 15, 0.95); z-index: 100; border-bottom: 1px solid var(--line); }
+.topbar { position: fixed; top: 0; width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; background: rgba(5, 6, 10, 0.85); z-index: 100; border-bottom: 1px solid var(--line); backdrop-filter: blur(10px); }
 .brand, h2, .badge, .button, .modal-id { font-family: var(--pixel); }
 .brand { color: var(--text); text-decoration: none; font-size: 14px; text-shadow: 0 0 10px var(--cyan); }
 .stats { font-size: 12px; font-weight: bold; color: #888; }
+.neon-text { color: var(--cyan); text-shadow: 0 0 8px var(--cyan); }
 .topbar-actions { display: flex; gap: 10px; }
-.button { background: transparent; border: 1px solid; padding: 12px; font-size: 10px; cursor: pointer; color: var(--text); transition: 0.2s; }
+.button { background: transparent; border: 1px solid; padding: 12px; font-size: 10px; cursor: pointer; color: var(--text); transition: 0.2s; text-transform: uppercase; }
 .button-primary { background: rgba(0, 240, 255, 0.1); border-color: var(--cyan); color: var(--cyan); }
-.button-primary:hover { background: var(--cyan); color: #000; box-shadow: 0 0 15px var(--cyan); }
+.button-primary:hover { background: var(--cyan); color: #000; box-shadow: 0 0 20px var(--cyan); }
 .button-ghost { border-color: var(--line); }
 .button-full { width: 100%; margin-top: 10px; }
 
-/* Setup 3D y Cámara Fija (Solo ajustamos Y para centrar visualmente) */
-.viewport { width: 100vw; height: 100vh; cursor: grab; perspective: 1500px; background: radial-gradient(circle at center, #151824, #06070a); }
+/* Ambiente Cyberpunk */
+.cyber-bg { position: absolute; inset: 0; background: radial-gradient(circle at 50% 30%, #170d24 0%, #05060a 60%); z-index: -1; }
+.viewport { width: 100vw; height: 100vh; cursor: grab; perspective: 1200px; }
 .viewport:active { cursor: grabbing; }
-.camera { width: 100%; height: 100%; position: absolute; transform-style: preserve-3d; transform: translateY(150px); }
-
-/* El Mundo (Gira isométricamente) */
+.camera { width: 100%; height: 100%; position: absolute; transform-style: preserve-3d; }
 .world { position: absolute; top: 50%; left: 50%; transform-style: preserve-3d; }
 
-/* Autopista ampliada para caber todos los carteles */
-.highway { position: absolute; left: -60000px; top: 0; width: 120000px; height: 350px; background: #0c0e14; border-top: 3px solid #333; border-bottom: 3px solid #333; transform-style: preserve-3d; }
-.highway::after { content: ""; position: absolute; top: 50%; left: 0; width: 100%; height: 6px; background: repeating-linear-gradient(90deg, #fff 0, #fff 60px, transparent 60px, transparent 120px); opacity: 0.3; }
+/* Suelo de Neón */
+.cyber-grid { position: absolute; left: -10000px; top: -5000px; width: 80000px; height: 10000px; background-image: linear-gradient(rgba(255,0,127,0.15) 2px, transparent 2px), linear-gradient(90deg, rgba(255,0,127,0.15) 2px, transparent 2px); background-size: 100px 100px; transform: translateZ(-1px); }
 
-/* Contenedor Carteles al fondo */
-.plots-container { position: absolute; left: -55000px; top: -10px; display: flex; gap: 40px; align-items: flex-end; transform-style: preserve-3d; }
+/* Autopista Central */
+.highway { position: absolute; left: 0; top: 0; width: 66000px; height: 350px; background: #07090e; border-top: 4px solid var(--pink); border-bottom: 4px solid var(--cyan); transform-style: preserve-3d; box-shadow: inset 0 0 50px rgba(0,0,0,0.8), 0 0 20px rgba(255,0,127,0.2); }
+.highway::after { content: ""; position: absolute; top: 50%; left: 0; width: 100%; height: 6px; background: repeating-linear-gradient(90deg, rgba(255,255,255,0.7) 0, rgba(255,255,255,0.7) 80px, transparent 80px, transparent 160px); filter: drop-shadow(0 0 5px rgba(255,255,255,0.5)); }
+
+/* Contenedor Carteles */
+.plots-container { position: absolute; left: 0; top: -10px; display: flex; gap: 40px; align-items: flex-end; transform-style: preserve-3d; padding-left: 200px; }
 .plot { width: 180px; height: 20px; transform-style: preserve-3d; position: relative; cursor: pointer; }
 
-/* Marco 3D del cartel con postes */
-.billboard-frame { position: absolute; bottom: 60px; left: 0; width: 100%; height: 110px; transform-origin: bottom; transform: rotateX(-90deg); background: #111; border: 4px solid var(--brick-color, #444); border-bottom-width: 10px; display: flex; align-items: center; justify-content: center; box-shadow: inset 0 0 40px rgba(0,0,0,0.9), 0 15px 30px rgba(0,0,0,0.7); transition: 0.2s; transform-style: preserve-3d; }
-.billboard-frame.mega { height: 180px; width: 130%; left: -15%; z-index: 10; border-width: 6px; border-bottom-width: 12px; bottom: 90px; }
-.billboard-frame:hover { filter: brightness(1.2); transform: rotateX(-90deg) scale(1.02); }
+/* Vallas 3D mejoradas */
+.billboard-frame { position: absolute; bottom: 60px; left: 0; width: 100%; height: 110px; transform-origin: bottom; transform: rotateX(-90deg); background: #0a0b10; border: 4px solid var(--brick-color, #2a2d3d); border-bottom-width: 12px; display: flex; align-items: center; justify-content: center; box-shadow: inset 0 0 20px rgba(0,0,0,1), 0 10px 40px rgba(0,0,0,0.8); transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); transform-style: preserve-3d; }
+.billboard-frame.mega { height: 190px; width: 130%; left: -15%; z-index: 10; border-width: 6px; border-bottom-width: 14px; bottom: 90px; box-shadow: 0 0 30px var(--brick-color); }
+.billboard-frame:hover { transform: rotateX(-90deg) scale(1.05) translateY(-10px); filter: brightness(1.3); }
 
-/* Los 2 postes */
-.billboard-frame::before, .billboard-frame::after { content: ""; position: absolute; bottom: -68px; width: 8px; height: 60px; background: linear-gradient(90deg, #555, #111); box-shadow: 2px 5px 10px rgba(0,0,0,0.8); }
-.billboard-frame.mega::before, .billboard-frame.mega::after { height: 90px; bottom: -100px; width: 12px; }
+/* Postes de acero */
+.billboard-frame::before, .billboard-frame::after { content: ""; position: absolute; bottom: -72px; width: 10px; height: 60px; background: linear-gradient(90deg, #444, #111, #333); box-shadow: 5px 5px 15px rgba(0,0,0,0.9); }
+.billboard-frame.mega::before, .billboard-frame.mega::after { height: 94px; bottom: -108px; width: 14px; }
 .billboard-frame::before { left: 15%; }
 .billboard-frame::after { right: 15%; }
 
-/* Contenido */
-.plot.empty .billboard-frame { background: #1a1a24; border-color: #333; color: #555; font-family: var(--sans); font-size: 12px; font-weight: bold; }
-.billboard-content { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 5px; background: #fff; overflow: hidden; }
+/* Interior del Cartel */
+.plot.empty .billboard-frame { background: #0b0d14; border-color: #1a1c29; color: #444; font-family: var(--sans); font-size: 11px; font-weight: bold; }
+.plot.empty:hover .billboard-frame { border-color: var(--cyan); color: var(--cyan); box-shadow: 0 0 20px rgba(0,240,255,0.2); }
+.billboard-content { width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 5px; background: #fff; overflow: hidden; box-shadow: inset 0 0 10px rgba(0,0,0,0.5); }
 .billboard-logo { max-width: 90%; max-height: 60%; object-fit: contain; margin-bottom: 5px; }
-.billboard-name { font-size: 12px; font-weight: bold; color: #111; text-transform: uppercase; text-align: center; }
+.billboard-name { font-size: 13px; font-weight: 900; color: #000; text-transform: uppercase; text-align: center; }
 
-/* Farolas delante */
-.streetlights-container { position: absolute; left: -55000px; top: 350px; display: flex; gap: 600px; transform-style: preserve-3d; }
-.streetlight { position: relative; width: 6px; height: 120px; background: linear-gradient(90deg, #444, #111); transform-origin: bottom; transform: rotateX(-90deg); }
-.streetlight::before { content: ""; position: absolute; top: 0; left: -25px; width: 30px; height: 6px; background: #333; }
-.streetlight::after { content: ""; position: absolute; top: 6px; left: -20px; width: 15px; height: 15px; border-radius: 50%; background: #ffea99; box-shadow: 0 0 30px 10px #ffea99, 0 0 60px 20px #ffea99; opacity: 0.9; }
+/* Farolas */
+.streetlights-container { position: absolute; left: 0; top: 350px; display: flex; gap: 800px; transform-style: preserve-3d; }
+.streetlight { position: relative; width: 8px; height: 160px; background: linear-gradient(90deg, #333, #000); transform-origin: bottom; transform: rotateX(-90deg); }
+.streetlight::before { content: ""; position: absolute; top: 0; left: -40px; width: 50px; height: 6px; background: #222; }
+.streetlight::after { content: ""; position: absolute; top: 6px; left: -30px; width: 20px; height: 10px; background: #ffea99; box-shadow: 0 0 40px 15px rgba(255,234,153,0.6); border-radius: 10px; }
 
-/* Tráfico - Coches de todos los colores */
-.car { position: absolute; width: 45px; height: 16px; border-radius: 4px; }
-.car.right { top: 220px; animation: driveRight linear infinite; }
-.car.left { top: 80px; animation: driveLeft linear infinite; }
+/* Coches Cyberpunk Rediseñados */
+.car { position: absolute; width: 60px; height: 22px; border-radius: 6px; background: linear-gradient(to bottom, #333 0%, #111 40%, #000 100%); border: 1px solid #000; }
+/* Chasis central (cristalina) */
+.car::after { content: ""; position: absolute; top: 4px; left: 15px; right: 15px; bottom: 4px; background: rgba(0, 240, 255, 0.2); border-radius: 2px; }
 
-@keyframes driveRight { 0% { transform: translateX(0); } 100% { transform: translateX(120000px); } }
-@keyframes driveLeft { 0% { transform: translateX(120000px); } 100% { transform: translateX(0); } }
+.car.right { top: 220px; border-right: 3px solid #fff; border-left: 3px solid #ff003c; box-shadow: 25px 0 25px rgba(255,255,255,0.7), -20px 0 20px rgba(255,0,60,0.8), 0 10px 15px rgba(0,0,0,0.5); animation: driveRight linear infinite; }
+.car.left { top: 70px; border-left: 3px solid #fff; border-right: 3px solid #ff003c; box-shadow: -25px 0 25px rgba(255,255,255,0.7), 20px 0 20px rgba(255,0,60,0.8), 0 -10px 15px rgba(0,0,0,0.5); animation: driveLeft linear infinite; }
 
-/* UI Modales */
-.modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 200; }
+@keyframes driveRight { 0% { transform: translateX(-1000px); } 100% { transform: translateX(67000px); } }
+@keyframes driveLeft { 0% { transform: translateX(67000px); } 100% { transform: translateX(-1000px); } }
+
+/* Modales */
+.modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: flex; align-items: center; justify-content: center; z-index: 200; backdrop-filter: blur(5px); }
 .modal.hidden { display: none; }
-.modal-card { width: min(100%, 450px); background: var(--panel); border: 1px solid var(--line); padding: 25px; position: relative; }
+.modal-card { width: min(100%, 450px); background: var(--panel); border: 1px solid var(--line); padding: 25px; position: relative; box-shadow: 0 0 50px rgba(0,240,255,0.1); }
 .modal-close { position: absolute; top: 10px; right: 15px; background: transparent; border: none; color: #888; font-size: 20px; cursor: pointer; }
-.modal-color { height: 60px; margin: -25px -25px 20px; border-bottom: 2px solid var(--line); }
-.modal-meta { display: flex; justify-content: space-between; margin: 20px 0; padding: 15px; background: #000; border: 1px solid var(--line); }
-.form-card input, .form-card textarea { width: 100%; background: #000; border: 1px solid var(--line); color: #fff; padding: 10px; margin: 8px 0 15px; }
-.form-card input:focus { border-color: var(--cyan); outline: none; }
-.form-error { color: #ff003c; font-size: 12px; margin-top: 10px; }
-.check-line { display: flex; align-items: center; gap: 10px; font-size: 12px; }
-.check-line input { width: auto; margin: 0; }
+.modal-color { height: 6px; margin: -25px -25px 25px; }
+.modal-meta { display: flex; justify-content: space-between; margin: 20px 0; padding: 15px; background: #05060a; border: 1px solid var(--line); }
+.form-card input, .form-card textarea { width: 100%; background: #05060a; border: 1px solid var(--line); color: #fff; padding: 12px; margin: 8px 0 15px; }
+.form-card input:focus { border-color: var(--cyan); outline: none; box-shadow: 0 0 10px rgba(0,240,255,0.2); }
+.form-error { color: var(--pink); font-size: 12px; margin-top: 10px; }
