@@ -1,18 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EL MURAZO — Isometric Highway</title>
+  <title>EL MURAZO — Autopista Digital</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=6">
+  <link rel="stylesheet" href="style.css?v=7">
 </head>
 <body>
   <header class="topbar">
     <a class="brand" href="./">EL MURAZO</a>
-    <div class="stats">
-      <span>CARTELES: <strong id="stat-occupied" class="neon-text">0</strong>/500</span>
-    </div>
+    <div class="stats"><span>CARTELES: <strong id="stat-occupied" class="neon-text">0</strong>/500</span></div>
     <div class="topbar-actions">
       <button id="claim-btn" class="button button-primary">ALQUILAR CARTEL</button>
       <button id="login-btn" class="button button-ghost">LOGIN</button>
@@ -22,8 +20,10 @@
   <main id="viewport" class="viewport">
     <div id="camera" class="camera">
       <div id="world" class="world">
-        <div class="highway"></div>
+        <!-- Contenedor de carteles al fondo -->
         <div id="plots-container" class="plots-container"></div>
+        <!-- Autopista delante de los carteles -->
+        <div class="highway" id="highway"></div>
       </div>
     </div>
   </main>
@@ -34,9 +34,9 @@
       <div id="modal-color" class="modal-color"></div>
       <div class="modal-content">
         <div id="modal-badge" class="badge hidden">MEGA</div>
-        <div class="modal-id">PARCELA #<span id="modal-id-value">000</span></div>
+        <div class="modal-id">CARTEL #<span id="modal-id-value">000</span></div>
         <h2 id="modal-title">Cartel Disponible</h2>
-        <p id="modal-desc">Este espacio está libre. Alquila esta valla y domina la autopista.</p>
+        <p id="modal-desc">Este espacio está libre. Alquila esta valla.</p>
         <div class="modal-meta">
           <div><span>VISITAS</span><strong id="modal-visits">0</strong></div>
           <div><span>ESTADO</span><strong id="modal-status">LIBRE</strong></div>
@@ -51,7 +51,6 @@
     <div class="modal-card auth-card">
       <button id="close-auth" class="modal-close">×</button>
       <h2>ACCESO</h2>
-      <p>Inicia sesión con Google para gestionar tu terreno en la autopista.</p>
       <button id="google-login" class="button button-primary button-full">CONTINUAR CON GOOGLE</button>
       <button id="logout-btn" class="button button-ghost button-full hidden">CERRAR SESIÓN</button>
       <p id="auth-status" class="auth-status"></p>
@@ -64,18 +63,18 @@
       <h2>ALQUILAR CARTEL</h2>
       <form id="claim-form">
         <input type="hidden" id="claim-brick-id">
-        <label>Nombre a mostrar<input id="claim-name" maxlength="20" required placeholder="Tu marca o proyecto"></label>
+        <label>Nombre a mostrar<input id="claim-name" maxlength="20" required></label>
         <label>Descripción<textarea id="claim-desc" maxlength="140" required></textarea></label>
-        <label>Enlace Web<input id="claim-link" type="url" placeholder="https://..."></label>
-        <label>URL del Logo (Opcional)<input id="claim-logo" type="url" placeholder="https://tudominio.com/logo.png"></label>
-        <label>Color del Neón<input id="claim-color" type="color" value="#00f0ff"></label>
-        <label class="check-line"><input id="claim-founder" type="checkbox"> Plan MEGA (Estructura gigante)</label>
+        <label>Enlace Web<input id="claim-link" type="url"></label>
+        <label>URL del Logo<input id="claim-logo" type="url"></label>
+        <label>Color del Marco<input id="claim-color" type="color" value="#8a8d91"></label>
+        <label class="check-line"><input id="claim-founder" type="checkbox"> Plan MEGA</label>
         <button class="button button-primary button-full" type="submit">CONFIRMAR ALQUILER</button>
         <p id="claim-error" class="form-error"></p>
       </form>
     </div>
   </div>
 
-  <script type="module" src="app.js?v=6"></script>
+  <script type="module" src="app.js?v=7"></script>
 </body>
 </html>
