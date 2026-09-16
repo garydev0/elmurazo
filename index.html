@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>EL MURAZO — Autopista Digital</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=8">
+  <link rel="stylesheet" href="style.css?v=9">
 </head>
 <body>
   <header class="topbar">
@@ -19,17 +19,19 @@
 
   <main id="viewport" class="viewport">
     <div id="camera" class="camera">
+      <!-- El mundo ahora se desliza en su propio eje -->
       <div id="world" class="world">
-        <!-- Contenedor de carteles al fondo -->
+        <!-- Vallas publicitarias (fondo) -->
         <div id="plots-container" class="plots-container"></div>
-        <!-- Autopista en el centro -->
+        <!-- Carretera (centro) -->
         <div class="highway" id="highway"></div>
-        <!-- Farolas en la parte más cercana -->
+        <!-- Farolas (frente) -->
         <div id="streetlights-container" class="streetlights-container"></div>
       </div>
     </div>
   </main>
 
+  <!-- Panel lateral del cartel -->
   <div id="brick-modal" class="modal hidden">
     <div class="modal-card">
       <button id="close-modal" class="modal-close">×</button>
@@ -70,13 +72,13 @@
         <label>Enlace Web<input id="claim-link" type="url"></label>
         <label>URL del Logo<input id="claim-logo" type="url"></label>
         <label>Color del Marco<input id="claim-color" type="color" value="#8a8d91"></label>
-        <label class="check-line"><input id="claim-founder" type="checkbox"> Plan MEGA</label>
+        <label class="check-line"><input id="claim-founder" type="checkbox"> Plan MEGA (Más grande)</label>
         <button class="button button-primary button-full" type="submit">CONFIRMAR ALQUILER</button>
         <p id="claim-error" class="form-error"></p>
       </form>
     </div>
   </div>
 
-  <script type="module" src="app.js?v=8"></script>
+  <script type="module" src="app.js?v=9"></script>
 </body>
 </html>
