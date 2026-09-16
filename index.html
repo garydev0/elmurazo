@@ -1,82 +1,28 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EL MURAZO — Autopista Cyberpunk</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Press+Start+2P&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=11">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El Murazo | Ofertas que golpean</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Iconos para Sol/Luna -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-  <header class="topbar">
-    <a class="brand" href="./">EL MURAZO</a>
-    <div class="stats"><span>CARTELES: <strong id="stat-occupied" class="neon-text">0</strong>/300</span></div>
-    <div class="topbar-actions">
-      <button id="login-btn" class="button button-ghost">LOGIN</button>
-    </div>
-  </header>
+    <header>
+        <h1>EL MURAZO</h1>
+        <button id="theme-toggle" class="theme-btn">
+            <i class="fas fa-sun" id="icon-sun"></i>
+            <i class="fas fa-moon" id="icon-moon" style="display: none;"></i>
+        </button>
+    </header>
 
-  <!-- Indicador de Zona actual -->
-  <div id="zone-indicator" class="zone-indicator">DISTRITO NORTE</div>
+    <main>
+        <!-- Aquí se inyectarán los productos desde Firebase -->
+        <div id="muro-container" class="grid-muro"></div>
+    </main>
 
-  <main id="viewport" class="viewport">
-    <div class="cyber-bg"></div>
-    <div id="camera" class="camera">
-      <div id="world" class="world">
-        <div class="cyber-grid"></div>
-        <div id="plots-container" class="plots-container"></div>
-        <div class="highway" id="highway"></div>
-        <div id="streetlights-container" class="streetlights-container"></div>
-      </div>
-    </div>
-  </main>
-
-  <div id="brick-modal" class="modal hidden">
-    <div class="modal-card">
-      <button id="close-modal" class="modal-close">×</button>
-      <div id="modal-color" class="modal-color"></div>
-      <div class="modal-content">
-        <div id="modal-badge" class="badge hidden">MEGA</div>
-        <div class="modal-id">CARTEL #<span id="modal-id-value">000</span></div>
-        <h2 id="modal-title">Cartel Disponible</h2>
-        <p id="modal-desc">Este espacio está libre.</p>
-        <div class="modal-meta">
-          <div><span>PRECIO ESTIMADO</span><strong id="modal-price">0€/mes</strong></div>
-          <div><span>ESTADO</span><strong id="modal-status" class="status-free">LIBRE</strong></div>
-        </div>
-        <a id="modal-link" href="#" target="_blank" class="button button-primary modal-link hidden">VISITAR WEB</a>
-        <button id="modal-claim" class="button button-primary modal-claim">RESERVAR AHORA</button>
-      </div>
-    </div>
-  </div>
-
-  <div id="auth-modal" class="modal hidden">
-    <div class="modal-card auth-card">
-      <button id="close-auth" class="modal-close">×</button>
-      <h2>ACCESO</h2>
-      <button id="google-login" class="button button-primary button-full">CONECTAR CON GOOGLE</button>
-      <button id="logout-btn" class="button button-ghost button-full hidden">CERRAR SESIÓN</button>
-    </div>
-  </div>
-
-  <div id="claim-modal" class="modal hidden">
-    <div class="modal-card form-card">
-      <button id="close-claim" class="modal-close">×</button>
-      <h2>RESERVAR CARTEL</h2>
-      <form id="claim-form">
-        <input type="hidden" id="claim-brick-id">
-        <label>Nombre de la marca<input id="claim-name" maxlength="20" required></label>
-        <label>Descripción breve<textarea id="claim-desc" maxlength="80" required></textarea></label>
-        <label>Enlace Web<input id="claim-link" type="url" required></label>
-        <label>URL del Logo (Opcional)<input id="claim-logo" type="url"></label>
-        <label>Color del Neón<input id="claim-color" type="color" value="#00f0ff"></label>
-        <label class="check-line"><input id="claim-founder" type="checkbox"> Plan MEGA (Estructura Doble)</label>
-        <button class="button button-primary button-full" type="submit">CONFIRMAR RESERVA</button>
-        <p id="claim-error" class="form-error"></p>
-      </form>
-    </div>
-  </div>
-
-  <script type="module" src="app.js?v=11"></script>
+    <!-- Scripts de Firebase y lógica principal -->
+    <script type="module" src="app.js"></script>
 </body>
 </html>
