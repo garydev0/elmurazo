@@ -19,12 +19,11 @@ let currentUser = null;
 let selectedBrick = null;
 
 // Cámara isométrica
-let cameraX = 0, cameraY = -500;
+let cameraX = 0, cameraY = -300; 
 let isDragging = false, startX, startY;
 const camera = document.getElementById("camera");
-const viewport = document.getElementById("viewport");
 
-viewport.addEventListener("mousedown", (e) => {
+document.getElementById("viewport").addEventListener("mousedown", (e) => {
   if(e.target.closest('.modal')) return;
   isDragging = true;
   startX = e.clientX - cameraX;
@@ -40,28 +39,38 @@ window.addEventListener("mousemove", (e) => {
 
 document.addEventListener("DOMContentLoaded", () => {
   camera.style.transform = `translate(${cameraX}px, ${cameraY}px)`;
+  spawnCars();
   bindUI();
   loadBricks();
 });
+
+// Generar tráfico en la autopista
+function spawnCars() {
+  const highway = document.getElementById("highway");
+  for (let i = 0; i < 40; i++) {
+    const car = document.createElement("div");
+    car.className = `car ${Math.random() > 0.5 ? 'right' : 'left'}`;
+    car.style.animationDelay = `-${Math.random() * 200}s`;
+    car.style.animationDuration = `${100 + Math.random() * 50}s`; // Coches cruzando la pista enorme
+    highway.appendChild(car);
+  }
+}
 
 function bindUI() {
   document.getElementById("login-btn").addEventListener("click", () => document.getElementById("auth-modal").classList.remove("hidden"));
   document.getElementById("google-login").addEventListener("click", () => signInWithPopup(auth, provider));
   document.getElementById("logout-btn").addEventListener("click", () => signOut(auth));
   document.getElementById("close-auth").addEventListener("click", () => document.getElementById("auth-modal").classList.add("hidden"));
-  
   document.getElementById("close-modal").addEventListener("click", () => document.getElementById("brick-modal").classList.add("hidden"));
   document.getElementById("claim-btn").addEventListener("click", () => openClaimModal(""));
   document.getElementById("close-claim").addEventListener("click", () => {
     document.getElementById("claim-modal").classList.add("hidden");
-    renderWall(); // Resetea la previsualización a su estado original
+    renderWall(); 
   });
-  
   document.getElementById("modal-claim").addEventListener("click", () => {
     document.getElementById("brick-modal").classList.add("hidden");
     if (selectedBrick) openClaimModal(selectedBrick.id);
   });
-  
   document.getElementById("claim-form").addEventListener("submit", handleClaim);
 
   onAuthStateChanged(auth, (user) => {
@@ -72,15 +81,14 @@ function bindUI() {
     document.getElementById("auth-status").textContent = user ? `Conectado como ${user.email}` : "";
   });
 
-  // Previsualización en vivo (Color, Nombre, Logo, y Altura 3D)
+  // Previsualización de Cartel (Blanco con marco)
   function updatePreview() {
     const brickId = document.getElementById("claim-brick-id").value || findFirstAvailableBrick();
     if (!brickId) return;
-    
     const plot = document.querySelector(`.plot[data-id="${brickId}"]`);
     if (!plot) return;
 
-    plot.classList.remove("empty"); // Al quitar empty, el CSS hace que el cartel "crezca" desde el suelo
+    plot.classList.remove("empty"); 
     plot.classList.add("claimed");
 
     const billboard = plot.querySelector('.billboard-base');
@@ -91,16 +99,14 @@ function bindUI() {
 
     document.getElementById("claim-color").style.backgroundColor = color;
     billboard.style.setProperty("--brick-color", color);
+    billboard.style.background = "#fff"; // Fondo blanco como en la foto
     
     if(isMega) billboard.classList.add("mega");
     else billboard.classList.remove("mega");
 
     let contentHTML = "";
-    if (logoUrl) {
-      contentHTML += `<img src="${escapeHtml(logoUrl)}" class="billboard-logo" onerror="this.style.display='none'">`;
-    }
+    if (logoUrl) contentHTML += `<img src="${escapeHtml(logoUrl)}" class="billboard-logo" onerror="this.style.display='none'">`;
     contentHTML += `<span class="billboard-name">${escapeHtml(name.slice(0, 15))}</span>`;
-    
     billboard.innerHTML = `<div class="billboard-content">${contentHTML}</div>`;
   }
 
@@ -122,7 +128,7 @@ function renderWall() {
   let occupied = 0;
 
   for (let i = 1; i <= 500; i++) {
-    const data = bricks.get(i) ?? { id: i, claimed: false, color: "#202638" };
+    const data = bricks.get(i) ?? { id: i, claimed: false, color: "#8a8d91" };
     if(data.claimed) occupied++;
     
     const plot = document.createElement("div");
@@ -131,43 +137,37 @@ function renderWall() {
     
     const billboard = document.createElement("div");
     billboard.className = `billboard-base ${data.founder ? "mega" : ""}`;
-    billboard.style.setProperty("--brick-color", data.claimed ? data.color : "#202638");
+    billboard.style.setProperty("--brick-color", data.claimed ? data.color : "#8a8d91");
     
     if (data.claimed) {
       let contentHTML = "";
-      if (data.logo) {
-        contentHTML += `<img src="${escapeHtml(data.logo)}" class="billboard-logo" onerror="this.style.display='none'">`;
-      }
+      if (data.logo) contentHTML += `<img src="${escapeHtml(data.logo)}" class="billboard-logo" onerror="this.style.display='none'">`;
       contentHTML += `<span class="billboard-name">${escapeHtml(data.name.slice(0,15))}</span>`;
       billboard.innerHTML = `<div class="billboard-content">${contentHTML}</div>`;
     } else {
-      billboard.innerHTML = `<span class="billboard-name">+</span>`;
+      billboard.innerHTML = `YOUR AD HERE<br>#${i}`; // Mensaje genérico de cartel vacío
     }
     
     plot.appendChild(billboard);
-    
     plot.addEventListener("click", (e) => {
       if(isDragging && (Math.abs(e.clientX - startX - cameraX) > 5)) return;
       openBrick(i);
     });
-    
     container.appendChild(plot);
   }
   document.getElementById("stat-occupied").textContent = occupied;
 }
 
 function openBrick(id) {
-  const b = bricks.get(id) || { id, claimed: false };
+  const b = bricks.get(id) || { id, claimed: false, color: "#8a8d91" };
   selectedBrick = b;
-  
-  document.getElementById("modal-color").style.backgroundColor = b.claimed ? b.color : "#111";
+  document.getElementById("modal-color").style.backgroundColor = b.color;
   document.getElementById("modal-title").textContent = b.claimed ? b.name : "Cartel Disponible";
-  document.getElementById("modal-desc").textContent = b.claimed ? b.description : "Sitúa tu marca frente al tráfico de la autopista.";
+  document.getElementById("modal-desc").textContent = b.claimed ? b.description : "Anuncia tu proyecto en este cartel.";
   document.getElementById("modal-id-value").textContent = b.id;
   document.getElementById("modal-visits").textContent = b.visits || 0;
   document.getElementById("modal-status").textContent = b.claimed ? "ALQUILADO" : "LIBRE";
   
-  document.getElementById("modal-badge").classList.toggle("hidden", !b.founder);
   const linkBtn = document.getElementById("modal-link");
   if (b.claimed && b.link) {
     linkBtn.href = b.link;
@@ -183,13 +183,10 @@ function openBrick(id) {
 function openClaimModal(brickId) {
   document.getElementById("claim-brick-id").value = brickId;
   document.getElementById("claim-form").reset();
-  
-  // Limpiar logo y color por defecto
   document.getElementById("claim-logo").value = "";
-  const defColor = "#00f0ff";
+  const defColor = "#8a8d91";
   document.getElementById("claim-color").value = defColor;
   document.getElementById("claim-color").style.backgroundColor = defColor;
-  
   document.getElementById("claim-error").textContent = "";
   document.getElementById("claim-modal").classList.remove("hidden");
 }
@@ -219,7 +216,6 @@ async function handleClaim(e) {
         visits: 0, ownerUid: currentUser.uid, updatedAt: serverTimestamp()
       }, {merge: true});
     });
-    
     document.getElementById("claim-modal").classList.add("hidden");
     await loadBricks();
     openBrick(id);
@@ -236,7 +232,5 @@ function findFirstAvailableBrick() {
 }
 
 function escapeHtml(value) {
-  return String(value).replace(/[&<>"']/g, (char) => ({
-    "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#039;"
-  })[char]);
+  return String(value).replace(/[&<>"']/g, (char) => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#039;" })[char]);
 }
