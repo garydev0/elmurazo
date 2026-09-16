@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EL MURAZO — Autopista Digital</title>
+  <title>EL MURAZO — Cyberpunk Highway</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Press+Start+2P&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=9">
+  <link rel="stylesheet" href="style.css?v=10">
 </head>
 <body>
   <header class="topbar">
     <a class="brand" href="./">EL MURAZO</a>
-    <div class="stats"><span>CARTELES: <strong id="stat-occupied" class="neon-text">0</strong>/500</span></div>
+    <div class="stats"><span>CARTELES: <strong id="stat-occupied" class="neon-text">0</strong>/300</span></div>
     <div class="topbar-actions">
       <button id="claim-btn" class="button button-primary">ALQUILAR CARTEL</button>
       <button id="login-btn" class="button button-ghost">LOGIN</button>
@@ -18,20 +18,20 @@
   </header>
 
   <main id="viewport" class="viewport">
+    <!-- Efecto niebla y ciudad de fondo -->
+    <div class="cyber-bg"></div>
     <div id="camera" class="camera">
-      <!-- El mundo ahora se desliza en su propio eje -->
       <div id="world" class="world">
-        <!-- Vallas publicitarias (fondo) -->
+        <!-- Cuadrícula de neón en el suelo -->
+        <div class="cyber-grid"></div>
+        
         <div id="plots-container" class="plots-container"></div>
-        <!-- Carretera (centro) -->
         <div class="highway" id="highway"></div>
-        <!-- Farolas (frente) -->
         <div id="streetlights-container" class="streetlights-container"></div>
       </div>
     </div>
   </main>
 
-  <!-- Panel lateral del cartel -->
   <div id="brick-modal" class="modal hidden">
     <div class="modal-card">
       <button id="close-modal" class="modal-close">×</button>
@@ -71,14 +71,14 @@
         <label>Descripción<textarea id="claim-desc" maxlength="140" required></textarea></label>
         <label>Enlace Web<input id="claim-link" type="url"></label>
         <label>URL del Logo<input id="claim-logo" type="url"></label>
-        <label>Color del Marco<input id="claim-color" type="color" value="#8a8d91"></label>
-        <label class="check-line"><input id="claim-founder" type="checkbox"> Plan MEGA (Más grande)</label>
+        <label>Color del Marco<input id="claim-color" type="color" value="#00f0ff"></label>
+        <label class="check-line"><input id="claim-founder" type="checkbox"> Plan MEGA</label>
         <button class="button button-primary button-full" type="submit">CONFIRMAR ALQUILER</button>
         <p id="claim-error" class="form-error"></p>
       </form>
     </div>
   </div>
 
-  <script type="module" src="app.js?v=9"></script>
+  <script type="module" src="app.js?v=10"></script>
 </body>
 </html>
