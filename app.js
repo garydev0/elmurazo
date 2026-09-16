@@ -1,282 +1,152 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-app.js";
-import { getFirestore, collection, getDocs, doc, query, runTransaction, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-firestore.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.10.0/firebase-auth.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-analytics.js";
+import { getFirestore, collection, addDoc, getDocs, orderBy, query } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore.js";
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-auth.js";
 
+// Tu configuración de Firebase
 const firebaseConfig = {
-  apiKey: "AIzaSyCFE0T4m16MOyn9JqMujJZZwMJCLen-LgA",
-  authDomain: "elmurazo.firebaseapp.com",
-  projectId: "elmurazo",
-  storageBucket: "elmurazo.firebasestorage.app"
+    apiKey: "AIzaSyCFE0T4m16MOyn9JqMujJZZwMJCLen-LgA",
+    authDomain: "elmurazo.firebaseapp.com",
+    projectId: "elmurazo",
+    storageBucket: "elmurazo.firebasestorage.app",
+    messagingSenderId: "722334671597",
+    appId: "1:722334671597:web:4b316572169de9c66262e4",
+    measurementId: "G-P003BX46Z4"
 };
 
+// Inicializar Firebase
 const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
 const db = getFirestore(app);
 const auth = getAuth(app);
-const provider = new GoogleAuthProvider();
 
-const TOTAL_BRICKS = 300;
-const CENTER_BRICK = 150;
-const BRICK_WIDTH = 220; // 180px ancho + 40px gap
+// --- LÓGICA MODO CLARO/OSCURO ---
+const themeToggle = document.getElementById('theme-toggle');
+const iconSun = document.getElementById('icon-sun');
+const iconMoon = document.getElementById('icon-moon');
 
-let bricks = new Map();
-let currentUser = null;
-let selectedBrick = null;
-
-// Sistema de Cámara Fija Horizontal
-let cameraX = 0; 
-let isDragging = false, startX, clickStartX;
-const world = document.getElementById("world");
-const zoneIndicator = document.getElementById("zone-indicator");
-
-// Calcular límites de arrastre para no salirse del mapa
-const MAX_X = window.innerWidth / 2;
-const MIN_X = -(TOTAL_BRICKS * BRICK_WIDTH) + window.innerWidth / 2;
-
-function setCamera(x) {
-  // Clamp (Bloquear) la cámara dentro de los límites del mapa
-  cameraX = Math.max(MIN_X, Math.min(MAX_X, x));
-  world.style.transform = `rotateX(60deg) rotateZ(-20deg) translateX(${cameraX}px)`;
-  updateZoneIndicator();
-}
-
-document.getElementById("viewport").addEventListener("mousedown", (e) => {
-  if(e.target.closest('.modal')) return;
-  isDragging = true;
-  clickStartX = e.clientX;
-  startX = e.clientX - cameraX;
-});
-window.addEventListener("mouseup", () => isDragging = false);
-window.addEventListener("mousemove", (e) => {
-  if (!isDragging) return;
-  setCamera(e.clientX - startX);
-});
-
-document.addEventListener("DOMContentLoaded", () => {
-  // Empezar en el centro exacto (Cartel 150)
-  const centerPixel = -(CENTER_BRICK * BRICK_WIDTH) + window.innerWidth / 2;
-  setCamera(centerPixel);
-  
-  spawnCars();
-  bindUI();
-  loadBricks();
-});
-
-function updateZoneIndicator() {
-  const currentPixel = Math.abs(cameraX - window.innerWidth / 2);
-  const currentBrick = Math.floor(currentPixel / BRICK_WIDTH);
-  
-  if (currentBrick >= 130 && currentBrick <= 170) {
-    zoneIndicator.textContent = "DISTRITO CENTRAL (PREMIUM)";
-    zoneIndicator.style.color = "var(--gold)";
-    zoneIndicator.style.borderColor = "var(--gold)";
-  } else if (currentBrick < 130) {
-    zoneIndicator.textContent = "AUTOPISTA NORTE";
-    zoneIndicator.style.color = "var(--cyan)";
-    zoneIndicator.style.borderColor = "var(--cyan)";
-  } else {
-    zoneIndicator.textContent = "DISTRITO SUR";
-    zoneIndicator.style.color = "var(--pink)";
-    zoneIndicator.style.borderColor = "var(--pink)";
-  }
-}
-
-function spawnCars() {
-  const highway = document.getElementById("highway");
-  for (let i = 0; i < 150; i++) {
-    const car = document.createElement("div");
-    const isRight = Math.random() > 0.5;
-    car.className = `car ${isRight ? 'right' : 'left'}`;
-    
-    // Tonos Cyberpunk
-    const hue = Math.random() > 0.5 ? 190 : 320; 
-    car.style.borderTopColor = `hsl(${hue}, 80%, 40%)`;
-    
-    car.style.animationDelay = `-${Math.random() * 500}s`;
-    car.style.animationDuration = `${120 + Math.random() * 80}s`;
-    highway.appendChild(car);
-  }
-}
-
-function bindUI() {
-  document.getElementById("login-btn").addEventListener("click", () => document.getElementById("auth-modal").classList.remove("hidden"));
-  document.getElementById("google-login").addEventListener("click", () => signInWithPopup(auth, provider));
-  document.getElementById("logout-btn").addEventListener("click", () => signOut(auth));
-  document.getElementById("close-auth").addEventListener("click", () => document.getElementById("auth-modal").classList.add("hidden"));
-  document.getElementById("close-modal").addEventListener("click", () => document.getElementById("brick-modal").classList.add("hidden"));
-  
-  document.getElementById("close-claim").addEventListener("click", () => {
-    document.getElementById("claim-modal").classList.add("hidden");
-    renderWall(); 
-  });
-  
-  document.getElementById("modal-claim").addEventListener("click", () => {
-    document.getElementById("brick-modal").classList.add("hidden");
-    if (selectedBrick) openClaimModal(selectedBrick.id);
-  });
-  document.getElementById("claim-form").addEventListener("submit", handleClaim);
-
-  onAuthStateChanged(auth, (user) => {
-    currentUser = user;
-    document.getElementById("login-btn").textContent = user ? "CUENTA" : "LOGIN";
-    document.getElementById("logout-btn").classList.toggle("hidden", !user);
-    document.getElementById("google-login").classList.toggle("hidden", !!user);
-  });
-
-  function updatePreview() {
-    const brickId = document.getElementById("claim-brick-id").value;
-    const plot = document.querySelector(`.plot[data-id="${brickId}"]`);
-    if (!plot) return;
-
-    plot.classList.remove("empty"); 
-    plot.classList.add("claimed");
-
-    const billboard = plot.querySelector('.billboard-frame');
-    const color = document.getElementById("claim-color").value;
-    const isMega = document.getElementById("claim-founder").checked;
-    const logoUrl = document.getElementById("claim-logo").value.trim();
-    const name = document.getElementById("claim-name").value.trim() || "PREVISUALIZACIÓN";
-
-    document.getElementById("claim-color").style.backgroundColor = color;
-    billboard.style.setProperty("--brick-color", color);
-    
-    if(isMega) billboard.classList.add("mega");
-    else billboard.classList.remove("mega");
-
-    let contentHTML = "";
-    if (logoUrl) contentHTML += `<img src="${escapeHtml(logoUrl)}" class="billboard-logo" onerror="this.style.display='none'">`;
-    contentHTML += `<span class="billboard-name">${escapeHtml(name.slice(0, 15))}</span>`;
-    billboard.innerHTML = `<div class="billboard-content">${contentHTML}</div>`;
-  }
-
-  document.getElementById("claim-color").addEventListener("input", updatePreview);
-  document.getElementById("claim-name").addEventListener("input", updatePreview);
-  document.getElementById("claim-logo").addEventListener("input", updatePreview);
-  document.getElementById("claim-founder").addEventListener("change", updatePreview);
-}
-
-async function loadBricks() {
-  const snap = await getDocs(query(collection(db, "bricks")));
-  snap.forEach(s => bricks.set(Number(s.id), { id: Number(s.id), ...s.data() }));
-  renderWall();
-}
-
-function getPriceForBrick(id) {
-  const distance = Math.abs(id - CENTER_BRICK);
-  if (distance <= 20) return 50; // Premium Central
-  if (distance <= 75) return 15; // Neón Medio
-  return 5; // Estándar Extremos
-}
-
-function renderWall() {
-  const container = document.getElementById("plots-container");
-  container.innerHTML = "";
-  let occupied = 0;
-
-  for (let i = 1; i <= TOTAL_BRICKS; i++) {
-    const data = bricks.get(i) ?? { id: i, claimed: false, color: "#1a1c29" };
-    if(data.claimed) occupied++;
-    
-    const isPremium = Math.abs(i - CENTER_BRICK) <= 20;
-    
-    const plot = document.createElement("div");
-    plot.className = `plot ${data.claimed ? "claimed" : "empty"} ${isPremium ? "zone-premium" : ""}`;
-    plot.dataset.id = i;
-    
-    const billboard = document.createElement("div");
-    billboard.className = `billboard-frame ${data.founder ? "mega" : ""}`;
-    billboard.style.setProperty("--brick-color", data.claimed ? data.color : (isPremium ? "#ffaa00" : "#1a1c29"));
-    
-    if (data.claimed) {
-      let contentHTML = "";
-      if (data.logo) contentHTML += `<img src="${escapeHtml(data.logo)}" class="billboard-logo" onerror="this.style.display='none'">`;
-      contentHTML += `<span class="billboard-name">${escapeHtml(data.name.slice(0,15))}</span>`;
-      billboard.innerHTML = `<div class="billboard-content">${contentHTML}</div>`;
-    } else {
-      billboard.innerHTML = `${isPremium ? 'PREMIUM' : 'DISPONIBLE'}<br>#${i}`; 
+if(themeToggle) {
+    // Cargar preferencia guardada
+    if(localStorage.getItem('theme') === 'light') {
+        document.body.setAttribute('data-theme', 'light');
+        iconSun.style.display = 'none';
+        iconMoon.style.display = 'inline-block';
     }
-    
-    plot.appendChild(billboard);
-    plot.addEventListener("click", (e) => {
-      if(Math.abs(e.clientX - clickStartX) > 5) return; // Evitar clic al arrastrar
-      openBrick(i);
+
+    themeToggle.addEventListener('click', () => {
+        if(document.body.getAttribute('data-theme') === 'light') {
+            document.body.removeAttribute('data-theme');
+            localStorage.setItem('theme', 'dark');
+            iconSun.style.display = 'inline-block';
+            iconMoon.style.display = 'none';
+        } else {
+            document.body.setAttribute('data-theme', 'light');
+            localStorage.setItem('theme', 'light');
+            iconSun.style.display = 'none';
+            iconMoon.style.display = 'inline-block';
+        }
     });
-    container.appendChild(plot);
-  }
-  document.getElementById("stat-occupied").textContent = occupied;
 }
 
-function openBrick(id) {
-  const b = bricks.get(id) || { id, claimed: false, color: "#00e5ff" };
-  selectedBrick = b;
-  const isPremium = Math.abs(id - CENTER_BRICK) <= 20;
-  
-  document.getElementById("modal-color").style.backgroundColor = b.claimed ? b.color : (isPremium ? "#ffaa00" : "#00e5ff");
-  document.getElementById("modal-title").textContent = b.claimed ? b.name : `Cartel #${b.id}`;
-  
-  const price = getPriceForBrick(id);
-  document.getElementById("modal-price").textContent = `${price}€/mes`;
-  
-  document.getElementById("modal-desc").textContent = b.claimed ? b.description : `Reserva este espacio en la autopista digital.`;
-  document.getElementById("modal-id-value").textContent = b.id;
-  document.getElementById("modal-status").textContent = b.claimed ? "ALQUILADO" : "LIBRE";
-  document.getElementById("modal-status").className = b.claimed ? "" : "status-free";
-  
-  const linkBtn = document.getElementById("modal-link");
-  if (b.claimed && b.link) {
-    linkBtn.href = b.link;
-    linkBtn.classList.remove("hidden");
-  } else {
-    linkBtn.classList.add("hidden");
-  }
-  
-  document.getElementById("modal-claim").classList.toggle("hidden", b.claimed);
-  document.getElementById("brick-modal").classList.remove("hidden");
+// --- LÓGICA DEL MURO (index.html) ---
+const muroContainer = document.getElementById('muro-container');
+
+if(muroContainer) {
+    async function cargarMuro() {
+        muroContainer.innerHTML = 'Cargando chollos...';
+        try {
+            // Ordenamos por fecha, los más nuevos primero
+            const q = query(collection(db, "productos"), orderBy("fecha", "desc"));
+            const querySnapshot = await getDocs(q);
+            muroContainer.innerHTML = '';
+            
+            querySnapshot.forEach((doc) => {
+                const prod = doc.data();
+                const ladrillo = document.createElement('div');
+                ladrillo.className = 'ladrillo';
+                ladrillo.innerHTML = `
+                    <img src="${prod.imagen}" alt="${prod.titulo}">
+                    <h3>${prod.titulo}</h3>
+                    <div class="precio">${prod.precio}</div>
+                    <a href="${prod.enlace}" target="_blank" class="btn-comprar">Ver Oferta</a>
+                `;
+                muroContainer.appendChild(ladrillo);
+            });
+        } catch (error) {
+            console.error("Error cargando el muro:", error);
+            muroContainer.innerHTML = 'Error cargando las ofertas.';
+        }
+    }
+    cargarMuro();
 }
 
-function openClaimModal(brickId) {
-  document.getElementById("claim-brick-id").value = brickId;
-  document.getElementById("claim-form").reset();
-  document.getElementById("claim-logo").value = "";
-  const defColor = Math.abs(brickId - CENTER_BRICK) <= 20 ? "#ffaa00" : "#00e5ff";
-  document.getElementById("claim-color").value = defColor;
-  document.getElementById("claim-color").style.backgroundColor = defColor;
-  document.getElementById("claim-error").textContent = "";
-  document.getElementById("claim-modal").classList.remove("hidden");
-}
+// --- LÓGICA DE ADMINISTRACIÓN (admin.html) ---
+const loginSection = document.getElementById('login-section');
+const uploadSection = document.getElementById('upload-section');
+const btnLogin = document.getElementById('btn-login');
+const btnLogout = document.getElementById('btn-logout');
 
-async function handleClaim(e) {
-  e.preventDefault();
-  if (!currentUser) {
-    document.getElementById("claim-error").textContent = "Debes iniciar sesión para reservar.";
-    return;
-  }
-  
-  const id = Number(document.getElementById("claim-brick-id").value);
-  const ref = doc(db, "bricks", String(id));
-  
-  try {
-    await runTransaction(db, async (tx) => {
-      const snap = await tx.get(ref);
-      if (snap.exists() && snap.data().claimed) throw new Error("Este cartel ya ha sido reservado.");
-      tx.set(ref, {
-        id, claimed: true,
-        name: document.getElementById("claim-name").value.trim(),
-        description: document.getElementById("claim-desc").value.trim(),
-        link: document.getElementById("claim-link").value.trim(),
-        logo: document.getElementById("claim-logo").value.trim(),
-        color: document.getElementById("claim-color").value,
-        founder: document.getElementById("claim-founder").checked,
-        visits: 0, ownerUid: currentUser.uid, updatedAt: serverTimestamp()
-      }, {merge: true});
+if (loginSection) {
+    // 1. Control de estado de sesión
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            // Seguridad extra: verificar que eres tú
+            if(user.email === "gerardlopezgarcia1@gmail.com") {
+                loginSection.style.display = 'none';
+                uploadSection.style.display = 'block';
+                btnLogout.style.display = 'block';
+            } else {
+                signOut(auth);
+                alert("Acceso denegado: Usuario no autorizado.");
+            }
+        } else {
+            loginSection.style.display = 'block';
+            uploadSection.style.display = 'none';
+            btnLogout.style.display = 'none';
+        }
     });
-    document.getElementById("claim-modal").classList.add("hidden");
-    await loadBricks();
-    openBrick(id);
-  } catch (err) {
-    document.getElementById("claim-error").textContent = err.message || "Error al procesar la reserva.";
-  }
-}
 
-function escapeHtml(value) {
-  return String(value).replace(/[&<>"']/g, (char) => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#039;" })[char]);
+    // 2. Proceso de Login
+    btnLogin.addEventListener('click', async () => {
+        const email = document.getElementById('email').value;
+        const pass = document.getElementById('password').value;
+        const errorMsg = document.getElementById('login-error');
+        
+        try {
+            await signInWithEmailAndPassword(auth, email, pass);
+        } catch (error) {
+            errorMsg.textContent = "Error: Credenciales incorrectas.";
+        }
+    });
+
+    // 3. Proceso de Logout
+    btnLogout.addEventListener('click', () => {
+        signOut(auth);
+    });
+
+    // 4. Subir nuevo producto a Firestore
+    const form = document.getElementById('product-form');
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const msg = document.getElementById('upload-msg');
+        msg.textContent = "Subiendo...";
+
+        try {
+            await addDoc(collection(db, "productos"), {
+                titulo: document.getElementById('prod-title').value,
+                imagen: document.getElementById('prod-img').value,
+                precio: document.getElementById('prod-price').value,
+                enlace: document.getElementById('prod-link').value,
+                fecha: new Date() // Para ordenar de nuevo a viejo
+            });
+            
+            msg.style.color = "green";
+            msg.textContent = "¡Ladrillo colgado en el muro con éxito!";
+            form.reset();
+        } catch (error) {
+            console.error(error);
+            msg.style.color = "red";
+            msg.textContent = "Error al subir el producto.";
+        }
+    });
 }
