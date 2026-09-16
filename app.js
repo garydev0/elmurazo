@@ -14,12 +14,17 @@ const db = getFirestore(app);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
+const TOTAL_BRICKS = 300;
+const CENTER_BRICK = 150;
+const BRICK_WIDTH = 220; // 180px width + 40px gap
+
 let bricks = new Map();
 let currentUser = null;
 let selectedBrick = null;
 
-// Cámara: Anclada a la autopista (modificamos translateX dentro del mundo)
-let cameraX = 0; 
+// Cámara: Cálculo para centrar en el cartel 150 al iniciar
+const centerPixel = (CENTER_BRICK * BRICK_WIDTH) - (BRICK_WIDTH / 2) + 200; // +200 por el padding-left
+let cameraX = -(centerPixel - window.innerWidth / 2); 
 let isDragging = false, startX, clickStartX;
 const world = document.getElementById("world");
 
@@ -33,7 +38,6 @@ window.addEventListener("mouseup", () => isDragging = false);
 window.addEventListener("mousemove", (e) => {
   if (!isDragging) return;
   cameraX = e.clientX - startX;
-  // Movemos el mundo localmente por su eje X (siguiendo la autopista)
   world.style.transform = `rotateX(60deg) rotateZ(-20deg) translateX(${cameraX}px)`; 
 });
 
@@ -45,35 +49,26 @@ document.addEventListener("DOMContentLoaded", () => {
   loadBricks();
 });
 
-// Generar Coches de colores
 function spawnCars() {
   const highway = document.getElementById("highway");
   for (let i = 0; i < 150; i++) {
     const car = document.createElement("div");
     const isRight = Math.random() > 0.5;
-    const hue = Math.floor(Math.random() * 360);
-    const color = `hsl(${hue}, 90%, 65%)`; // Colores brillantes aleatorios
-    
     car.className = `car ${isRight ? 'right' : 'left'}`;
-    car.style.backgroundColor = color;
     
-    // Luces faros
-    if (isRight) {
-      car.style.boxShadow = `15px 0 15px #fff, -15px 0 10px red, 0 0 20px ${color}`;
-    } else {
-      car.style.boxShadow = `-15px 0 15px #fff, 15px 0 10px red, 0 0 20px ${color}`;
-    }
+    // Tonos de coche: oscuro, azulado oscuro, morado oscuro
+    const hue = Math.random() > 0.5 ? 200 : 280;
+    car.style.borderTopColor = `hsl(${hue}, 50%, 40%)`;
     
     car.style.animationDelay = `-${Math.random() * 400}s`;
-    car.style.animationDuration = `${150 + Math.random() * 100}s`;
+    car.style.animationDuration = `${120 + Math.random() * 80}s`;
     highway.appendChild(car);
   }
 }
 
-// Generar Farolas
 function spawnStreetlights() {
   const container = document.getElementById("streetlights-container");
-  for(let i = 0; i < 200; i++) {
+  for(let i = 0; i < 80; i++) {
     const light = document.createElement("div");
     light.className = "streetlight";
     container.appendChild(light);
@@ -105,7 +100,6 @@ function bindUI() {
     document.getElementById("auth-status").textContent = user ? `Conectado como ${user.email}` : "";
   });
 
-  // Previsualización en tiempo real
   function updatePreview() {
     const brickId = document.getElementById("claim-brick-id").value || findFirstAvailableBrick();
     if (!brickId) return;
@@ -119,7 +113,7 @@ function bindUI() {
     const color = document.getElementById("claim-color").value;
     const isMega = document.getElementById("claim-founder").checked;
     const logoUrl = document.getElementById("claim-logo").value.trim();
-    const name = document.getElementById("claim-name").value.trim() || "PREVIEW";
+    const name = document.getElementById("claim-name").value.trim() || "PREVISUALIZACIÓN";
 
     document.getElementById("claim-color").style.backgroundColor = color;
     billboard.style.setProperty("--brick-color", color);
@@ -150,8 +144,8 @@ function renderWall() {
   container.innerHTML = "";
   let occupied = 0;
 
-  for (let i = 1; i <= 500; i++) {
-    const data = bricks.get(i) ?? { id: i, claimed: false, color: "#444" };
+  for (let i = 1; i <= TOTAL_BRICKS; i++) {
+    const data = bricks.get(i) ?? { id: i, claimed: false, color: "#1a1c29" };
     if(data.claimed) occupied++;
     
     const plot = document.createElement("div");
@@ -160,7 +154,7 @@ function renderWall() {
     
     const billboard = document.createElement("div");
     billboard.className = `billboard-frame ${data.founder ? "mega" : ""}`;
-    billboard.style.setProperty("--brick-color", data.claimed ? data.color : "#444");
+    billboard.style.setProperty("--brick-color", data.claimed ? data.color : "#1a1c29");
     
     if (data.claimed) {
       let contentHTML = "";
@@ -168,12 +162,14 @@ function renderWall() {
       contentHTML += `<span class="billboard-name">${escapeHtml(data.name.slice(0,15))}</span>`;
       billboard.innerHTML = `<div class="billboard-content">${contentHTML}</div>`;
     } else {
-      billboard.innerHTML = `DISPONIBLE<br>#${i}`; 
+      // Visualmente distinguimos la zona cara (el centro)
+      let label = "DISPONIBLE";
+      if(i >= 140 && i <= 160) label = "ZONA PREMIUM";
+      billboard.innerHTML = `${label}<br>#${i}`; 
     }
     
     plot.appendChild(billboard);
     plot.addEventListener("click", (e) => {
-      // Ignorar el clic si se estaba arrastrando la pantalla (tolerancia de 5px)
       if(Math.abs(e.clientX - clickStartX) > 5) return;
       openBrick(i);
     });
@@ -183,11 +179,18 @@ function renderWall() {
 }
 
 function openBrick(id) {
-  const b = bricks.get(id) || { id, claimed: false, color: "#444" };
+  const b = bricks.get(id) || { id, claimed: false, color: "#00f0ff" };
   selectedBrick = b;
-  document.getElementById("modal-color").style.backgroundColor = b.color;
-  document.getElementById("modal-title").textContent = b.claimed ? b.name : "Cartel Disponible";
-  document.getElementById("modal-desc").textContent = b.claimed ? b.description : "Anuncia tu proyecto en esta valla publicitaria 3D.";
+  document.getElementById("modal-color").style.backgroundColor = b.claimed ? b.color : "#00f0ff";
+  document.getElementById("modal-title").textContent = b.claimed ? b.name : `Cartel #${b.id}`;
+  
+  // Precio simulado según distancia al centro (150)
+  const distance = Math.abs(id - CENTER_BRICK);
+  let price = 5;
+  if(distance < 10) price = 50;
+  else if(distance < 50) price = 15;
+  
+  document.getElementById("modal-desc").textContent = b.claimed ? b.description : `Zona de alto impacto. Alquila este espacio desde ${price}€/mes.`;
   document.getElementById("modal-id-value").textContent = b.id;
   document.getElementById("modal-visits").textContent = b.visits || 0;
   document.getElementById("modal-status").textContent = b.claimed ? "ALQUILADO" : "LIBRE";
@@ -249,7 +252,7 @@ async function handleClaim(e) {
 }
 
 function findFirstAvailableBrick() {
-  for (let i = 1; i <= 500; i++) {
+  for (let i = 1; i <= TOTAL_BRICKS; i++) {
     if (!bricks.get(i)?.claimed) return i;
   }
   return null;
