@@ -3,41 +3,272 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="El Murazo — chollos seleccionados de tecnología y gadgets.">
+  
+  <!-- SEO, Open Graph y Favicon -->
+  <meta name="description" content="No buscamos ofertas. Encontramos las que merecen la pena. El filtro humano de Internet para gadgets y tecnología.">
   <meta name="theme-color" content="#0b0c10">
   <title>El Murazo — Chollos que merecen la pena</title>
-  <link rel="stylesheet" href="style.css">
+  
+  <link rel="icon" type="image/png" href="logo.png">
+  <link rel="apple-touch-icon" href="logo.png">
+  
+  <meta property="og:title" content="El Murazo — Chollos que merecen la pena">
+  <meta property="og:description" content="No buscamos ofertas. Encontramos las que merecen la pena. El filtro humano de Internet para gadgets y tecnología.">
+  <meta property="og:image" content="https://elmurazo.com/logo.png">
+  <meta property="og:url" content="https://elmurazo.com/">
+  <meta property="og:type" content="website">
+
+  <style>
+    /* VARIABLES Y TEMAS */
+    :root {
+      --bg: #08090c; --bg-soft: #101218; --panel: rgba(19, 21, 28, 0.92);
+      --panel-2: #171923; --text: #f6f7fb; --muted: #969cab; --line: #2a2d37;
+      --accent: #ff4d2e; --accent-2: #ff785d; --success: #35d07f; --danger: #ff5666;
+      --shadow: 0 20px 50px rgba(0,0,0,.28);
+      color-scheme: dark;
+    }
+    :root[data-theme="light"] {
+      --bg: #f4f5f8; --bg-soft: #ffffff; --panel: rgba(255,255,255,.94);
+      --panel-2: #f0f2f5; --text: #12151c; --muted: #687080; --line: #dde0e6;
+      --shadow: 0 18px 45px rgba(24,30,43,.10);
+      color-scheme: light;
+    }
+
+    /* RESETS Y BASE */
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0; min-height: 100vh;
+      background: radial-gradient(circle at 15% -5%, rgba(255,77,46,.12), transparent 30rem),
+                  radial-gradient(circle at 85% 0%, rgba(87,77,255,.08), transparent 28rem), var(--bg);
+      color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+    }
+    button, input, select { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    .hidden { display: none !important; }
+
+    /* LAYOUT */
+    .site-shell { width: min(1380px, calc(100% - 34px)); margin: 0 auto; }
+    
+    /* TOPBAR */
+    .topbar {
+      min-height: 82px; display: flex; align-items: center; justify-content: space-between; gap: 20px; border-bottom: 1px solid var(--line);
+    }
+    .brand { color: inherit; text-decoration: none; display: inline-flex; align-items: center; gap: 12px; }
+    .brand-mark {
+      width: 40px; height: 40px; display: grid; place-items: center; border-radius: 12px;
+      background: var(--accent); color: white; font-weight: 950; box-shadow: 0 9px 25px rgba(255,77,46,.25);
+    }
+    .brand strong { display: block; font-size: .98rem; letter-spacing: .09em; }
+    .brand small { display: block; margin-top: -2px; color: var(--muted); font-size: .64rem; letter-spacing: .13em; font-weight: 800; }
+    
+    .topbar-actions { display: flex; align-items: center; gap: 8px; }
+    .admin-link { padding: 9px 12px; border-radius: 10px; color: var(--muted); text-decoration: none; font-size: .86rem; font-weight: 800; }
+    .admin-link:hover { color: var(--text); background: var(--panel-2); }
+    .icon-btn, .ghost-btn, .text-btn { border: 1px solid var(--line); background: var(--panel); color: var(--text); cursor: pointer; }
+    .icon-btn { width: 40px; height: 40px; border-radius: 11px; font-size: 1.1rem; }
+    .ghost-btn { border-radius: 10px; padding: 10px 14px; font-weight: 800; }
+    .text-btn { border: 0; background: none; padding: 4px 0; color: var(--accent); font-weight: 800; cursor: pointer; }
+    .primary-btn { border: 0; border-radius: 11px; padding: 12px 15px; background: var(--accent); color: #fff; font-weight: 900; cursor: pointer; box-shadow: 0 12px 25px rgba(255,77,46,.18); }
+    .primary-btn:hover { background: var(--accent-2); }
+    .primary-btn:disabled { cursor: wait; opacity: .7; }
+    .full { width: 100%; }
+
+    /* HERO PUBLICA */
+    .hero { display: flex; align-items: flex-end; justify-content: space-between; gap: 32px; padding: 76px 0 42px; }
+    .eyebrow, .panel-kicker { display: inline-block; color: var(--accent); font-weight: 900; letter-spacing: .12em; font-size: .72rem; }
+    .hero h1, .admin-heading h1, .auth-card h1 { margin: 11px 0 14px; line-height: .98; letter-spacing: -.055em; font-size: clamp(2.9rem, 7vw, 6.4rem); }
+    .hero h1 span { color: var(--accent); }
+    .hero p { max-width: 760px; color: var(--muted); font-size: clamp(1rem, 2vw, 1.16rem); margin: 0; }
+    .hero-badge {
+      min-width: 185px; padding: 18px; border: 1px solid var(--line); background: var(--panel);
+      border-radius: 18px; display: flex; align-items: center; gap: 12px; box-shadow: var(--shadow);
+    }
+    .live-dot { width: 9px; height: 9px; background: var(--success); border-radius: 50%; box-shadow: 0 0 0 6px rgba(53,208,127,.12); }
+    .hero-badge strong { display: block; font-size: 1.5rem; }
+    .hero-badge small { color: var(--muted); }
+
+    /* TOOLBAR BUSCADOR */
+    .toolbar {
+      position: sticky; top: 10px; z-index: 10; margin: 4px 0 28px; padding: 10px;
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      border: 1px solid var(--line); border-radius: 16px; background: color-mix(in srgb, var(--panel) 88%, transparent); backdrop-filter: blur(16px);
+    }
+    .search-wrap { flex: 1; display: flex; align-items: center; gap: 9px; padding: 0 4px 0 10px; }
+    .search-icon { color: var(--muted); font-size: 1.4rem; }
+    .search-wrap input, .admin-search input { width: 100%; border: 0; outline: 0; background: transparent; color: var(--text); padding: 10px 6px; }
+    .toolbar-meta { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: .85rem; }
+    
+    /* TARJETAS DE PRODUCTO (NUEVA IDENTIDAD) */
+    .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(245px, 1fr)); gap: 16px; padding-bottom: 40px; }
+    .product-card {
+      background: var(--panel); border: 1px solid var(--line); border-radius: 18px; overflow: hidden;
+      box-shadow: 0 5px 18px rgba(0,0,0,.06); transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+      animation: card-in .35s ease both; display: flex; flex-direction: column;
+    }
+    .product-card:hover { transform: translateY(-5px); border-color: rgba(255,77,46,.45); box-shadow: var(--shadow); }
+    @keyframes card-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    .product-image-wrap { position: relative; display: block; aspect-ratio: 1.25/1; background: #fff; overflow: hidden; }
+    .product-image { width: 100%; height: 100%; object-fit: contain; padding: 17px; transition: transform .25s ease; }
+    .product-card:hover .product-image { transform: scale(1.035); }
+    
+    /* Etiquetas/Badges */
+    .deal-badge { position: absolute; top: 12px; left: 12px; padding: 6px 9px; border-radius: 8px; font-size: .65rem; font-weight: 950; letter-spacing: .08em; }
+    .badge-oferta { background: var(--accent); color: #fff; }
+    .badge-recomendado { background: var(--panel-2); color: var(--text); border: 1px solid var(--line); box-shadow: var(--shadow); }
+    
+    .product-body { padding: 15px; display: flex; flex-direction: column; flex: 1; }
+    .product-category { font-size: .7rem; font-weight: 900; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; display: block; }
+    .product-title { font-size: 1.05rem; line-height: 1.25; margin: 0 0 10px; font-weight: 800; min-height: 2.5em; }
+    .product-review {
+      font-size: .88rem; font-style: italic; color: var(--text); opacity: 0.9;
+      margin: auto 0 15px; padding-left: 12px; border-left: 3px solid var(--accent); line-height: 1.4; font-weight: 500;
+    }
+    .product-footer { display: flex; align-items: end; justify-content: space-between; gap: 10px; margin-top: auto; }
+    .product-price { color: var(--accent); font-size: 1.35rem; letter-spacing: -.03em; }
+    .buy-btn {
+      text-decoration: none; color: #fff; background: var(--text); color: var(--bg);
+      padding: 9px 12px; border-radius: 10px; font-size: .82rem; font-weight: 900; white-space: nowrap;
+    }
+    .buy-btn:hover { background: var(--accent); color: white; }
+
+    /* ESTADOS */
+    .state-card { border: 1px dashed var(--line); border-radius: 20px; padding: 58px 25px; text-align: center; margin: 10px 0 50px; background: var(--panel); }
+    .state-icon { width: 44px; height: 44px; margin: 0 auto 12px; display: grid; place-items: center; border-radius: 13px; background: var(--panel-2); color: var(--accent); font-weight: 900; }
+    .state-card h2 { margin: 0 0 6px; }
+    .state-card p { margin: 0 0 18px; color: var(--muted); }
+    .state-inline { padding: 35px; text-align: center; color: var(--muted); }
+
+    /* PANEL DE ADMIN */
+    .admin-main { padding: 50px 0 70px; }
+    .admin-heading { display: flex; align-items: end; justify-content: space-between; gap: 25px; margin-bottom: 28px; }
+    .admin-heading p { color: var(--muted); margin: 0; }
+    .admin-layout { display: grid; grid-template-columns: minmax(310px, .85fr) minmax(0, 1.5fr); gap: 18px; align-items: start; }
+    
+    .panel-card, .auth-card { background: var(--panel); border: 1px solid var(--line); border-radius: 20px; box-shadow: var(--shadow); }
+    .panel-card { padding: 22px; }
+    .panel-title { display: flex; align-items: flex-start; justify-content: space-between; gap: 15px; margin-bottom: 18px; }
+    .panel-title h2 { margin: 6px 0 0; font-size: 1.3rem; letter-spacing: -.025em; }
+    .count-pill { display: inline-flex; min-width: 25px; height: 25px; padding: 0 8px; justify-content: center; align-items: center; border-radius: 999px; background: var(--panel-2); color: var(--muted); font-size: .75rem; vertical-align: middle; }
+    
+    /* FORMULARIOS Y NUEVOS CAMPOS */
+    .stack-form { display: grid; gap: 13px; }
+    .stack-form label { display: grid; gap: 7px; color: var(--muted); font-size: .83rem; font-weight: 800; }
+    .stack-form input, select { width: 100%; border: 1px solid var(--line); border-radius: 11px; padding: 12px 13px; outline: none; background: var(--bg-soft); color: var(--text); }
+    .stack-form input:focus, select:focus { border-color: rgba(255,77,46,.7); box-shadow: 0 0 0 4px rgba(255,77,46,.08); }
+    .form-grid-2 { display: grid; grid-template-columns: .7fr 1.3fr; gap: 11px; }
+    .form-message { min-height: 20px; margin: 0; color: var(--success); font-size: .82rem; }
+    .form-message.error { color: var(--danger); }
+    
+    /* Interruptor / Toggle Switch */
+    .toggle-switch { display: flex !important; align-items: center; gap: 12px; cursor: pointer; color: var(--text) !important; font-size: .85rem !important; }
+    .toggle-switch input { display: none; }
+    .slider { position: relative; width: 44px; height: 24px; background: var(--line); border-radius: 24px; transition: .3s; flex-shrink: 0; }
+    .slider::after { content: ''; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; background: #fff; border-radius: 50%; transition: .3s; }
+    .toggle-switch input:checked + .slider { background: var(--success); }
+    .toggle-switch input:checked + .slider::after { transform: translateX(20px); }
+
+    .password-wrap { position: relative; }
+    .password-wrap input { padding-right: 75px; }
+    .password-toggle { position: absolute; top: 50%; right: 8px; transform: translateY(-50%); border: 0; background: none; color: var(--muted); font-weight: 800; cursor: pointer; font-size: .72rem; }
+    .image-preview { min-height: 145px; display: grid; place-items: center; overflow: hidden; border-radius: 14px; border: 1px dashed var(--line); background: var(--bg-soft); }
+    .image-preview img { width: 100%; height: 180px; object-fit: contain; background: #fff; }
+    .image-preview-placeholder { color: var(--muted); font-size: .8rem; padding: 20px; text-align: center; }
+
+    /* ADMIN PRODUCTOS */
+    .admin-search { display: flex; align-items: center; gap: 5px; padding: 0 8px; width: min(220px, 45vw); border: 1px solid var(--line); border-radius: 10px; background: var(--bg-soft); color: var(--muted); }
+    .admin-products { display: grid; gap: 10px; }
+    .admin-product-row { display: grid; grid-template-columns: 72px minmax(0, 1fr) auto; gap: 13px; align-items: center; padding: 10px; border: 1px solid var(--line); background: var(--bg-soft); border-radius: 14px; }
+    .admin-thumb { width: 72px; height: 64px; border-radius: 9px; object-fit: contain; background: #fff; }
+    .admin-product-info { min-width: 0; }
+    .admin-product-info strong { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: .9rem; }
+    .admin-product-info span { display: block; color: var(--accent); font-weight: 950; margin-top: 2px; }
+    .admin-product-info small { color: var(--muted); font-size: .7rem; }
+    .row-actions { display: flex; gap: 7px; }
+    .row-btn { border: 1px solid var(--line); background: transparent; color: var(--text); border-radius: 9px; padding: 8px 10px; font-size: .75rem; font-weight: 900; cursor: pointer; }
+    .row-btn.edit:hover { border-color: var(--accent); color: var(--accent); }
+    .row-btn.delete:hover { border-color: var(--danger); color: var(--danger); }
+
+    /* AUTH CARD & TOAST */
+    .auth-card { max-width: 475px; margin: 8vh auto; padding: 30px; }
+    .auth-icon { width: 50px; height: 50px; display: grid; place-items: center; border-radius: 15px; background: var(--panel-2); margin-bottom: 20px; }
+    
+    .toast {
+      position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 20px); opacity: 0; pointer-events: none;
+      background: #151821; color: #fff; border: 1px solid #2a2d37; border-radius: 12px; padding: 12px 16px; font-weight: 800; box-shadow: var(--shadow); transition: .2s ease; z-index: 100;
+    }
+    .toast.show { opacity: 1; transform: translate(-50%,0); }
+    .toast[data-type="error"] { border-color: rgba(255,86,102,.6); }
+
+    .footer { display: flex; justify-content: space-between; gap: 15px; padding: 25px 0 35px; border-top: 1px solid var(--line); color: var(--muted); font-size: .78rem; }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      .hero { padding-top: 52px; }
+      .hero-badge { display: none; }
+      .admin-layout { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      .site-shell { width: min(100% - 22px, 1380px); }
+      .topbar { min-height: 70px; }
+      .brand strong { font-size: .86rem; }
+      .hero { padding: 40px 0 28px; }
+      .hero h1 { font-size: clamp(2.55rem, 15vw, 4rem); }
+      .toolbar { position: static; flex-direction: column; align-items: stretch; }
+      .toolbar-meta { justify-content: space-between; }
+      .products-grid { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px; }
+      .product-body { padding: 11px; }
+      .product-title { font-size: .88rem; min-height: 2.8em;}
+      .product-price { font-size: 1.1rem; }
+      .buy-btn { padding: 8px 9px; font-size: .72rem; }
+      .footer { flex-direction: column; }
+      .admin-heading { align-items: flex-start; flex-direction: column; }
+      .admin-product-row { grid-template-columns: 58px minmax(0,1fr); }
+      .admin-thumb { width: 58px; height: 58px; }
+      .row-actions { grid-column: 1/-1; }
+      .row-btn { flex: 1; }
+      .form-grid-2 { grid-template-columns: 1fr; }
+      .admin-search { width: 100%; }
+    }
+    .is-loading { animation: spin .65s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
 </head>
 <body>
   <div class="site-shell">
+    
+    <!-- BARRA NAVEGACIÓN GLOBAL -->
     <header class="topbar">
-      <a class="brand" href="index.html" aria-label="El Murazo, inicio">
+      <a class="brand" href="#" onclick="window.location.hash=''; return false;" aria-label="El Murazo, inicio">
         <span class="brand-mark">M</span>
         <span>
           <strong>EL MURAZO</strong>
-          <small>CHOLLOS SIN RUIDO</small>
+          <small>EL FILTRO HUMANO</small>
         </span>
       </a>
-
       <div class="topbar-actions">
-        <button class="icon-btn" id="theme-toggle" type="button" aria-label="Cambiar tema" title="Cambiar tema">
+        <a id="nav-mode-btn" class="admin-link" href="#admin">Panel Admin</a>
+        <button class="icon-btn" id="theme-toggle" type="button" aria-label="Cambiar tema">
           <span id="theme-icon">☾</span>
         </button>
       </div>
     </header>
 
-    <main>
+    <!-- === VISTA: MURO PÚBLICO === -->
+    <main id="view-public">
       <section class="hero">
         <div>
-          <span class="eyebrow">⚡ OFERTAS CURADAS</span>
-          <h1>Encuentra el chollo.<br><span>Sin perder tiempo.</span></h1>
-          <p>Hardware, accesorios y gadgets que hemos seleccionado para que no tengas que rebuscar entre cientos de resultados.</p>
+          <span class="eyebrow">⚡ EL FILTRO HUMANO DE INTERNET</span>
+          <h1>No buscamos ofertas.<br><span>Encontramos las que merecen la pena.</span></h1>
+          <p>Hardware, accesorios y gadgets seleccionados a mano. Porque no siempre gana lo más barato, sino lo mejor pensado.</p>
         </div>
         <div class="hero-badge">
           <span class="live-dot"></span>
           <div>
             <strong id="offer-count">0</strong>
-            <small>ofertas activas</small>
+            <small>recomendaciones</small>
           </div>
         </div>
       </section>
@@ -45,7 +276,7 @@
       <section class="toolbar" aria-label="Filtros del muro">
         <div class="search-wrap">
           <span class="search-icon">⌕</span>
-          <input id="search-input" type="search" placeholder="Buscar chollo..." autocomplete="off">
+          <input id="search-input" type="search" placeholder="Buscar gadget, marca..." autocomplete="off">
         </div>
         <div class="toolbar-meta">
           <span id="results-count">Cargando...</span>
@@ -65,16 +296,563 @@
         <div class="state-icon">!</div>
         <h2>No se han podido cargar las ofertas</h2>
         <p>Comprueba la conexión o la configuración de Firebase.</p>
-        <button id="retry-btn" class="primary-btn" type="button">Reintentar</button>
       </div>
+    </main>
+
+    <!-- === VISTA: PANEL DE ADMINISTRACIÓN === -->
+    <main id="view-admin" class="admin-main hidden">
+      
+      <!-- LOGIN -->
+      <section id="login-section" class="auth-card hidden">
+        <div class="auth-icon">🔒</div>
+        <span class="eyebrow">ÁREA PRIVADA</span>
+        <h1>Bienvenido al panel</h1>
+        <p>Inicia sesión con tu cuenta de administrador de Google para gestionar El Murazo.</p>
+        
+        <div style="margin-top: 25px;">
+          <button id="btn-google-login" class="primary-btn full" type="button" style="display: flex; align-items: center; justify-content: center; gap: 10px; background: white; color: black;">
+            <svg width="18" height="18" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+              <path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"/>
+              <path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"/>
+              <path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"/>
+              <path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"/>
+            </svg>
+            Acceder con Google
+          </button>
+          <p id="login-error" class="form-message error" style="margin-top: 15px; text-align: center;"></p>
+        </div>
+      </section>
+
+      <!-- ADMIN DASHBOARD -->
+      <section id="admin-section" class="hidden">
+        <div class="admin-heading">
+          <div>
+            <span class="eyebrow">CONTROL TOTAL</span>
+            <h1>Gestiona tu muro</h1>
+            <p>Controla las ofertas, las etiquetas y tu veredicto personal.</p>
+          </div>
+          <button id="btn-logout" class="ghost-btn" type="button">Cerrar sesión</button>
+        </div>
+
+        <div class="admin-layout">
+          <!-- PUBLICAR -->
+          <section class="panel-card">
+            <div class="panel-title">
+              <div>
+                <span class="panel-kicker">PUBLICAR / EDITAR</span>
+                <h2 id="form-title">Nuevo chollo</h2>
+              </div>
+              <button id="cancel-edit" class="text-btn hidden" type="button">Cancelar edición</button>
+            </div>
+
+            <form id="product-form" class="stack-form">
+              <input id="edit-id" type="hidden">
+
+              <!-- NUEVO: Toggle de Oferta -->
+              <label class="toggle-switch" style="margin-bottom: 8px;">
+                <input id="prod-oferta" type="checkbox" checked>
+                <span class="slider"></span>
+                <span>¿Es una oferta/chollo temporal? (Activa el badge 🔥 OFERTA)</span>
+              </label>
+
+              <label>
+                Título
+                <input id="prod-title" type="text" maxlength="140" placeholder="Ej. SSD NVMe 2 TB Samsung" required>
+              </label>
+
+              <!-- NUEVO: Categorías y Reseña Humana -->
+              <div class="form-grid-2">
+                <label>
+                  Categoría
+                  <select id="prod-category">
+                    <option value="ofertas">🔥 Ofertas reales</option>
+                    <option value="gadgets">🧠 Gadgets que merecen la pena</option>
+                    <option value="setup">🎮 Setup y tecnología</option>
+                    <option value="util">🏠 Cosas útiles para tu día a día</option>
+                  </select>
+                </label>
+                <label>
+                  ¿Lo comprarías? (Reseña humana)
+                  <div style="display: flex; gap: 8px;">
+                    <input id="prod-review" type="text" maxlength="110" placeholder="Ej. No sabías que necesitabas esto hasta que lo ves." style="flex: 1;">
+                    <button id="btn-ai-review" class="ghost-btn" type="button" title="Redactar reseña con IA" style="padding: 0 12px; font-size: 1.1rem;">✨</button>
+                  </div>
+                </label>
+              </div>
+
+              <!-- PRECIO LIMPIO -->
+              <div class="form-grid-2">
+                <label>
+                  Precio (se añadirá el símbolo € automático)
+                  <input id="prod-price" type="text" maxlength="40" placeholder="129,99" required>
+                </label>
+                <label>
+                  Enlace de afiliado / tienda
+                  <input id="prod-link" type="url" placeholder="https://amzn.to/..." required>
+                </label>
+              </div>
+
+              <label>
+                URL de la imagen
+                <input id="prod-img" type="url" placeholder="https://..." required>
+              </label>
+
+              <div class="image-preview" id="image-preview">
+                <div class="image-preview-placeholder">La vista previa aparecerá aquí</div>
+              </div>
+
+              <button id="submit-product" class="primary-btn full" type="submit">Publicar recomendación</button>
+              <p id="upload-msg" class="form-message"></p>
+            </form>
+          </section>
+
+          <!-- GESTIONAR -->
+          <section class="panel-card products-panel">
+            <div class="panel-title" style="align-items:center;">
+              <div>
+                <span class="panel-kicker">MURAL</span>
+                <h2>Publicados <span id="admin-count" class="count-pill">0</span></h2>
+              </div>
+              <div class="admin-search">
+                <span>⌕</span>
+                <input id="admin-search" type="search" placeholder="Buscar...">
+              </div>
+            </div>
+
+            <div id="admin-products" class="admin-products" aria-live="polite"></div>
+            <div id="admin-empty" class="state-inline hidden">No hay productos.</div>
+          </section>
+        </div>
+      </section>
     </main>
 
     <footer class="footer">
       <span>© <span id="current-year"></span> El Murazo</span>
-      <span>Los enlaces pueden ser de afiliación de Amazon.</span>
+      <span>Los enlaces pueden ser de afiliación para mantener el proyecto.</span>
     </footer>
+    
+    <div id="toast" class="toast" role="status"></div>
   </div>
 
-  <script type="module" src="app.js"></script>
+  <!-- SCRIPT UNIFICADO Y FIREBASE -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
+    import {
+      getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, Timestamp
+    } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore.js";
+    import {
+      getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut
+    } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCFE0T4m16MOyn9JqMujJZZwMJCLen-LgA",
+      authDomain: "elmurazo.firebaseapp.com",
+      projectId: "elmurazo",
+      storageBucket: "elmurazo.firebasestorage.app",
+      messagingSenderId: "722334671597",
+      appId: "1:722334671597:web:4b316572169de9c66262e4",
+      measurementId: "G-P003BX46Z4"
+    };
+
+    const ADMIN_EMAIL = "gerardlopezgarcia1@gmail.com";
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+    const $ = (selector, root = document) => root.querySelector(selector);
+
+    // ESTADOS GLOBALES
+    let allProducts = [];
+    let isDataLoaded = false;
+    
+    // DICCIONARIO DE CATEGORÍAS PARA VISUALIZACIÓN
+    const CATEGORY_LABELS = {
+      'ofertas': '🔥 OFERTA REAL',
+      'gadgets': '🧠 GADGET ÚTIL',
+      'setup': '🎮 SETUP Y TECH',
+      'util': '🏠 DÍA A DÍA'
+    };
+
+    /* =================== UTILIDADES =================== */
+    function escapeHtml(value = "") {
+      return String(value).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#039;");
+    }
+    
+    function safeUrl(value, fallback = "#") {
+      try { const url = new URL(String(value || ""), window.location.href); if (url.protocol === "http:" || url.protocol === "https:") return url.href; } catch (_) {}
+      return fallback;
+    }
+
+    function showToast(message, type = "success") {
+      const toast = $("#toast");
+      toast.textContent = message;
+      toast.dataset.type = type;
+      toast.classList.add("show");
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => toast.classList.remove("show"), 3200);
+    }
+
+    /* =================== INTEGRACIÓN GEMINI API =================== */
+    async function callGeminiAPI(prompt, systemInstruction = "") {
+      const apiKey = ""; // La API key será provista de manera segura en el entorno Canvas
+      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+      
+      const payload = {
+        contents: [{ parts: [{ text: prompt }] }]
+      };
+      
+      if (systemInstruction) {
+        payload.systemInstruction = { parts: [{ text: systemInstruction }] };
+      }
+
+      try {
+        const response = await fetch(apiUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const result = await response.json();
+        return result.candidates?.[0]?.content?.parts?.[0]?.text || "Vaya, la IA está descansando. Inténtalo de nuevo.";
+      } catch (error) {
+        console.error("Gemini API Error:", error);
+        return "Hubo un error de conexión con la IA.";
+      }
+    }
+
+    /* =================== PARSEO DE DATOS =================== */
+    function normalizeProduct(docSnap) {
+      const data = docSnap.data() || {};
+      let millis = 0;
+      if (data.fecha?.toMillis) millis = data.fecha.toMillis();
+      else if (data.fecha?.seconds) millis = data.fecha.seconds * 1000;
+      else if (data.fecha instanceof Date) millis = data.fecha.getTime();
+      
+      return {
+        id: docSnap.id,
+        titulo: String(data.titulo || "Sin título"),
+        imagen: String(data.imagen || ""),
+        precio: String(data.precio || ""),
+        enlace: String(data.enlace || "#"),
+        enOferta: data.enOferta !== false, // Por defecto true si es antiguo
+        categoria: String(data.categoria || "ofertas"),
+        resena: String(data.resena || ""),
+        fechaMillis: millis
+      };
+    }
+
+    // FORMATEO INTELIGENTE DE PRECIO (Añade € si falta)
+    function formatDisplayPrice(rawPrice) {
+      const p = rawPrice.trim();
+      if (!p) return "";
+      return (p.includes('€') || p.toLowerCase().includes('eur')) ? p : `${p} €`;
+    }
+
+    /* =================== RENDERIZADO PÚBLICO =================== */
+    function createProductCard(product) {
+      const article = document.createElement("article");
+      article.className = "product-card";
+      const image = safeUrl(product.imagen, "https://placehold.co/900x700/111318/ffffff?text=El+Murazo");
+      const displayPrice = formatDisplayPrice(product.precio);
+      const catLabel = CATEGORY_LABELS[product.categoria] || CATEGORY_LABELS['ofertas'];
+      
+      // Control visual del badge según interruptor de Admin
+      const badgeClass = product.enOferta ? 'badge-oferta' : 'badge-recomendado';
+      const badgeText = product.enOferta ? '🔥 OFERTA' : '⭐ RECOMENDADO';
+      
+      // Control visual de la frase personal ("El Murazo Score")
+      const reviewHtml = product.resena ? `<div class="product-review">"${escapeHtml(product.resena)}"</div>` : '';
+
+      article.innerHTML = `
+        <a class="product-image-wrap" href="${escapeHtml(safeUrl(product.enlace))}" target="_blank" rel="noopener noreferrer sponsored">
+          <img class="product-image" src="${escapeHtml(image)}" alt="" loading="lazy" referrerpolicy="no-referrer">
+          <span class="deal-badge ${badgeClass}">${badgeText}</span>
+        </a>
+        <div class="product-body">
+          <span class="product-category">${catLabel}</span>
+          <h2 class="product-title">${escapeHtml(product.titulo)}</h2>
+          ${reviewHtml}
+          <div class="product-footer">
+            <strong class="product-price">${escapeHtml(displayPrice)}</strong>
+            <a class="buy-btn" href="${escapeHtml(safeUrl(product.enlace))}" target="_blank" rel="noopener noreferrer sponsored">
+              Ver chollo <span>↗</span>
+            </a>
+          </div>
+        </div>
+      `;
+
+      const img = $(".product-image", article);
+      img.addEventListener("error", () => { img.src = "https://placehold.co/900x700/111318/ffffff?text=Imagen+no+disponible"; });
+      return article;
+    }
+
+    function renderPublicProducts() {
+      const container = $("#muro-container");
+      const search = ($("#search-input")?.value || "").trim().toLowerCase();
+      const filtered = allProducts.filter(p => !search || p.titulo.toLowerCase().includes(search));
+
+      $("#offer-count").textContent = allProducts.length;
+      $("#results-count").textContent = `${filtered.length} ${filtered.length === 1 ? "resultado" : "resultados"}`;
+
+      container.innerHTML = "";
+      if (!filtered.length && isDataLoaded) {
+        $("#empty-state").classList.remove("hidden");
+      } else {
+        $("#empty-state").classList.add("hidden");
+        filtered.forEach(p => container.appendChild(createProductCard(p)));
+      }
+    }
+
+    /* =================== RENDERIZADO ADMIN =================== */
+    function renderAdminProducts() {
+      const container = $("#admin-products");
+      const search = ($("#admin-search")?.value || "").trim().toLowerCase();
+      const filtered = allProducts.filter(p => !search || p.titulo.toLowerCase().includes(search));
+      
+      $("#admin-count").textContent = String(allProducts.length);
+      container.innerHTML = "";
+      $("#admin-empty").classList.toggle("hidden", filtered.length > 0);
+
+      filtered.forEach(p => {
+        const row = document.createElement("article");
+        row.className = "admin-product-row";
+        const thumb = p.imagen || "https://placehold.co/180x140/111318/ffffff?text=Sin+imagen";
+        const displayPrice = formatDisplayPrice(p.precio);
+
+        row.innerHTML = `
+          <img src="${escapeHtml(thumb)}" alt="" class="admin-thumb" referrerpolicy="no-referrer">
+          <div class="admin-product-info">
+            <strong>${escapeHtml(p.titulo)}</strong>
+            <span>${escapeHtml(displayPrice)}</span>
+            <small>Cat: ${escapeHtml(CATEGORY_LABELS[p.categoria] || p.categoria)}</small>
+          </div>
+          <div class="row-actions">
+            <button class="row-btn edit" data-action="edit" data-id="${escapeHtml(p.id)}">Editar</button>
+            <button class="row-btn delete" data-action="delete" data-id="${escapeHtml(p.id)}">Borrar</button>
+          </div>
+        `;
+        container.appendChild(row);
+      });
+    }
+
+    /* =================== GESTIÓN DE DATOS Y SUSCRIPCIÓN =================== */
+    function subscribeToData() {
+      onSnapshot(collection(db, "productos"), snapshot => {
+        allProducts = snapshot.docs.map(normalizeProduct).sort((a, b) => b.fechaMillis - a.fechaMillis);
+        isDataLoaded = true;
+        $("#error-state").classList.add("hidden");
+        
+        // Al estar unificados, actualizamos ambas vistas automáticamente
+        renderPublicProducts();
+        renderAdminProducts();
+      }, err => {
+        console.error(err);
+        $("#error-state").classList.remove("hidden");
+      });
+    }
+
+    /* =================== FORMULARIO ADMIN =================== */
+    function resetProductForm() {
+      $("#product-form").reset();
+      $("#edit-id").value = "";
+      $("#form-title").textContent = "Nuevo chollo";
+      $("#submit-product").textContent = "Publicar recomendación";
+      $("#cancel-edit").classList.add("hidden");
+      $("#upload-msg").textContent = "";
+      $("#prod-oferta").checked = true; // Por defecto oferta activa
+      $("#image-preview").innerHTML = `<div class="image-preview-placeholder">La vista previa aparecerá aquí</div>`;
+    }
+
+    function startEdit(product) {
+      $("#edit-id").value = product.id;
+      $("#prod-title").value = product.titulo;
+      // Quitamos el símbolo € si existía en base de datos para que la edición sea limpia
+      $("#prod-price").value = product.precio.replace(/€/g, '').trim(); 
+      $("#prod-link").value = product.enlace;
+      $("#prod-img").value = product.imagen;
+      
+      $("#prod-oferta").checked = product.enOferta;
+      $("#prod-category").value = product.categoria;
+      $("#prod-review").value = product.resena;
+
+      $("#form-title").textContent = "Editar recomendación";
+      $("#submit-product").textContent = "Guardar cambios";
+      $("#cancel-edit").classList.remove("hidden");
+      
+      const box = $("#image-preview");
+      box.innerHTML = `<img src="${escapeHtml(product.imagen)}" alt="Preview">`;
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    async function handleProductSubmit(e) {
+      e.preventDefault();
+      const id = $("#edit-id").value.trim();
+      const titulo = $("#prod-title").value.trim();
+      const imagen = $("#prod-img").value.trim();
+      const precio = $("#prod-price").value.trim(); // Se guarda limpio. Ej: "129,99"
+      const enlace = $("#prod-link").value.trim();
+      const enOferta = $("#prod-oferta").checked;
+      const categoria = $("#prod-category").value;
+      const resena = $("#prod-review").value.trim();
+      
+      const msg = $("#upload-msg");
+      const button = $("#submit-product");
+
+      msg.textContent = ""; button.disabled = true; button.textContent = "Guardando...";
+
+      try {
+        const payload = { titulo, imagen, precio, enlace, enOferta, categoria, resena, actualizadoEn: Timestamp.now() };
+        if (id) {
+          await updateDoc(doc(db, "productos", id), payload);
+          showToast("Cambios guardados.");
+        } else {
+          payload.fecha = Timestamp.now();
+          await addDoc(collection(db, "productos"), payload);
+          showToast("Recomendación publicada.");
+        }
+        resetProductForm();
+      } catch (err) {
+        msg.textContent = "Error al guardar los datos.";
+        msg.className = "form-message error";
+      } finally {
+        button.disabled = false;
+        button.textContent = id ? "Guardar cambios" : "Publicar recomendación";
+      }
+    }
+
+    /* =================== ENRUTAMIENTO Y AUTH (SPA) =================== */
+    function handleRoute() {
+      const hash = window.location.hash;
+      if (hash === '#admin') {
+        $("#view-public").classList.add("hidden");
+        $("#view-admin").classList.remove("hidden");
+        $("#nav-mode-btn").href = "#";
+        $("#nav-mode-btn").textContent = "Ver Muro Público";
+      } else {
+        $("#view-public").classList.remove("hidden");
+        $("#view-admin").classList.add("hidden");
+        $("#nav-mode-btn").href = "#admin";
+        $("#nav-mode-btn").textContent = "Panel Admin";
+      }
+      window.scrollTo(0,0);
+    }
+
+    function initAuth() {
+      onAuthStateChanged(auth, user => {
+        if (user) {
+          if (user.email?.toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
+            $("#login-section").classList.add("hidden");
+            $("#admin-section").classList.remove("hidden");
+            $("#login-error").textContent = "";
+          } else {
+            // Un usuario normal ha intentado entrar. Lo expulsamos y mostramos error.
+            signOut(auth);
+            $("#login-error").textContent = "Acceso denegado: Tu cuenta no tiene permisos.";
+            $("#login-section").classList.remove("hidden");
+            $("#admin-section").classList.add("hidden");
+          }
+        } else {
+          $("#login-section").classList.remove("hidden");
+          $("#admin-section").classList.add("hidden");
+        }
+      });
+      
+      const btnGoogle = $("#btn-google-login");
+      btnGoogle.addEventListener("click", async () => {
+        const provider = new GoogleAuthProvider();
+        btnGoogle.disabled = true; 
+        const originalHtml = btnGoogle.innerHTML;
+        btnGoogle.textContent = "Autenticando...";
+        try { 
+          await signInWithPopup(auth, provider); 
+          // Si va bien, el 'onAuthStateChanged' de arriba ya se encarga de mostrar el panel
+        } catch (err) { 
+          console.error(err);
+          $("#login-error").textContent = "Error al conectar con Google."; 
+        } finally { 
+          btnGoogle.disabled = false; 
+          btnGoogle.innerHTML = originalHtml; 
+        }
+      });
+
+      $("#btn-logout").addEventListener("click", () => { signOut(auth); resetProductForm(); });
+    }
+
+    /* =================== INICIALIZACIÓN =================== */
+    function initEvents() {
+      // Tema Oscuro/Claro
+      const themeBtn = $("#theme-toggle");
+      const themeIcon = $("#theme-icon");
+      if (localStorage.getItem("elmurazo-theme") === "light") document.documentElement.dataset.theme = "light";
+      const syncTheme = () => themeIcon.textContent = document.documentElement.dataset.theme === "light" ? "☀" : "☾";
+      syncTheme();
+      themeBtn?.addEventListener("click", () => {
+        if (document.documentElement.dataset.theme === "light") { delete document.documentElement.dataset.theme; localStorage.setItem("elmurazo-theme", "dark"); } 
+        else { document.documentElement.dataset.theme = "light"; localStorage.setItem("elmurazo-theme", "light"); }
+        syncTheme();
+      });
+
+      if ($("#current-year")) $("#current-year").textContent = new Date().getFullYear();
+      
+      // Buscadores y recarga
+      $("#search-input")?.addEventListener("input", renderPublicProducts);
+      $("#admin-search")?.addEventListener("input", renderAdminProducts);
+      $("#refresh-btn")?.addEventListener("click", renderPublicProducts);
+      
+      /* =================== EVENTOS DE INTELIGENCIA ARTIFICIAL =================== */
+      // IA Redactora de Reseñas (Admin)
+      $("#btn-ai-review")?.addEventListener("click", async () => {
+        const title = $("#prod-title").value.trim();
+        if (!title) {
+          showToast("Escribe primero el título del producto para guiar a la IA.", "error");
+          return;
+        }
+        
+        const btn = $("#btn-ai-review");
+        btn.classList.add("is-loading");
+        btn.disabled = true;
+        
+        const catSelect = $("#prod-category");
+        const category = catSelect.options[catSelect.selectedIndex].text;
+        
+        const systemPrompt = "Eres el editor creativo de 'El Murazo'. Escribes reseñas extremadamente cortas (una sola frase concisa, máximo 110 caracteres), directas y con muchísimo gancho comercial para vender tecnología. Estilo coloquial español, inteligente y sincero.";
+        const prompt = `Escribe la frase-reseña corta para este producto: "${title}". Categoría orientativa: "${category}". Responde ÚNICAMENTE con la frase. No uses comillas al principio ni al final.`;
+        
+        const aiReview = await callGeminiAPI(prompt, systemPrompt);
+        $("#prod-review").value = aiReview.replace(/^"|"$/g, '').trim();
+        
+        btn.classList.remove("is-loading");
+        btn.disabled = false;
+        showToast("¡Reseña generada con IA!");
+      });
+      /* ======================================================================== */
+
+      // Admin Forms & List
+      $("#cancel-edit")?.addEventListener("click", resetProductForm);
+      $("#product-form")?.addEventListener("submit", handleProductSubmit);
+      $("#prod-img")?.addEventListener("input", e => {
+        const preview = $("#image-preview");
+        if(preview) preview.innerHTML = e.target.value ? `<img src="${escapeHtml(e.target.value)}" alt="Preview">` : `<div class="image-preview-placeholder">La vista previa aparecerá aquí</div>`;
+      });
+      
+      $("#admin-products")?.addEventListener("click", async e => {
+        const btn = e.target.closest("button[data-action]"); if (!btn) return;
+        const p = allProducts.find(x => x.id === btn.dataset.id); if (!p) return;
+        if (btn.dataset.action === "edit") startEdit(p);
+        if (btn.dataset.action === "delete" && window.confirm(`¿Borrar "${p.titulo}"?`)) {
+          await deleteDoc(doc(db, "productos", p.id));
+          if ($("#edit-id").value === p.id) resetProductForm();
+          showToast("Borrado.");
+        }
+      });
+      
+      // Router SPA
+      window.addEventListener("hashchange", handleRoute);
+      handleRoute();
+    }
+
+    // ARRANQUE APLICACIÓN
+    initEvents();
+    initAuth();
+    subscribeToData();
+  </script>
 </body>
 </html>
