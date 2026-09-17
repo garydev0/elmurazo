@@ -166,17 +166,31 @@
         </p>
       </div>
 
-      <!-- Quick Stats / Callout -->
+      <!-- Gift Finder Quiz Callout Button -->
       <div class="mt-6 sm:mt-0 flex sm:flex-col items-center justify-center sm:items-end gap-3 shrink-0">
-        <div class="glass-panel px-4 py-3 rounded-2xl text-left border border-slate-800 flex items-center gap-3">
-          <div class="w-10 h-10 rounded-xl bg-orange-500/10 text-orange-400 flex items-center justify-center text-lg">
-            <i class="fa-brands fa-tiktok"></i>
+        <button 
+          type="button"
+          onclick="openGiftFinderModal()" 
+          class="glass-panel px-4 py-3 rounded-2xl text-left border border-pink-500/30 hover:border-pink-500/60 bg-gradient-to-r from-pink-500/10 via-orange-500/10 to-transparent hover:from-pink-500/20 hover:via-orange-500/20 transition-all duration-300 flex items-center gap-3.5 group cursor-pointer shadow-lg shadow-pink-500/5 hover:scale-105 active:scale-95"
+          title="Abrir recomendador de regalos"
+        >
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-pink-500 to-rose-600 text-white flex items-center justify-center text-lg shadow-md shadow-pink-500/25 group-hover:rotate-6 transition-transform">
+            <i class="fa-solid fa-gift"></i>
           </div>
           <div>
-            <p class="text-[11px] text-slate-400 uppercase font-semibold">¿Vienes de TikTok / Reels?</p>
-            <p class="text-xs font-bold text-white">Escribe el número del vídeo arriba</p>
+            <div class="flex items-center gap-1.5 mb-0.5">
+              <span class="text-[10px] uppercase font-bold tracking-wider text-pink-400 bg-pink-500/20 px-1.5 py-0.5 rounded border border-pink-500/30 flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-pink-400 animate-pulse"></span>
+                Asistente Express
+              </span>
+            </div>
+            <p class="text-xs font-bold text-white group-hover:text-pink-300 transition-colors">
+              Quiz: ¿Qué regalar? (3 clics)
+            </p>
+            <p class="text-[10px] text-slate-400">Te recomendamos el gadget ideal</p>
           </div>
-        </div>
+          <i class="fa-solid fa-chevron-right text-slate-500 group-hover:text-white text-xs ml-0.5 group-hover:translate-x-0.5 transition-all"></i>
+        </button>
       </div>
     </div>
   </section>
@@ -264,36 +278,9 @@
     
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
       
-      <!-- Category Tabs -->
+      <!-- Category Tabs (Rendered dynamically based on available products) -->
       <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1 sm:pb-0" id="categoryFilters">
-        <button 
-          onclick="setCategory('all')" 
-          data-category="all"
-          class="filter-tab active-tab px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all bg-orange-600 text-white"
-        >
-          <i class="fa-solid fa-border-all mr-1.5"></i> Todos los Gadgets
-        </button>
-        <button 
-          onclick="setCategory('setup')" 
-          data-category="setup"
-          class="filter-tab px-3.5 py-1.5 rounded-xl text-xs font-medium whitespace-nowrap transition-all bg-slate-900 text-slate-300 hover:bg-slate-800 hover:text-white border border-slate-800"
-        >
-          <i class="fa-solid fa-desktop mr-1.5 text-blue-400"></i> Setups & Mesa
-        </button>
-        <button 
-          onclick="setCategory('viral')" 
-          data-category="viral"
-          class="filter-tab px-3.5 py-1.5 rounded-xl text-xs font-medium whitespace-nowrap transition-all bg-slate-900 text-slate-300 hover:bg-slate-800 hover:text-white border border-slate-800"
-        >
-          <i class="fa-solid fa-fire mr-1.5 text-orange-400"></i> Gadgets Raros & Virales
-        </button>
-        <button 
-          onclick="setCategory('regalo')" 
-          data-category="regalo"
-          class="filter-tab px-3.5 py-1.5 rounded-xl text-xs font-medium whitespace-nowrap transition-all bg-slate-900 text-slate-300 hover:bg-slate-800 hover:text-white border border-slate-800"
-        >
-          <i class="fa-solid fa-gift mr-1.5 text-pink-400"></i> Ideas de Regalo
-        </button>
+        <!-- Injected and updated automatically by JavaScript -->
       </div>
 
       <!-- Sorting & Active Count -->
@@ -353,6 +340,169 @@
         <i class="fa-solid fa-xmark text-sm"></i>
       </button>
       <div id="modalContent"></div>
+    </div>
+  </div>
+
+  <!-- GIFT FINDER QUIZ MODAL -->
+  <div id="giftFinderModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md" onclick="closeGiftFinderOnBackdrop(event)">
+    <div class="glass-panel w-full max-w-xl rounded-2xl border border-pink-500/30 p-6 relative shadow-2xl overflow-hidden max-h-[90vh] flex flex-col" onclick="event.stopPropagation()">
+      
+      <!-- Botón de Cerrar -->
+      <button onclick="closeGiftFinderModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center transition-colors z-10">
+        <i class="fa-solid fa-xmark text-sm"></i>
+      </button>
+
+      <!-- Encabezado del Modal -->
+      <div class="flex items-center gap-3 mb-4 shrink-0">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-pink-500 to-rose-600 text-white flex items-center justify-center text-lg shadow-md shadow-pink-500/25">
+          <i class="fa-solid fa-gift"></i>
+        </div>
+        <div>
+          <h3 class="text-base font-bold text-white font-display flex items-center gap-2">
+            Asistente de Regalos Sin Trampa
+            <span class="text-[10px] font-semibold text-pink-400 bg-pink-500/15 px-2 py-0.5 rounded border border-pink-500/25">3 clics</span>
+          </h3>
+          <p class="text-xs text-slate-400">Te recomendamos gadgets analizados según el perfil y presupuesto estimado.</p>
+        </div>
+      </div>
+
+      <!-- Barra de Progreso / Pasos -->
+      <div id="giftQuizProgress" class="flex items-center justify-between gap-2 mb-5 px-1 shrink-0">
+        <div class="flex items-center gap-2 sm:gap-3">
+          <div id="giftDot1" class="w-7 h-7 rounded-full bg-orange-600 text-white font-bold text-xs flex items-center justify-center transition-colors">1</div>
+          <div id="giftBar1" class="h-0.5 w-6 sm:w-10 bg-slate-800 transition-colors"></div>
+          <div id="giftDot2" class="w-7 h-7 rounded-full bg-slate-800 text-slate-400 font-bold text-xs flex items-center justify-center transition-colors">2</div>
+          <div id="giftBar2" class="h-0.5 w-6 sm:w-10 bg-slate-800 transition-colors"></div>
+          <div id="giftDot3" class="w-7 h-7 rounded-full bg-slate-800 text-slate-400 font-bold text-xs flex items-center justify-center transition-colors">3</div>
+        </div>
+        <span id="giftStepLabel" class="text-xs font-semibold text-orange-400 bg-orange-500/10 px-2 py-0.5 rounded border border-orange-500/20">Paso 1 de 3</span>
+      </div>
+
+      <!-- Cuerpo del Cuestionario -->
+      <div class="overflow-y-auto flex-1 pr-1">
+        
+        <!-- PASO 1: Perfil de la persona -->
+        <div id="giftStep1" class="space-y-3">
+          <h4 class="text-sm font-bold text-white">1. ¿A quién va dirigido el regalo?</h4>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <button type="button" onclick="selectGiftAnswer('profile', 'gamer')" data-group="profile" data-val="gamer" class="gift-option-btn p-3 rounded-xl border border-slate-800 bg-slate-900/60 hover:border-orange-500/50 text-left transition-all flex items-center gap-3">
+              <span class="w-9 h-9 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center text-sm shrink-0"><i class="fa-solid fa-gamepad"></i></span>
+              <div>
+                <p class="text-xs font-bold text-white">Gamer / Streamer</p>
+                <p class="text-[10px] text-slate-400">Juegos, directos y rincón gaming</p>
+              </div>
+            </button>
+            <button type="button" onclick="selectGiftAnswer('profile', 'worker')" data-group="profile" data-val="worker" class="gift-option-btn p-3 rounded-xl border border-slate-800 bg-slate-900/60 hover:border-orange-500/50 text-left transition-all flex items-center gap-3">
+              <span class="w-9 h-9 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-sm shrink-0"><i class="fa-solid fa-laptop-code"></i></span>
+              <div>
+                <p class="text-xs font-bold text-white">Teletrabajo / Oficina</p>
+                <p class="text-[10px] text-slate-400">Productividad, comodidad y orden</p>
+              </div>
+            </button>
+            <button type="button" onclick="selectGiftAnswer('profile', 'viral')" data-group="profile" data-val="viral" class="gift-option-btn p-3 rounded-xl border border-slate-800 bg-slate-900/60 hover:border-orange-500/50 text-left transition-all flex items-center gap-3">
+              <span class="w-9 h-9 rounded-lg bg-orange-500/10 text-orange-400 flex items-center justify-center text-sm shrink-0"><i class="fa-solid fa-fire"></i></span>
+              <div>
+                <p class="text-xs font-bold text-white">Fan de Gadgets Virales</p>
+                <p class="text-[10px] text-slate-400">Curiosidades tech y novedades</p>
+              </div>
+            </button>
+            <button type="button" onclick="selectGiftAnswer('profile', 'anyone')" data-group="profile" data-val="anyone" class="gift-option-btn p-3 rounded-xl border border-slate-800 bg-slate-900/60 hover:border-orange-500/50 text-left transition-all flex items-center gap-3">
+              <span class="w-9 h-9 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center text-sm shrink-0"><i class="fa-solid fa-user-astronaut"></i></span>
+              <div>
+                <p class="text-xs font-bold text-white">Cualquier persona</p>
+                <p class="text-[10px] text-slate-400">Un regalo comodín para acertar sí o sí</p>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <!-- PASO 2: Presupuesto estimado -->
+        <div id="giftStep2" class="hidden space-y-3">
+          <h4 class="text-sm font-bold text-white">2. ¿Qué presupuesto aproximado tienes?</h4>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <button type="button" onclick="selectGiftAnswer('budget', 'tier1')" data-group="budget" data-val="tier1" class="gift-option-btn p-3 rounded-xl border border-slate-800 bg-slate-900/60 hover:border-orange-500/50 text-left transition-all flex items-center gap-3">
+              <span class="w-9 h-9 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xs font-bold shrink-0">~25€</span>
+              <div>
+                <p class="text-xs font-bold text-white">Hasta ~25€</p>
+                <p class="text-[10px] text-slate-400">Detalle económico o amigo invisible</p>
+              </div>
+            </button>
+            <button type="button" onclick="selectGiftAnswer('budget', 'tier2')" data-group="budget" data-val="tier2" class="gift-option-btn p-3 rounded-xl border border-slate-800 bg-slate-900/60 hover:border-orange-500/50 text-left transition-all flex items-center gap-3">
+              <span class="w-9 h-9 rounded-lg bg-orange-500/10 text-orange-400 flex items-center justify-center text-xs font-bold shrink-0">~50€</span>
+              <div>
+                <p class="text-xs font-bold text-white">De 25€ a ~50€</p>
+                <p class="text-[10px] text-slate-400">Gama equilibrada de calidad</p>
+              </div>
+            </button>
+            <button type="button" onclick="selectGiftAnswer('budget', 'tier3')" data-group="budget" data-val="tier3" class="gift-option-btn p-3 rounded-xl border border-slate-800 bg-slate-900/60 hover:border-orange-500/50 text-left transition-all flex items-center gap-3">
+              <span class="w-9 h-9 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center text-xs font-bold shrink-0">+50€</span>
+              <div>
+                <p class="text-xs font-bold text-white">Más de 50€ (Gama Pro)</p>
+                <p class="text-[10px] text-slate-400">Regalo principal de alto impacto</p>
+              </div>
+            </button>
+            <button type="button" onclick="selectGiftAnswer('budget', 'all')" data-group="budget" data-val="all" class="gift-option-btn p-3 rounded-xl border border-slate-800 bg-slate-900/60 hover:border-orange-500/50 text-left transition-all flex items-center gap-3">
+              <span class="w-9 h-9 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center text-xs font-bold shrink-0">∞</span>
+              <div>
+                <p class="text-xs font-bold text-white">Sin límite</p>
+                <p class="text-[10px] text-slate-400">Lo mejor sin importar el coste</p>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <!-- PASO 3: Objetivo -->
+        <div id="giftStep3" class="hidden space-y-3">
+          <h4 class="text-sm font-bold text-white">3. ¿Cuál es tu objetivo?</h4>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <button type="button" onclick="selectGiftAnswer('goal', 'wow')" data-group="goal" data-val="wow" class="gift-option-btn p-3 rounded-xl border border-slate-800 bg-slate-900/60 hover:border-orange-500/50 text-left transition-all flex items-center gap-3">
+              <span class="w-9 h-9 rounded-lg bg-pink-500/10 text-pink-400 flex items-center justify-center text-sm shrink-0"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
+              <div>
+                <p class="text-xs font-bold text-white">Efecto WOW</p>
+                <p class="text-[10px] text-slate-400">Que diga "¿Dónde has encontrado esto?"</p>
+              </div>
+            </button>
+            <button type="button" onclick="selectGiftAnswer('goal', 'useful')" data-group="goal" data-val="useful" class="gift-option-btn p-3 rounded-xl border border-slate-800 bg-slate-900/60 hover:border-orange-500/50 text-left transition-all flex items-center gap-3">
+              <span class="w-9 h-9 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-sm shrink-0"><i class="fa-solid fa-check-double"></i></span>
+              <div>
+                <p class="text-xs font-bold text-white">100% Útil</p>
+                <p class="text-[10px] text-slate-400">Cero trastos que queden en un cajón</p>
+              </div>
+            </button>
+            <button type="button" onclick="selectGiftAnswer('goal', 'clean')" data-group="goal" data-val="clean" class="gift-option-btn p-3 rounded-xl border border-slate-800 bg-slate-900/60 hover:border-orange-500/50 text-left transition-all flex items-center gap-3">
+              <span class="w-9 h-9 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center text-sm shrink-0"><i class="fa-solid fa-sparkles"></i></span>
+              <div>
+                <p class="text-xs font-bold text-white">Estética & Orden</p>
+                <p class="text-[10px] text-slate-400">Minimalismo y cables fuera de vista</p>
+              </div>
+            </button>
+            <button type="button" onclick="selectGiftAnswer('goal', 'safe')" data-group="goal" data-val="safe" class="gift-option-btn p-3 rounded-xl border border-slate-800 bg-slate-900/60 hover:border-orange-500/50 text-left transition-all flex items-center gap-3">
+              <span class="w-9 h-9 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center text-sm shrink-0"><i class="fa-solid fa-shield-halved"></i></span>
+              <div>
+                <p class="text-xs font-bold text-white">Acierto Seguro</p>
+                <p class="text-[10px] text-slate-400">El producto más probado y valorado</p>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <!-- CONTENEDOR DE RESULTADOS -->
+        <div id="giftResultsContainer" class="hidden"></div>
+
+      </div>
+
+      <!-- Pie y Controles del Modal -->
+      <div id="giftQuizFooter" class="pt-4 border-t border-slate-800/80 mt-4 flex items-center justify-between gap-3 shrink-0">
+        <button id="giftPrevBtn" type="button" onclick="prevGiftStep()" disabled class="px-3.5 py-2 bg-slate-900 hover:bg-slate-800 disabled:opacity-40 disabled:hover:bg-slate-900 text-slate-300 rounded-xl text-xs font-semibold transition-colors flex items-center gap-1.5 border border-slate-800 cursor-pointer">
+          <i class="fa-solid fa-arrow-left text-[10px]"></i>
+          <span>Anterior</span>
+        </button>
+        <button id="giftNextBtn" type="button" onclick="nextGiftStep()" class="px-4 py-2 bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 disabled:opacity-40 text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-orange-500/20 flex items-center gap-1.5 cursor-pointer">
+          <span id="giftNextLabel">Siguiente paso</span>
+          <i class="fa-solid fa-arrow-right text-[10px]"></i>
+        </button>
+      </div>
+
     </div>
   </div>
 
@@ -501,13 +651,17 @@
             <input type="text" id="formCode" required placeholder="#01" class="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-orange-500 font-mono">
           </div>
 
-          <!-- Category -->
+          <!-- Category (Expanded with top gadget niches) -->
           <div>
             <label class="block text-[11px] font-semibold text-slate-300 mb-1">Categoría Principal</label>
             <select id="formCategory" class="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-orange-500">
-              <option value="setup">Setups & Mesa</option>
-              <option value="viral">Gadgets Virales</option>
-              <option value="regalo">Ideas de Regalo</option>
+              <option value="setup">🖥️ Setups & Mesa</option>
+              <option value="viral">🔥 Gadgets Raros & Virales</option>
+              <option value="regalo">🎁 Ideas de Regalo</option>
+              <option value="audio">🎧 Audio & Auriculares</option>
+              <option value="iluminacion">💡 Iluminación & Tiras LED</option>
+              <option value="cables">🔌 Orden, Cables & Soportes</option>
+              <option value="viaje">🎒 Tech de Viaje / EDC</option>
             </select>
           </div>
 
@@ -724,6 +878,18 @@
     // Firestore collection path
     const productsCollectionRef = collection(db, 'artifacts', appId, 'public', 'data', 'products');
 
+    // Centralized Category Catalog with Icons and Badge Colors
+    const CATEGORIES = {
+      all: { label: "Todos los Gadgets", icon: "fa-solid fa-border-all", color: "text-white" },
+      setup: { label: "Setups & Mesa", icon: "fa-solid fa-desktop", color: "text-blue-400" },
+      viral: { label: "Gadgets Virales", icon: "fa-solid fa-fire", color: "text-orange-400" },
+      regalo: { label: "Ideas de Regalo", icon: "fa-solid fa-gift", color: "text-pink-400" },
+      audio: { label: "Audio & Auriculares", icon: "fa-solid fa-headphones", color: "text-purple-400" },
+      iluminacion: { label: "Iluminación & LED", icon: "fa-solid fa-lightbulb", color: "text-amber-400" },
+      cables: { label: "Orden & Cables", icon: "fa-solid fa-plug", color: "text-emerald-400" },
+      viaje: { label: "Tech de Viaje / EDC", icon: "fa-solid fa-briefcase", color: "text-cyan-400" }
+    };
+
     let products = [];
     let currentUser = null;
     let isAdmin = false;
@@ -733,6 +899,14 @@
     let isBuilderExpanded = true;
     let pendingDeleteId = null;
     let unsubscribeProducts = null;
+
+    // Gift Quiz State
+    let giftQuizStep = 1;
+    let giftAnswers = {
+      profile: null,
+      budget: null,
+      goal: null
+    };
 
     // Monitor authentication state
     onAuthStateChanged(auth, (user) => {
@@ -836,6 +1010,8 @@
       const countLabel = document.getElementById("resultsCount");
       const searchIndicator = document.getElementById("searchIndicator");
       const searchIndicatorText = document.getElementById("searchIndicatorText");
+
+      renderCategoryTabs();
 
       let filtered = products.filter(item => {
         const matchesCategory = (currentCategory === "all") || (item.category === currentCategory);
@@ -987,6 +1163,38 @@
       `).join("");
     }
 
+    // Dynamic category tabs based on predefined list and available items
+    function renderCategoryTabs() {
+      const container = document.getElementById("categoryFilters");
+      if (!container) return;
+
+      // Always show 'all', plus any category that either has products or is one of the core 3
+      const activeCategoryKeys = new Set(products.map(p => p.category));
+      const tabsToRender = Object.keys(CATEGORIES).filter(key => {
+        if (key === 'all' || key === 'setup' || key === 'viral' || key === 'regalo') return true;
+        return activeCategoryKeys.has(key);
+      });
+
+      container.innerHTML = tabsToRender.map(key => {
+        const cat = CATEGORIES[key] || { label: key, icon: 'fa-solid fa-tag', color: 'text-slate-400' };
+        const isActive = (currentCategory === key);
+        return `
+          <button 
+            onclick="setCategory('${key}')" 
+            data-category="${key}"
+            class="filter-tab px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 ${
+              isActive 
+                ? 'bg-orange-600 text-white shadow-md shadow-orange-600/20' 
+                : 'bg-slate-900 text-slate-300 hover:bg-slate-800 hover:text-white border border-slate-800'
+            }"
+          >
+            <i class="${cat.icon} ${isActive ? 'text-white' : cat.color}"></i>
+            <span>${cat.label}</span>
+          </button>
+        `;
+      }).join("");
+    }
+
     function renderAdminProductsList() {
       const container = document.getElementById("adminProductsList");
       if (!container) return;
@@ -1004,14 +1212,16 @@
         return;
       }
 
-      container.innerHTML = products.map(item => `
+      container.innerHTML = products.map(item => {
+        const catInfo = CATEGORIES[item.category] || { label: item.category };
+        return `
         <div class="p-3 bg-slate-900/80 rounded-xl border border-slate-800 flex items-center justify-between gap-3 hover:border-slate-700 transition-colors">
           <div class="flex items-center gap-3 min-w-0">
             <img src="${item.image}" alt="${item.title}" class="w-10 h-10 rounded-lg object-cover bg-slate-950 shrink-0">
             <div class="min-w-0">
               <div class="flex items-center gap-2">
                 <span class="font-mono text-xs font-black text-orange-400">${item.code || '#--'}</span>
-                <span class="text-[10px] px-1.5 py-0.2 bg-slate-800 text-slate-400 rounded">${item.category}</span>
+                <span class="text-[10px] px-1.5 py-0.5 bg-slate-800 text-slate-300 rounded border border-slate-700/60">${catInfo.label}</span>
                 <span class="text-[10px] text-slate-500">Est: ~${item.estimatedValue || 0}€</span>
               </div>
               <p class="text-xs font-semibold text-white truncate max-w-xs sm:max-w-md">${item.title}</p>
@@ -1028,7 +1238,7 @@
             </button>
           </div>
         </div>
-      `).join("");
+      `}).join("");
     }
 
     function openProductFormModal(productId = null) {
@@ -1371,6 +1581,296 @@
       showToast("¡Recibido! Lo pondremos a prueba para el próximo vídeo.");
     }
 
+    /* GIFT FINDER QUIZ LOGIC */
+    function openGiftFinderModal() {
+      resetGiftQuiz();
+      document.getElementById("giftFinderModal").classList.remove("hidden");
+    }
+
+    function closeGiftFinderModal() {
+      document.getElementById("giftFinderModal").classList.add("hidden");
+    }
+
+    function closeGiftFinderOnBackdrop(e) {
+      if (e.target.id === "giftFinderModal") closeGiftFinderModal();
+    }
+
+    function resetGiftQuiz() {
+      giftQuizStep = 1;
+      giftAnswers = { profile: null, budget: null, goal: null };
+      
+      document.querySelectorAll(".gift-option-btn").forEach(btn => {
+        btn.classList.remove("border-orange-500", "bg-orange-500/10");
+        btn.classList.add("border-slate-800", "bg-slate-900/60");
+      });
+
+      document.getElementById("giftResultsContainer").classList.add("hidden");
+      document.getElementById("giftQuizFooter").classList.remove("hidden");
+      document.getElementById("giftQuizProgress").classList.remove("hidden");
+      
+      updateGiftStepUI();
+    }
+
+    function selectGiftAnswer(group, val) {
+      giftAnswers[group] = val;
+
+      // Update button styling in this group
+      document.querySelectorAll(`.gift-option-btn[data-group="${group}"]`).forEach(btn => {
+        if (btn.dataset.val === val) {
+          btn.classList.remove("border-slate-800", "bg-slate-900/60");
+          btn.classList.add("border-orange-500", "bg-orange-500/15");
+        } else {
+          btn.classList.remove("border-orange-500", "bg-orange-500/15");
+          btn.classList.add("border-slate-800", "bg-slate-900/60");
+        }
+      });
+
+      // Automatically advance to the next step after a tiny feedback delay
+      setTimeout(() => {
+        if (giftQuizStep < 3) {
+          nextGiftStep();
+        } else {
+          showGiftResults();
+        }
+      }, 180);
+    }
+
+    function nextGiftStep() {
+      if (giftQuizStep === 1 && !giftAnswers.profile) return;
+      if (giftQuizStep === 2 && !giftAnswers.budget) return;
+
+      if (giftQuizStep < 3) {
+        giftQuizStep++;
+        updateGiftStepUI();
+      } else {
+        showGiftResults();
+      }
+    }
+
+    function prevGiftStep() {
+      if (giftQuizStep > 1) {
+        giftQuizStep--;
+        updateGiftStepUI();
+      }
+    }
+
+    function updateGiftStepUI() {
+      const step1 = document.getElementById("giftStep1");
+      const step2 = document.getElementById("giftStep2");
+      const step3 = document.getElementById("giftStep3");
+      const results = document.getElementById("giftResultsContainer");
+      const prevBtn = document.getElementById("giftPrevBtn");
+      const nextBtn = document.getElementById("giftNextBtn");
+      const nextLabel = document.getElementById("giftNextLabel");
+      const stepLabel = document.getElementById("giftStepLabel");
+
+      step1.classList.add("hidden");
+      step2.classList.add("hidden");
+      step3.classList.add("hidden");
+      results.classList.add("hidden");
+
+      prevBtn.disabled = (giftQuizStep === 1);
+
+      // Dots and progress styling
+      const d1 = document.getElementById("giftDot1");
+      const d2 = document.getElementById("giftDot2");
+      const d3 = document.getElementById("giftDot3");
+      const b1 = document.getElementById("giftBar1");
+      const b2 = document.getElementById("giftBar2");
+
+      [d1, d2, d3].forEach((d, idx) => {
+        if (idx + 1 === giftQuizStep) {
+          d.className = "w-7 h-7 rounded-full bg-orange-600 text-white font-bold text-xs flex items-center justify-center transition-colors shadow-md shadow-orange-500/30";
+        } else if (idx + 1 < giftQuizStep) {
+          d.className = "w-7 h-7 rounded-full bg-emerald-600 text-white font-bold text-xs flex items-center justify-center transition-colors";
+          d.innerHTML = `<i class="fa-solid fa-check text-[10px]"></i>`;
+        } else {
+          d.className = "w-7 h-7 rounded-full bg-slate-800 text-slate-400 font-bold text-xs flex items-center justify-center transition-colors";
+          d.textContent = idx + 1;
+        }
+      });
+
+      b1.className = `h-0.5 w-6 sm:w-10 ${giftQuizStep > 1 ? 'bg-orange-500' : 'bg-slate-800'} transition-colors`;
+      b2.className = `h-0.5 w-6 sm:w-10 ${giftQuizStep > 2 ? 'bg-orange-500' : 'bg-slate-800'} transition-colors`;
+
+      stepLabel.textContent = `Paso ${giftQuizStep} de 3`;
+
+      if (giftQuizStep === 1) {
+        step1.classList.remove("hidden");
+        nextBtn.disabled = !giftAnswers.profile;
+        nextLabel.textContent = "Siguiente paso";
+      } else if (giftQuizStep === 2) {
+        step2.classList.remove("hidden");
+        nextBtn.disabled = !giftAnswers.budget;
+        nextLabel.textContent = "Siguiente paso";
+      } else if (giftQuizStep === 3) {
+        step3.classList.remove("hidden");
+        nextBtn.disabled = !giftAnswers.goal;
+        nextLabel.textContent = "Ver regalos ideales";
+      }
+    }
+
+    function showGiftResults() {
+      const step1 = document.getElementById("giftStep1");
+      const step2 = document.getElementById("giftStep2");
+      const step3 = document.getElementById("giftStep3");
+      const resultsContainer = document.getElementById("giftResultsContainer");
+      const footer = document.getElementById("giftQuizFooter");
+      const progress = document.getElementById("giftQuizProgress");
+
+      step1.classList.add("hidden");
+      step2.classList.add("hidden");
+      step3.classList.add("hidden");
+      footer.classList.add("hidden");
+      progress.classList.add("hidden");
+      resultsContainer.classList.remove("hidden");
+
+      if (products.length === 0) {
+        resultsContainer.innerHTML = `
+          <div class="py-8 text-center text-slate-400 space-y-3">
+            <div class="w-12 h-12 mx-auto rounded-xl bg-orange-500/10 text-orange-400 flex items-center justify-center text-xl">
+              <i class="fa-solid fa-boxes-packing"></i>
+            </div>
+            <p class="text-xs">Aún no hay productos subidos en el catálogo. Entra al Panel Admin para publicar los primeros.</p>
+            <button onclick="closeGiftFinderModal()" class="px-4 py-2 bg-slate-800 text-white rounded-xl text-xs font-semibold">
+              Cerrar
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      // Algorithm: Score each product against the 3 answers
+      const scored = products.map(item => {
+        let score = 0;
+        const est = item.estimatedValue || 25;
+        const cat = item.category || "";
+        const ambience = Array.isArray(item.ambience) ? item.ambience : [];
+        const tags = Array.isArray(item.tags) ? item.tags : [];
+
+        // 1. Budget Fit
+        if (giftAnswers.budget === "tier1") {
+          if (est <= 25) score += 4;
+          else if (est <= 35) score += 1;
+        } else if (giftAnswers.budget === "tier2") {
+          if (est >= 20 && est <= 55) score += 4;
+          else score += 1;
+        } else if (giftAnswers.budget === "tier3") {
+          if (est > 45) score += 4;
+          else score += 1;
+        } else {
+          score += 2; // all
+        }
+
+        // 2. Profile Fit
+        if (giftAnswers.profile === "gamer") {
+          if (cat === "setup" || ambience.includes("creator")) score += 4;
+          if (tags.some(t => ["gamer", "juegos", "stream", "luz", "pantalla"].includes(t))) score += 3;
+        } else if (giftAnswers.profile === "worker") {
+          if (cat === "setup" && ambience.includes("productive")) score += 4;
+          if (tags.some(t => ["oficina", "trabajo", "soporte", "orden", "usb", "mesa"].includes(t))) score += 3;
+        } else if (giftAnswers.profile === "viral") {
+          if (cat === "viral") score += 5;
+          if (tags.some(t => ["gadget", "viral", "curioso"].includes(t))) score += 3;
+        } else {
+          // anyone
+          if (cat === "regalo" || cat === "viral") score += 3;
+          score += 2;
+        }
+
+        // 3. Goal Fit
+        if (giftAnswers.goal === "wow") {
+          if (cat === "viral") score += 3;
+          if (parseFloat(item.rating || 0) >= 4.7) score += 2;
+        } else if (giftAnswers.goal === "useful") {
+          if (cat === "setup" || ambience.includes("productive")) score += 3;
+        } else if (giftAnswers.goal === "clean") {
+          if (ambience.includes("minimal")) score += 4;
+        } else if (giftAnswers.goal === "safe") {
+          if (parseFloat(item.rating || 0) >= 4.7) score += 3;
+          if (cat === "regalo") score += 2;
+        }
+
+        // Category bonus
+        if (cat === "regalo") score += 2;
+
+        return { item, score };
+      });
+
+      scored.sort((a, b) => b.score - a.score);
+      const topMatches = scored.slice(0, 3).map(s => s.item);
+
+      resultsContainer.innerHTML = `
+        <div class="space-y-4">
+          <div class="bg-gradient-to-r from-pink-500/10 via-orange-500/10 to-amber-500/10 border border-orange-500/20 p-4 rounded-xl flex items-center justify-between gap-3">
+            <div>
+              <span class="text-[10px] font-black uppercase tracking-wider text-pink-400 bg-pink-500/20 px-2 py-0.5 rounded border border-pink-500/30">
+                Selección Personalizada
+              </span>
+              <h4 class="text-sm font-bold text-white mt-1">
+                ¡Los ${topMatches.length} mejores gadgets según tu test!
+              </h4>
+              <p class="text-[11px] text-slate-400">Verificados en vídeo, con alta puntuación y entrega en Amazon.</p>
+            </div>
+            <button onclick="resetGiftQuiz()" class="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700 rounded-lg text-xs font-semibold transition-all shrink-0 flex items-center gap-1.5">
+              <i class="fa-solid fa-rotate-right text-[10px]"></i>
+              <span class="hidden sm:inline">Repetir</span>
+            </button>
+          </div>
+
+          <div class="space-y-3">
+            ${topMatches.map(product => `
+              <div class="bg-slate-900/90 border border-slate-800 hover:border-orange-500/40 p-3 rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 transition-colors">
+                <div class="flex items-center gap-3 min-w-0">
+                  <img src="${product.image || 'https://placehold.co/100x100/1e293b/f97316?text=Regalo'}" alt="${product.title}" class="w-14 h-14 rounded-lg object-cover bg-slate-950 shrink-0 border border-slate-800">
+                  <div class="min-w-0">
+                    <div class="flex items-center gap-1.5">
+                      <span class="text-[9px] font-black font-mono text-orange-400 bg-orange-500/10 px-1.5 py-0.2 rounded border border-orange-500/20">
+                        ${product.code || '#--'}
+                      </span>
+                      <span class="text-[10px] text-slate-400 font-semibold">${product.tier || 'Gama Estimada'}</span>
+                      <span class="text-[10px] text-amber-400 flex items-center gap-1 font-semibold">
+                        <i class="fa-solid fa-star text-[9px]"></i> ${product.rating || '4.8'}
+                      </span>
+                    </div>
+                    <h5 class="text-xs font-bold text-white truncate max-w-xs mt-0.5">${product.title}</h5>
+                    <p class="text-[11px] text-slate-400 line-clamp-1 mt-0.5">${product.hook || ''}</p>
+                  </div>
+                </div>
+
+                <div class="flex items-center gap-2 w-full sm:w-auto justify-end shrink-0 pt-2 sm:pt-0 border-t border-slate-800/80 sm:border-0">
+                  <button 
+                    onclick="openProductModal('${product.id}')"
+                    class="p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded-lg text-xs transition-colors"
+                    title="Ver ficha completa"
+                  >
+                    <i class="fa-solid fa-circle-info"></i>
+                  </button>
+                  <a 
+                    href="${product.amzUrl}" 
+                    target="_blank" 
+                    rel="nofollow sponsored" 
+                    class="flex-1 sm:flex-initial px-3.5 py-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-slate-950 font-black text-xs rounded-lg transition-all shadow-md shadow-orange-500/10 flex items-center justify-center gap-1.5"
+                    onclick="trackOutboundClick('${product.code}')"
+                  >
+                    <i class="fa-brands fa-amazon text-sm"></i>
+                    <span>Ver precio</span>
+                    <i class="fa-solid fa-arrow-up-right-from-square text-[9px] opacity-75"></i>
+                  </a>
+                </div>
+              </div>
+            `).join("")}
+          </div>
+
+          <div class="pt-2 text-center">
+            <button onclick="closeGiftFinderModal()" class="text-xs text-slate-400 hover:text-white transition-colors underline">
+              Cerrar y seguir navegando
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
     function updateBudgetDisplay(val) {
       document.getElementById("budgetDisplay").textContent = `Hasta ~${val}€`;
     }
@@ -1514,6 +2014,13 @@
     window.closeSuggestModal = closeSuggestModal;
     window.closeSuggestOnBackdrop = closeSuggestOnBackdrop;
     window.submitSuggestion = submitSuggestion;
+    window.openGiftFinderModal = openGiftFinderModal;
+    window.closeGiftFinderModal = closeGiftFinderModal;
+    window.closeGiftFinderOnBackdrop = closeGiftFinderOnBackdrop;
+    window.selectGiftAnswer = selectGiftAnswer;
+    window.nextGiftStep = nextGiftStep;
+    window.prevGiftStep = prevGiftStep;
+    window.resetGiftQuiz = resetGiftQuiz;
     window.generateSetupCombo = generateSetupCombo;
     window.updateBudgetDisplay = updateBudgetDisplay;
     window.toggleComboBuilder = toggleComboBuilder;
@@ -1544,5 +2051,6 @@
       }
     });
   </script>
+
 </body>
 </html>
