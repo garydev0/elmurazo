@@ -6,10 +6,19 @@
   <title>El Murazo | Gadgets, Setups y Regalos sin Trampa</title>
   <meta name="description" content="Encuentra los gadgets de nuestros vídeos, configura tu setup por presupuesto estimado y descubre compras seguras en Amazon sin llevarte un murazo.">
   
-  <!-- Google Fonts: Inter & Outfit -->
+  <!-- Favicon y Metadatos para Pestaña del Navegador y Redes Sociales -->
+  <link rel="icon" type="image/png" href="logo.png">
+  <link rel="apple-touch-icon" href="logo.png">
+  <meta property="og:title" content="El Murazo | Gadgets, Setups y Regalos sin Trampa">
+  <meta property="og:description" content="Encuentra los gadgets de nuestros vídeos, configura tu setup por presupuesto estimado y descubre compras seguras en Amazon.">
+  <meta property="og:image" content="logo.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="logo.png">
+
+  <!-- Google Fonts: Inter (Pesos completos hasta Black 900) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -41,7 +50,7 @@
           },
           fontFamily: {
             sans: ['Inter', 'sans-serif'],
-            display: ['Outfit', 'sans-serif']
+            display: ['Inter', 'sans-serif']
           }
         }
       }
@@ -79,10 +88,13 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
       
       <!-- Brand Logo -->
-      <a href="#" class="flex items-center gap-2 group cursor-pointer" onclick="resetFilters(event)">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-amber-600 flex items-center justify-center text-white shadow-lg shadow-orange-500/20 group-hover:scale-105 transition-transform">
-          <i class="fa-solid fa-shield-halved text-xl"></i>
-        </div>
+      <a href="#" class="flex items-center gap-2.5 group cursor-pointer" onclick="resetFilters(event)">
+        <img 
+          src="logo.png" 
+          alt="El Murazo" 
+          class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl object-contain shadow-md shadow-orange-500/10 group-hover:scale-105 transition-transform"
+          onerror="this.style.display='none'"
+        >
         <div>
           <span class="font-display font-black text-xl tracking-tight text-white flex items-center gap-1">
             EL<span class="text-orange-500">MURAZO</span>
@@ -116,13 +128,6 @@
       <!-- Action Buttons -->
       <div class="flex items-center gap-2">
         <button 
-          onclick="toggleComboBuilder()" 
-          class="hidden md:flex items-center gap-2 px-3.5 py-2 bg-orange-600/15 hover:bg-orange-600/25 text-orange-400 border border-orange-500/30 rounded-xl text-xs font-semibold transition-all"
-        >
-          <i class="fa-solid fa-calculator"></i>
-          <span>Generador de Setup</span>
-        </button>
-        <button 
           onclick="openSuggestModal()" 
           class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-medium transition-colors flex items-center gap-1.5"
           title="Sugerir un gadget visto en redes"
@@ -154,7 +159,7 @@
           Cero compras absurdas • 100% satisfecho
         </div>
         <h1 class="font-display text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">
-          El filtro definitivo contra el <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-500">murazo</span> de Amazon
+          Encuentra lo que buscas en <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-500">Elmurazo</span>
         </h1>
         <p class="mt-2 text-sm sm:text-base text-slate-400">
           Encuentra al instante el producto exacto de nuestros vídeos escribiendo su <strong>#código</strong>.
@@ -176,7 +181,8 @@
     </div>
   </section>
 
-  <section id="comboBuilderSection" class="bg-slate-900/80 border-b border-slate-800 transition-all duration-300">
+  <!-- Generador de Setup ocultado temporalmente para que los productos salgan directamente -->
+  <section id="comboBuilderSection" class="hidden bg-slate-900/80 border-b border-slate-800 transition-all duration-300">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
       
       <div class="flex items-center justify-between mb-4">
@@ -208,7 +214,7 @@
           </select>
         </div>
 
-        <!-- Estimated Budget Tier Selector (Strict Amazon Compliance: Tiers, not manual live price promises) -->
+        <!-- Estimated Budget Tier Selector -->
         <div class="glass-panel p-3.5 rounded-xl border border-slate-800">
           <div class="flex justify-between items-center mb-2">
             <label class="text-xs font-semibold text-slate-300">
@@ -240,7 +246,7 @@
             <span>Calcular Combo Recomendado</span>
           </button>
           <span class="text-[10px] text-slate-500 text-center mt-1.5">
-            *Cálculo estimativo para no infringir precios en tiempo real de Amazon.
+            *Cálculo estimativo para cumplir las políticas de precios en tiempo real de Amazon.
           </span>
         </div>
 
@@ -292,7 +298,7 @@
 
       <!-- Sorting & Active Count -->
       <div class="flex items-center justify-between sm:justify-end gap-3 text-xs text-slate-400">
-        <span id="resultsCount">Mostrando 12 productos</span>
+        <span id="resultsCount">Mostrando catálogo</span>
         <div class="flex items-center gap-1.5 bg-slate-900 px-2.5 py-1.5 rounded-lg border border-slate-800">
           <i class="fa-solid fa-arrow-down-wide-short text-slate-500"></i>
           <select id="sortSelect" onchange="handleSort(this.value)" class="bg-transparent text-slate-300 focus:outline-none cursor-pointer">
@@ -306,7 +312,7 @@
 
     </div>
 
-    <!-- Active Search Banner (Shown when searching) -->
+    <!-- Active Search Banner -->
     <div id="searchIndicator" class="hidden mb-4 p-3 bg-slate-900 border border-slate-800 rounded-xl flex items-center justify-between text-xs">
       <div class="flex items-center gap-2 text-slate-300">
         <i class="fa-solid fa-filter text-orange-400"></i>
@@ -318,10 +324,10 @@
     </div>
 
     <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-      <!-- Cards will be populated by JavaScript -->
+      <!-- Cards populated by JavaScript -->
     </div>
 
-    <!-- No Results / Empty State -->
+    <!-- Empty State -->
     <div id="emptyState" class="hidden py-16 text-center max-w-md mx-auto">
       <div class="w-16 h-16 mx-auto rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-500 text-2xl mb-4">
         <i class="fa-solid fa-layer-group"></i>
@@ -340,22 +346,17 @@
 
   </main>
 
+  <!-- PRODUCT DETAIL MODAL -->
   <div id="productModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-fade-in" onclick="closeModalOnBackdrop(event)">
     <div class="glass-panel w-full max-w-lg rounded-2xl border border-slate-700 overflow-hidden shadow-2xl relative" onclick="event.stopPropagation()">
-      
-      <!-- Close Button -->
       <button onclick="closeProductModal()" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-slate-800/80 text-slate-300 hover:text-white flex items-center justify-center z-10">
         <i class="fa-solid fa-xmark text-sm"></i>
       </button>
-
-      <!-- Modal Content Body -->
-      <div id="modalContent">
-        <!-- Injected via JavaScript -->
-      </div>
-
+      <div id="modalContent"></div>
     </div>
   </div>
 
+  <!-- SUGGEST PRODUCT MODAL -->
   <div id="suggestModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm" onclick="closeSuggestOnBackdrop(event)">
     <div class="glass-panel w-full max-w-md rounded-2xl border border-slate-700 p-6 relative shadow-2xl" onclick="event.stopPropagation()">
       <button onclick="closeSuggestModal()" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-slate-800 text-slate-300 hover:text-white flex items-center justify-center">
@@ -409,7 +410,7 @@
         </button>
       </div>
 
-      <!-- State 1: Login Request (Not logged in as Gerard) -->
+      <!-- State 1: Login Request -->
       <div id="adminLoginSection" class="p-8 text-center space-y-4">
         <div class="w-14 h-14 mx-auto rounded-2xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-400 text-2xl">
           <i class="fa-solid fa-key"></i>
@@ -435,7 +436,7 @@
         </button>
       </div>
 
-      <!-- State 2: Active Dashboard (Logged in as Gerard) -->
+      <!-- State 2: Active Dashboard -->
       <div id="adminDashboardSection" class="hidden flex-1 flex flex-col overflow-hidden">
         
         <!-- Action Toolbar -->
@@ -514,7 +515,7 @@
           <div>
             <label class="block text-[11px] font-semibold text-slate-300 mb-1">
               Valor Est. Combo (€)
-              <i class="fa-solid fa-circle-question text-slate-500" title="Uso interno exclusivo para el calculador de combos. No se publica como precio directo."></i>
+              <i class="fa-solid fa-circle-question text-slate-500" title="Uso interno exclusivo para el calculador de combos."></i>
             </label>
             <input type="number" id="formEstimatedValue" required min="1" max="500" placeholder="25" class="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-orange-500">
           </div>
@@ -610,7 +611,7 @@
     </div>
   </div>
 
-  <!-- CONFIRM DELETE MODAL (Zero browser confirm()) -->
+  <!-- CONFIRM DELETE MODAL -->
   <div id="deleteModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md" onclick="closeDeleteOnBackdrop(event)">
     <div class="glass-panel w-full max-w-sm rounded-2xl border border-red-500/30 p-6 text-center shadow-2xl relative" onclick="event.stopPropagation()">
       <div class="w-12 h-12 mx-auto rounded-xl bg-red-500/10 text-red-400 flex items-center justify-center text-xl mb-3">
@@ -635,10 +636,13 @@
       
       <!-- Upper Section -->
       <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div class="flex items-center gap-2">
-          <div class="w-7 h-7 rounded-lg bg-orange-500 flex items-center justify-center text-white text-xs font-black">
-            M
-          </div>
+        <div class="flex items-center gap-2.5">
+          <img 
+            src="logo.png" 
+            alt="El Murazo" 
+            class="w-7 h-7 rounded-lg object-contain"
+            onerror="this.style.display='none'"
+          >
           <span class="font-display font-black text-sm tracking-tight text-white">ELMURAZO.COM</span>
         </div>
         
@@ -649,7 +653,7 @@
         </div>
       </div>
 
-      <!-- Legal Disclosure Notice (Mandatory by Amazon Associates Program in Spain & EU) -->
+      <!-- Legal Disclosure Notice -->
       <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800 text-[11px] leading-relaxed text-slate-400 space-y-2">
         <p class="font-semibold text-slate-300 flex items-center gap-1.5">
           <i class="fa-solid fa-circle-info text-orange-400"></i> Aviso Legal de Afiliación y Precios:
@@ -717,10 +721,10 @@
     const ADMIN_EMAIL = "gerardlopezgarcia1@gmail.com";
     const appId = typeof __app_id !== 'undefined' ? __app_id : 'elmurazo';
 
-    // Strict path matching Rule 1
+    // Firestore collection path
     const productsCollectionRef = collection(db, 'artifacts', appId, 'public', 'data', 'products');
 
-    let products = []; // Starts clean, synced in real time via Firestore
+    let products = [];
     let currentUser = null;
     let isAdmin = false;
     let currentCategory = "all";
@@ -738,7 +742,7 @@
       renderCatalog();
     });
 
-    // Initialize Auth first, then connect real-time Firestore listener
+    // Initialize Auth and Firestore real-time listener
     async function initFirebaseSync() {
       try {
         await auth.authStateReady();
@@ -747,11 +751,10 @@
             await signInAnonymously(auth);
             console.log("[Auth] Visitante conectado con éxito");
           } catch (authErr) {
-            console.warn("[Auth] Activa el proveedor 'Anónimo' en Firebase Console > Authentication:", authErr.code);
+            console.warn("[Auth] Proveedor anónimo opcional:", authErr.code);
           }
         }
 
-        // Attach real-time snapshot after auth initialization
         if (unsubscribeProducts) unsubscribeProducts();
         unsubscribeProducts = onSnapshot(productsCollectionRef, (snapshot) => {
           products = [];
@@ -766,7 +769,7 @@
         }, (error) => {
           console.error("[Firestore Error]", error);
           if (error.code === 'permission-denied') {
-            showToast("Aviso: Pega las reglas en Firebase Console para habilitar la lectura de productos.");
+            showToast("Aviso: Revisa las reglas de lectura pública en Firestore Console.");
           } else {
             showToast("Error conectando con la base de datos de productos");
           }
@@ -834,7 +837,6 @@
       const searchIndicator = document.getElementById("searchIndicator");
       const searchIndicatorText = document.getElementById("searchIndicatorText");
 
-      // Filter products
       let filtered = products.filter(item => {
         const matchesCategory = (currentCategory === "all") || (item.category === currentCategory);
         const cleanQuery = searchQuery.trim().toLowerCase().replace(/^#/, '');
@@ -849,7 +851,6 @@
         return matchesCategory && matchesSearch;
       });
 
-      // Sorting
       filtered.sort((a, b) => {
         if (currentSort === "code_asc") return (a.code || "").localeCompare(b.code || "");
         if (currentSort === "popular") return parseInt(b.views || 0) - parseInt(a.views || 0);
@@ -858,7 +859,6 @@
         return 0;
       });
 
-      // Search Indicator
       if (searchQuery.trim()) {
         searchIndicator.classList.remove("hidden");
         searchIndicatorText.textContent = `"${searchQuery}"`;
@@ -866,7 +866,6 @@
         searchIndicator.classList.add("hidden");
       }
 
-      // Empty State Handling
       if (filtered.length === 0) {
         grid.innerHTML = "";
         empty.classList.remove("hidden");
@@ -898,7 +897,6 @@
       grid.innerHTML = filtered.map(item => `
         <article class="glass-panel rounded-2xl overflow-hidden border border-slate-800 hover:border-orange-500/40 transition-all duration-300 flex flex-col group hover:-translate-y-1 hover:shadow-xl hover:shadow-orange-500/5 relative">
           
-          <!-- Admin inline quick actions (Only visible to Gerard) -->
           ${isAdmin ? `
             <div class="absolute top-3 right-3 z-20 flex items-center gap-1 bg-slate-950/90 backdrop-blur-md p-1 rounded-lg border border-slate-700 shadow-lg">
               <button onclick="openProductFormModal('${item.id}')" class="w-6 h-6 rounded bg-slate-800 hover:bg-orange-600 text-slate-300 hover:text-white flex items-center justify-center text-[10px]" title="Editar">
@@ -910,7 +908,6 @@
             </div>
           ` : ''}
 
-          <!-- Image Container with Badges -->
           <div class="relative aspect-video sm:aspect-square overflow-hidden bg-slate-900">
             <img 
               src="${item.image || 'https://placehold.co/600x600/1e293b/f97316?text=El+Murazo'}" 
@@ -920,18 +917,15 @@
               onerror="this.src='https://placehold.co/600x600/1e293b/f97316?text=El+Murazo'"
             >
             
-            <!-- Video Code Badge (Tied to TikTok) -->
             <div class="absolute top-3 left-3 badge-code text-white text-xs font-black px-2.5 py-1 rounded-lg shadow-md flex items-center gap-1 tracking-wider z-10">
               <i class="fa-brands fa-tiktok text-[10px]"></i>
               <span>${item.code || '#00'}</span>
             </div>
 
-            <!-- Estimated Tier Pill (Amazon compliant) -->
             <div class="absolute ${isAdmin ? 'top-11 right-3' : 'top-3 right-3'} bg-slate-950/80 backdrop-blur-md border border-slate-700/60 text-slate-300 text-[10px] font-semibold px-2 py-0.5 rounded-md z-10">
               ${item.tier || 'Gama Estimada'}
             </div>
 
-            <!-- Social views pill -->
             ${item.views ? `
               <div class="absolute bottom-3 left-3 bg-slate-950/70 backdrop-blur-sm text-slate-300 text-[10px] font-medium px-2 py-0.5 rounded flex items-center gap-1">
                 <i class="fa-solid fa-eye text-orange-400 text-[9px]"></i>
@@ -940,7 +934,6 @@
             ` : ''}
           </div>
 
-          <!-- Card Body -->
           <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between">
             <div>
               <div class="flex items-center gap-1.5 text-amber-400 text-[11px] font-semibold mb-1">
@@ -958,10 +951,7 @@
               </p>
             </div>
 
-            <!-- Card Actions -->
             <div class="mt-4 pt-3 border-t border-slate-800/80 flex items-center gap-2">
-              
-              <!-- Direct Amazon CTA -->
               <a 
                 href="${item.amzUrl}" 
                 target="_blank" 
@@ -974,7 +964,6 @@
                 <i class="fa-solid fa-arrow-up-right-from-square text-[10px] opacity-75"></i>
               </a>
 
-              <!-- Info / Breakdown Modal Button -->
               <button 
                 onclick="openProductModal('${item.id}')"
                 class="p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded-xl text-xs transition-colors border border-slate-700/50"
@@ -983,7 +972,6 @@
                 <i class="fa-solid fa-circle-info"></i>
               </button>
 
-              <!-- Copy Short Link -->
               <button 
                 onclick="copyProductLink('${item.code}', '${item.amzUrl}')"
                 class="p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded-xl text-xs transition-colors border border-slate-700/50"
@@ -991,7 +979,6 @@
               >
                 <i class="fa-solid fa-share-nodes"></i>
               </button>
-
             </div>
 
           </div>
@@ -1074,7 +1061,6 @@
         document.getElementById("formWhyNotMurazo").value = item.whyNotMurazo || "";
         document.getElementById("formTags").value = Array.isArray(item.tags) ? item.tags.join(", ") : "";
 
-        // Checkbox values
         const checkboxes = document.querySelectorAll(".form-ambience");
         checkboxes.forEach(cb => {
           cb.checked = Array.isArray(item.ambience) && item.ambience.includes(cb.value);
@@ -1116,14 +1102,12 @@
         const hook = document.getElementById("formHook").value.trim();
         const whyNotMurazo = document.getElementById("formWhyNotMurazo").value.trim();
 
-        // Ambience checkboxes
         const selectedAmbiences = [];
         document.querySelectorAll(".form-ambience:checked").forEach(cb => {
           selectedAmbiences.push(cb.value);
         });
         if (selectedAmbiences.length === 0) selectedAmbiences.push("minimal");
 
-        // Tags array
         const tagsInput = document.getElementById("formTags").value;
         const tags = tagsInput.split(",").map(t => t.trim().toLowerCase()).filter(Boolean);
 
@@ -1145,12 +1129,10 @@
         };
 
         if (id) {
-          // Update existing doc
           const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'products', id);
           await updateDoc(docRef, payload);
           showToast(`¡Gadget ${code} actualizado correctamente!`);
         } else {
-          // Create new doc
           payload.createdAt = new Date().toISOString();
           await addDoc(productsCollectionRef, payload);
           showToast(`¡Gadget ${code} publicado en El Murazo!`);
@@ -1510,6 +1492,7 @@
       return (str || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
     }
 
+    // Expose functions to window
     window.handleAdminNavClick = handleAdminNavClick;
     window.openAdminModal = openAdminModal;
     window.closeAdminModal = closeAdminModal;
@@ -1544,7 +1527,7 @@
     window.trackOutboundClick = trackOutboundClick;
     window.showLegalNotice = showLegalNotice;
 
-    // Initialization on load
+    // Initialization on DOM load
     window.addEventListener("DOMContentLoaded", () => {
       document.getElementById("currentYear").textContent = new Date().getFullYear();
 
