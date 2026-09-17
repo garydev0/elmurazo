@@ -1,448 +1,703 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>El Murazo | Gadgets, Setups y Regalos sin Trampa</title>
+  <meta name="description" content="Encuentra los gadgets de nuestros vídeos, configura tu setup por presupuesto estimado y descubre compras seguras en Amazon sin llevarte un murazo.">
   
-  <!-- SEO, Open Graph y Favicon -->
-  <meta name="description" content="No buscamos ofertas. Encontramos las que merecen la pena. El filtro humano de Internet para gadgets y tecnología.">
-  <meta name="theme-color" content="#0b0c10">
-  <title>El Murazo — Chollos que merecen la pena</title>
+  <!-- Google Fonts: Inter & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@600;700;800;900&display=swap" rel="stylesheet">
   
-  <link rel="icon" type="image/png" href="logo.png">
-  <link rel="apple-touch-icon" href="logo.png">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
   
-  <meta property="og:title" content="El Murazo — Chollos que merecen la pena">
-  <meta property="og:description" content="No buscamos ofertas. Encontramos las que merecen la pena. El filtro humano de Internet para gadgets y tecnología.">
-  <meta property="og:image" content="https://elmurazo.com/logo.png">
-  <meta property="og:url" content="https://elmurazo.com/">
-  <meta property="og:type" content="website">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#fff7ed',
+              100: '#ffedd5',
+              400: '#fb923c',
+              500: '#f97316',
+              600: '#ea580c',
+              700: '#c2410c',
+              dark: '#0f172a',
+              card: '#1e293b'
+            },
+            amazon: {
+              yellow: '#febd69',
+              orange: '#ff9900',
+              hover: '#e88b00'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Outfit', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
 
   <style>
-    /* VARIABLES Y TEMAS */
-    :root {
-      --bg: #08090c; --bg-soft: #101218; --panel: rgba(19, 21, 28, 0.92);
-      --panel-2: #171923; --text: #f6f7fb; --muted: #969cab; --line: #2a2d37;
-      --accent: #ff4d2e; --accent-2: #ff785d; --success: #35d07f; --danger: #ff5666;
-      --shadow: 0 20px 50px rgba(0,0,0,.28);
-      color-scheme: dark;
+    /* Custom glassmorphism & glow effects */
+    .glass-panel {
+      background: rgba(30, 41, 59, 0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
     }
-    :root[data-theme="light"] {
-      --bg: #f4f5f8; --bg-soft: #ffffff; --panel: rgba(255,255,255,.94);
-      --panel-2: #f0f2f5; --text: #12151c; --muted: #687080; --line: #dde0e6;
-      --shadow: 0 18px 45px rgba(24,30,43,.10);
-      color-scheme: light;
+    .neon-border:focus-within {
+      box-shadow: 0 0 0 2px #ea580c, 0 0 15px rgba(234, 88, 12, 0.4);
     }
-
-    /* RESETS Y BASE */
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      margin: 0; min-height: 100vh;
-      background: radial-gradient(circle at 15% -5%, rgba(255,77,46,.12), transparent 30rem),
-                  radial-gradient(circle at 85% 0%, rgba(87,77,255,.08), transparent 28rem), var(--bg);
-      color: var(--text);
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      line-height: 1.5;
+    .badge-code {
+      background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);
     }
-    button, input, select { font: inherit; }
-    button, a { -webkit-tap-highlight-color: transparent; }
-    .hidden { display: none !important; }
-
-    /* LAYOUT */
-    .site-shell { width: min(1380px, calc(100% - 34px)); margin: 0 auto; }
-    
-    /* TOPBAR */
-    .topbar {
-      min-height: 82px; display: flex; align-items: center; justify-content: space-between; gap: 20px; border-bottom: 1px solid var(--line);
+    /* Hide scrollbars for clean tag navigation */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
     }
-    .brand { color: inherit; text-decoration: none; display: inline-flex; align-items: center; gap: 12px; }
-    .brand-mark {
-      width: 40px; height: 40px; display: grid; place-items: center; border-radius: 12px;
-      background: var(--accent); color: white; font-weight: 950; box-shadow: 0 9px 25px rgba(255,77,46,.25);
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
     }
-    .brand strong { display: block; font-size: .98rem; letter-spacing: .09em; }
-    .brand small { display: block; margin-top: -2px; color: var(--muted); font-size: .64rem; letter-spacing: .13em; font-weight: 800; }
-    
-    .topbar-actions { display: flex; align-items: center; gap: 8px; }
-    .admin-link { padding: 9px 12px; border-radius: 10px; color: var(--muted); text-decoration: none; font-size: .86rem; font-weight: 800; }
-    .admin-link:hover { color: var(--text); background: var(--panel-2); }
-    .icon-btn, .ghost-btn, .text-btn { border: 1px solid var(--line); background: var(--panel); color: var(--text); cursor: pointer; }
-    .icon-btn { width: 40px; height: 40px; border-radius: 11px; font-size: 1.1rem; }
-    .ghost-btn { border-radius: 10px; padding: 10px 14px; font-weight: 800; }
-    .text-btn { border: 0; background: none; padding: 4px 0; color: var(--accent); font-weight: 800; cursor: pointer; }
-    .primary-btn { border: 0; border-radius: 11px; padding: 12px 15px; background: var(--accent); color: #fff; font-weight: 900; cursor: pointer; box-shadow: 0 12px 25px rgba(255,77,46,.18); }
-    .primary-btn:hover { background: var(--accent-2); }
-    .primary-btn:disabled { cursor: wait; opacity: .7; }
-    .full { width: 100%; }
-
-    /* HERO PUBLICA */
-    .hero { display: flex; align-items: flex-end; justify-content: space-between; gap: 32px; padding: 76px 0 42px; }
-    .eyebrow, .panel-kicker { display: inline-block; color: var(--accent); font-weight: 900; letter-spacing: .12em; font-size: .72rem; }
-    .hero h1, .admin-heading h1, .auth-card h1 { margin: 11px 0 14px; line-height: .98; letter-spacing: -.055em; font-size: clamp(2.9rem, 7vw, 6.4rem); }
-    .hero h1 span { color: var(--accent); }
-    .hero p { max-width: 760px; color: var(--muted); font-size: clamp(1rem, 2vw, 1.16rem); margin: 0; }
-    .hero-badge {
-      min-width: 185px; padding: 18px; border: 1px solid var(--line); background: var(--panel);
-      border-radius: 18px; display: flex; align-items: center; gap: 12px; box-shadow: var(--shadow);
-    }
-    .live-dot { width: 9px; height: 9px; background: var(--success); border-radius: 50%; box-shadow: 0 0 0 6px rgba(53,208,127,.12); }
-    .hero-badge strong { display: block; font-size: 1.5rem; }
-    .hero-badge small { color: var(--muted); }
-
-    /* TOOLBAR BUSCADOR */
-    .toolbar {
-      position: sticky; top: 10px; z-index: 10; margin: 4px 0 28px; padding: 10px;
-      display: flex; align-items: center; justify-content: space-between; gap: 12px;
-      border: 1px solid var(--line); border-radius: 16px; background: color-mix(in srgb, var(--panel) 88%, transparent); backdrop-filter: blur(16px);
-    }
-    .search-wrap { flex: 1; display: flex; align-items: center; gap: 9px; padding: 0 4px 0 10px; }
-    .search-icon { color: var(--muted); font-size: 1.4rem; }
-    .search-wrap input, .admin-search input { width: 100%; border: 0; outline: 0; background: transparent; color: var(--text); padding: 10px 6px; }
-    .toolbar-meta { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: .85rem; }
-    
-    /* TARJETAS DE PRODUCTO (NUEVA IDENTIDAD) */
-    .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(245px, 1fr)); gap: 16px; padding-bottom: 40px; }
-    .product-card {
-      background: var(--panel); border: 1px solid var(--line); border-radius: 18px; overflow: hidden;
-      box-shadow: 0 5px 18px rgba(0,0,0,.06); transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
-      animation: card-in .35s ease both; display: flex; flex-direction: column;
-    }
-    .product-card:hover { transform: translateY(-5px); border-color: rgba(255,77,46,.45); box-shadow: var(--shadow); }
-    @keyframes card-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-    .product-image-wrap { position: relative; display: block; aspect-ratio: 1.25/1; background: #fff; overflow: hidden; }
-    .product-image { width: 100%; height: 100%; object-fit: contain; padding: 17px; transition: transform .25s ease; }
-    .product-card:hover .product-image { transform: scale(1.035); }
-    
-    /* Etiquetas/Badges */
-    .deal-badge { position: absolute; top: 12px; left: 12px; padding: 6px 9px; border-radius: 8px; font-size: .65rem; font-weight: 950; letter-spacing: .08em; }
-    .badge-oferta { background: var(--accent); color: #fff; }
-    .badge-recomendado { background: var(--panel-2); color: var(--text); border: 1px solid var(--line); box-shadow: var(--shadow); }
-    
-    .product-body { padding: 15px; display: flex; flex-direction: column; flex: 1; }
-    .product-category { font-size: .7rem; font-weight: 900; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; display: block; }
-    .product-title { font-size: 1.05rem; line-height: 1.25; margin: 0 0 10px; font-weight: 800; min-height: 2.5em; }
-    .product-review {
-      font-size: .88rem; font-style: italic; color: var(--text); opacity: 0.9;
-      margin: auto 0 15px; padding-left: 12px; border-left: 3px solid var(--accent); line-height: 1.4; font-weight: 500;
-    }
-    .product-footer { display: flex; align-items: end; justify-content: space-between; gap: 10px; margin-top: auto; }
-    .product-price { color: var(--accent); font-size: 1.35rem; letter-spacing: -.03em; }
-    .buy-btn {
-      text-decoration: none; color: #fff; background: var(--text); color: var(--bg);
-      padding: 9px 12px; border-radius: 10px; font-size: .82rem; font-weight: 900; white-space: nowrap;
-    }
-    .buy-btn:hover { background: var(--accent); color: white; }
-
-    /* ESTADOS */
-    .state-card { border: 1px dashed var(--line); border-radius: 20px; padding: 58px 25px; text-align: center; margin: 10px 0 50px; background: var(--panel); }
-    .state-icon { width: 44px; height: 44px; margin: 0 auto 12px; display: grid; place-items: center; border-radius: 13px; background: var(--panel-2); color: var(--accent); font-weight: 900; }
-    .state-card h2 { margin: 0 0 6px; }
-    .state-card p { margin: 0 0 18px; color: var(--muted); }
-    .state-inline { padding: 35px; text-align: center; color: var(--muted); }
-
-    /* PANEL DE ADMIN */
-    .admin-main { padding: 50px 0 70px; }
-    .admin-heading { display: flex; align-items: end; justify-content: space-between; gap: 25px; margin-bottom: 28px; }
-    .admin-heading p { color: var(--muted); margin: 0; }
-    .admin-layout { display: grid; grid-template-columns: minmax(310px, .85fr) minmax(0, 1.5fr); gap: 18px; align-items: start; }
-    
-    .panel-card, .auth-card { background: var(--panel); border: 1px solid var(--line); border-radius: 20px; box-shadow: var(--shadow); }
-    .panel-card { padding: 22px; }
-    .panel-title { display: flex; align-items: flex-start; justify-content: space-between; gap: 15px; margin-bottom: 18px; }
-    .panel-title h2 { margin: 6px 0 0; font-size: 1.3rem; letter-spacing: -.025em; }
-    .count-pill { display: inline-flex; min-width: 25px; height: 25px; padding: 0 8px; justify-content: center; align-items: center; border-radius: 999px; background: var(--panel-2); color: var(--muted); font-size: .75rem; vertical-align: middle; }
-    
-    /* FORMULARIOS Y NUEVOS CAMPOS */
-    .stack-form { display: grid; gap: 13px; }
-    .stack-form label { display: grid; gap: 7px; color: var(--muted); font-size: .83rem; font-weight: 800; }
-    .stack-form input, select { width: 100%; border: 1px solid var(--line); border-radius: 11px; padding: 12px 13px; outline: none; background: var(--bg-soft); color: var(--text); }
-    .stack-form input:focus, select:focus { border-color: rgba(255,77,46,.7); box-shadow: 0 0 0 4px rgba(255,77,46,.08); }
-    .form-grid-2 { display: grid; grid-template-columns: .7fr 1.3fr; gap: 11px; }
-    .form-message { min-height: 20px; margin: 0; color: var(--success); font-size: .82rem; }
-    .form-message.error { color: var(--danger); }
-    
-    /* Interruptor / Toggle Switch */
-    .toggle-switch { display: flex !important; align-items: center; gap: 12px; cursor: pointer; color: var(--text) !important; font-size: .85rem !important; }
-    .toggle-switch input { display: none; }
-    .slider { position: relative; width: 44px; height: 24px; background: var(--line); border-radius: 24px; transition: .3s; flex-shrink: 0; }
-    .slider::after { content: ''; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; background: #fff; border-radius: 50%; transition: .3s; }
-    .toggle-switch input:checked + .slider { background: var(--success); }
-    .toggle-switch input:checked + .slider::after { transform: translateX(20px); }
-
-    .password-wrap { position: relative; }
-    .password-wrap input { padding-right: 75px; }
-    .password-toggle { position: absolute; top: 50%; right: 8px; transform: translateY(-50%); border: 0; background: none; color: var(--muted); font-weight: 800; cursor: pointer; font-size: .72rem; }
-    .image-preview { min-height: 145px; display: grid; place-items: center; overflow: hidden; border-radius: 14px; border: 1px dashed var(--line); background: var(--bg-soft); }
-    .image-preview img { width: 100%; height: 180px; object-fit: contain; background: #fff; }
-    .image-preview-placeholder { color: var(--muted); font-size: .8rem; padding: 20px; text-align: center; }
-
-    /* ADMIN PRODUCTOS */
-    .admin-search { display: flex; align-items: center; gap: 5px; padding: 0 8px; width: min(220px, 45vw); border: 1px solid var(--line); border-radius: 10px; background: var(--bg-soft); color: var(--muted); }
-    .admin-products { display: grid; gap: 10px; }
-    .admin-product-row { display: grid; grid-template-columns: 72px minmax(0, 1fr) auto; gap: 13px; align-items: center; padding: 10px; border: 1px solid var(--line); background: var(--bg-soft); border-radius: 14px; }
-    .admin-thumb { width: 72px; height: 64px; border-radius: 9px; object-fit: contain; background: #fff; }
-    .admin-product-info { min-width: 0; }
-    .admin-product-info strong { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: .9rem; }
-    .admin-product-info span { display: block; color: var(--accent); font-weight: 950; margin-top: 2px; }
-    .admin-product-info small { color: var(--muted); font-size: .7rem; }
-    .row-actions { display: flex; gap: 7px; }
-    .row-btn { border: 1px solid var(--line); background: transparent; color: var(--text); border-radius: 9px; padding: 8px 10px; font-size: .75rem; font-weight: 900; cursor: pointer; }
-    .row-btn.edit:hover { border-color: var(--accent); color: var(--accent); }
-    .row-btn.delete:hover { border-color: var(--danger); color: var(--danger); }
-
-    /* AUTH CARD & TOAST */
-    .auth-card { max-width: 475px; margin: 8vh auto; padding: 30px; }
-    .auth-icon { width: 50px; height: 50px; display: grid; place-items: center; border-radius: 15px; background: var(--panel-2); margin-bottom: 20px; }
-    
-    .toast {
-      position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 20px); opacity: 0; pointer-events: none;
-      background: #151821; color: #fff; border: 1px solid #2a2d37; border-radius: 12px; padding: 12px 16px; font-weight: 800; box-shadow: var(--shadow); transition: .2s ease; z-index: 100;
-    }
-    .toast.show { opacity: 1; transform: translate(-50%,0); }
-    .toast[data-type="error"] { border-color: rgba(255,86,102,.6); }
-
-    .footer { display: flex; justify-content: space-between; gap: 15px; padding: 25px 0 35px; border-top: 1px solid var(--line); color: var(--muted); font-size: .78rem; }
-
-    /* RESPONSIVE */
-    @media (max-width: 900px) {
-      .hero { padding-top: 52px; }
-      .hero-badge { display: none; }
-      .admin-layout { grid-template-columns: 1fr; }
-    }
-    @media (max-width: 640px) {
-      .site-shell { width: min(100% - 22px, 1380px); }
-      .topbar { min-height: 70px; }
-      .brand strong { font-size: .86rem; }
-      .hero { padding: 40px 0 28px; }
-      .hero h1 { font-size: clamp(2.55rem, 15vw, 4rem); }
-      .toolbar { position: static; flex-direction: column; align-items: stretch; }
-      .toolbar-meta { justify-content: space-between; }
-      .products-grid { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px; }
-      .product-body { padding: 11px; }
-      .product-title { font-size: .88rem; min-height: 2.8em;}
-      .product-price { font-size: 1.1rem; }
-      .buy-btn { padding: 8px 9px; font-size: .72rem; }
-      .footer { flex-direction: column; }
-      .admin-heading { align-items: flex-start; flex-direction: column; }
-      .admin-product-row { grid-template-columns: 58px minmax(0,1fr); }
-      .admin-thumb { width: 58px; height: 58px; }
-      .row-actions { grid-column: 1/-1; }
-      .row-btn { flex: 1; }
-      .form-grid-2 { grid-template-columns: 1fr; }
-      .admin-search { width: 100%; }
-    }
-    .is-loading { animation: spin .65s linear infinite; }
-    @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 </head>
-<body>
-  <div class="site-shell">
-    
-    <!-- BARRA NAVEGACIÓN GLOBAL -->
-    <header class="topbar">
-      <a class="brand" href="#" onclick="window.location.hash=''; return false;" aria-label="El Murazo, inicio">
-        <span class="brand-mark">M</span>
-        <span>
-          <strong>EL MURAZO</strong>
-          <small>EL FILTRO HUMANO</small>
-        </span>
+
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col antialiased selection:bg-orange-500 selection:text-white">
+
+  <header class="sticky top-0 z-40 bg-slate-950/90 backdrop-blur-md border-b border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+      
+      <!-- Brand Logo -->
+      <a href="#" class="flex items-center gap-2 group cursor-pointer" onclick="resetFilters(event)">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-orange-500 to-amber-600 flex items-center justify-center text-white shadow-lg shadow-orange-500/20 group-hover:scale-105 transition-transform">
+          <i class="fa-solid fa-shield-halved text-xl"></i>
+        </div>
+        <div>
+          <span class="font-display font-black text-xl tracking-tight text-white flex items-center gap-1">
+            EL<span class="text-orange-500">MURAZO</span>
+            <span class="text-[10px] uppercase font-bold tracking-widest bg-orange-500/10 text-orange-400 px-1.5 py-0.5 rounded border border-orange-500/20">COM</span>
+          </span>
+        </div>
       </a>
-      <div class="topbar-actions">
-        <a id="nav-mode-btn" class="admin-link" href="#admin">Panel Admin</a>
-        <button class="icon-btn" id="theme-toggle" type="button" aria-label="Cambiar tema">
-          <span id="theme-icon">☾</span>
+
+      <!-- Quick Search Bar (Syncs with Code & Text) -->
+      <div class="flex-1 max-w-md relative">
+        <div class="relative flex items-center neon-border rounded-xl transition-all">
+          <i class="fa-solid fa-magnifying-glass absolute left-3.5 text-slate-400 pointer-events-none text-sm"></i>
+          <input 
+            type="text" 
+            id="searchInput"
+            placeholder="Buscar por palabra o código TikTok (ej: #04, soporte)..." 
+            class="w-full pl-10 pr-10 py-2 bg-slate-900 border border-slate-800 rounded-xl text-sm placeholder-slate-500 focus:outline-none focus:border-orange-500 text-white transition-colors"
+            oninput="handleSearch(this.value)"
+          >
+          <button 
+            id="clearSearchBtn" 
+            onclick="clearSearch()" 
+            class="hidden absolute right-3 text-slate-400 hover:text-white text-xs"
+            title="Limpiar búsqueda"
+          >
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center gap-2">
+        <button 
+          onclick="toggleComboBuilder()" 
+          class="hidden md:flex items-center gap-2 px-3.5 py-2 bg-orange-600/15 hover:bg-orange-600/25 text-orange-400 border border-orange-500/30 rounded-xl text-xs font-semibold transition-all"
+        >
+          <i class="fa-solid fa-calculator"></i>
+          <span>Generador de Setup</span>
+        </button>
+        <button 
+          onclick="openSuggestModal()" 
+          class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-medium transition-colors flex items-center gap-1.5"
+          title="Sugerir un gadget visto en redes"
+        >
+          <i class="fa-solid fa-paper-plane text-[11px] text-orange-400"></i>
+          <span class="hidden sm:inline">Sugerir</span>
+        </button>
+
+        <!-- Admin Access Button -->
+        <button 
+          id="adminNavBtn"
+          onclick="handleAdminNavClick()" 
+          class="px-3 py-2 bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-orange-400 rounded-xl text-xs font-medium transition-all border border-slate-800 flex items-center gap-1.5"
+          title="Panel de Administración"
+        >
+          <i class="fa-solid fa-lock text-[11px]"></i>
+          <span id="adminNavLabel" class="hidden sm:inline">Admin</span>
         </button>
       </div>
-    </header>
 
-    <!-- === VISTA: MURO PÚBLICO === -->
-    <main id="view-public">
-      <section class="hero">
-        <div>
-          <span class="eyebrow">⚡ EL FILTRO HUMANO DE INTERNET</span>
-          <h1>No buscamos ofertas.<br><span>Encontramos las que merecen la pena.</span></h1>
-          <p>Hardware, accesorios y gadgets seleccionados a mano. Porque no siempre gana lo más barato, sino lo mejor pensado.</p>
+    </div>
+  </header>
+
+  <section class="relative overflow-hidden pt-8 pb-6 border-b border-slate-900 bg-gradient-to-b from-slate-900/40 via-slate-950 to-slate-950">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center sm:text-left sm:flex sm:items-center sm:justify-between gap-8">
+      <div class="max-w-2xl">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-400 text-xs font-semibold mb-3">
+          <span class="flex h-2 w-2 rounded-full bg-orange-500 animate-pulse"></span>
+          Cero compras absurdas • 100% satisfecho
         </div>
-        <div class="hero-badge">
-          <span class="live-dot"></span>
+        <h1 class="font-display text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">
+          El filtro definitivo contra el <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-500">murazo</span> de Amazon
+        </h1>
+        <p class="mt-2 text-sm sm:text-base text-slate-400">
+          Encuentra al instante el producto exacto de nuestros vídeos escribiendo su <strong>#código</strong>.
+        </p>
+      </div>
+
+      <!-- Quick Stats / Callout -->
+      <div class="mt-6 sm:mt-0 flex sm:flex-col items-center justify-center sm:items-end gap-3 shrink-0">
+        <div class="glass-panel px-4 py-3 rounded-2xl text-left border border-slate-800 flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-orange-500/10 text-orange-400 flex items-center justify-center text-lg">
+            <i class="fa-brands fa-tiktok"></i>
+          </div>
           <div>
-            <strong id="offer-count">0</strong>
-            <small>recomendaciones</small>
+            <p class="text-[11px] text-slate-400 uppercase font-semibold">¿Vienes de TikTok / Reels?</p>
+            <p class="text-xs font-bold text-white">Escribe el número del vídeo arriba</p>
           </div>
         </div>
-      </section>
-
-      <section class="toolbar" aria-label="Filtros del muro">
-        <div class="search-wrap">
-          <span class="search-icon">⌕</span>
-          <input id="search-input" type="search" placeholder="Buscar gadget, marca..." autocomplete="off">
-        </div>
-        <div class="toolbar-meta">
-          <span id="results-count">Cargando...</span>
-          <button id="refresh-btn" class="ghost-btn" type="button">↻ Actualizar</button>
-        </div>
-      </section>
-
-      <section id="muro-container" class="products-grid" aria-live="polite"></section>
-
-      <div id="empty-state" class="state-card hidden">
-        <div class="state-icon">⌁</div>
-        <h2>No hay chollos todavía</h2>
-        <p>Cuando publiquemos una oferta aparecerá aquí.</p>
       </div>
+    </div>
+  </section>
 
-      <div id="error-state" class="state-card hidden">
-        <div class="state-icon">!</div>
-        <h2>No se han podido cargar las ofertas</h2>
-        <p>Comprueba la conexión o la configuración de Firebase.</p>
-      </div>
-    </main>
-
-    <!-- === VISTA: PANEL DE ADMINISTRACIÓN === -->
-    <main id="view-admin" class="admin-main hidden">
+  <section id="comboBuilderSection" class="bg-slate-900/80 border-b border-slate-800 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
       
-      <!-- LOGIN -->
-      <section id="login-section" class="auth-card hidden">
-        <div class="auth-icon">🔒</div>
-        <span class="eyebrow">ÁREA PRIVADA</span>
-        <h1>Bienvenido al panel</h1>
-        <p>Inicia sesión con tu cuenta de administrador de Google para gestionar El Murazo.</p>
-        
-        <div style="margin-top: 25px;">
-          <button id="btn-google-login" class="primary-btn full" type="button" style="display: flex; align-items: center; justify-content: center; gap: 10px; background: white; color: black;">
-            <svg width="18" height="18" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
-              <path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"/>
-              <path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"/>
-              <path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"/>
-              <path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"/>
-            </svg>
-            Acceder con Google
-          </button>
-          <p id="login-error" class="form-message error" style="margin-top: 15px; text-align: center;"></p>
-        </div>
-      </section>
-
-      <!-- ADMIN DASHBOARD -->
-      <section id="admin-section" class="hidden">
-        <div class="admin-heading">
+      <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center gap-2.5">
+          <span class="w-8 h-8 rounded-lg bg-orange-500/20 text-orange-400 flex items-center justify-center text-sm">
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+          </span>
           <div>
-            <span class="eyebrow">CONTROL TOTAL</span>
-            <h1>Gestiona tu muro</h1>
-            <p>Controla las ofertas, las etiquetas y tu veredicto personal.</p>
+            <h2 class="text-base font-bold text-white font-display">Generador de Setup por Presupuesto Estimado</h2>
           </div>
-          <button id="btn-logout" class="ghost-btn" type="button">Cerrar sesión</button>
+        </div>
+        <button onclick="toggleComboBuilder()" class="text-slate-400 hover:text-white text-xs p-1" title="Minimizar">
+          <i id="comboToggleIcon" class="fa-solid fa-chevron-up"></i>
+        </button>
+      </div>
+
+      <!-- Controls Container -->
+      <div id="comboControls" class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+        
+        <!-- Ambience Selector -->
+        <div class="glass-panel p-3.5 rounded-xl border border-slate-800">
+          <label class="block text-xs font-semibold text-slate-300 mb-2">
+            1. Elige el tipo de rincón o necesidad
+          </label>
+          <select id="comboAmbience" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-orange-500">
+            <option value="minimal">Setup Minimalista & Limpio</option>
+            <option value="productive">Teletrabajo & Productividad</option>
+            <option value="creator">Creador / Streamer / Iluminación</option>
+          </select>
         </div>
 
-        <div class="admin-layout">
-          <!-- PUBLICAR -->
-          <section class="panel-card">
-            <div class="panel-title">
-              <div>
-                <span class="panel-kicker">PUBLICAR / EDITAR</span>
-                <h2 id="form-title">Nuevo chollo</h2>
-              </div>
-              <button id="cancel-edit" class="text-btn hidden" type="button">Cancelar edición</button>
-            </div>
-
-            <form id="product-form" class="stack-form">
-              <input id="edit-id" type="hidden">
-
-              <!-- NUEVO: Toggle de Oferta -->
-              <label class="toggle-switch" style="margin-bottom: 8px;">
-                <input id="prod-oferta" type="checkbox" checked>
-                <span class="slider"></span>
-                <span>¿Es una oferta/chollo temporal? (Activa el badge 🔥 OFERTA)</span>
-              </label>
-
-              <label>
-                Título
-                <input id="prod-title" type="text" maxlength="140" placeholder="Ej. SSD NVMe 2 TB Samsung" required>
-              </label>
-
-              <!-- NUEVO: Categorías y Reseña Humana -->
-              <div class="form-grid-2">
-                <label>
-                  Categoría
-                  <select id="prod-category">
-                    <option value="ofertas">🔥 Ofertas reales</option>
-                    <option value="gadgets">🧠 Gadgets que merecen la pena</option>
-                    <option value="setup">🎮 Setup y tecnología</option>
-                    <option value="util">🏠 Cosas útiles para tu día a día</option>
-                  </select>
-                </label>
-                <label>
-                  ¿Lo comprarías? (Reseña humana)
-                  <div style="display: flex; gap: 8px;">
-                    <input id="prod-review" type="text" maxlength="110" placeholder="Ej. No sabías que necesitabas esto hasta que lo ves." style="flex: 1;">
-                    <button id="btn-ai-review" class="ghost-btn" type="button" title="Redactar reseña con IA" style="padding: 0 12px; font-size: 1.1rem;">✨</button>
-                  </div>
-                </label>
-              </div>
-
-              <!-- PRECIO LIMPIO -->
-              <div class="form-grid-2">
-                <label>
-                  Precio (se añadirá el símbolo € automático)
-                  <input id="prod-price" type="text" maxlength="40" placeholder="129,99" required>
-                </label>
-                <label>
-                  Enlace de afiliado / tienda
-                  <input id="prod-link" type="url" placeholder="https://amzn.to/..." required>
-                </label>
-              </div>
-
-              <label>
-                URL de la imagen
-                <input id="prod-img" type="url" placeholder="https://..." required>
-              </label>
-
-              <div class="image-preview" id="image-preview">
-                <div class="image-preview-placeholder">La vista previa aparecerá aquí</div>
-              </div>
-
-              <button id="submit-product" class="primary-btn full" type="submit">Publicar recomendación</button>
-              <p id="upload-msg" class="form-message"></p>
-            </form>
-          </section>
-
-          <!-- GESTIONAR -->
-          <section class="panel-card products-panel">
-            <div class="panel-title" style="align-items:center;">
-              <div>
-                <span class="panel-kicker">MURAL</span>
-                <h2>Publicados <span id="admin-count" class="count-pill">0</span></h2>
-              </div>
-              <div class="admin-search">
-                <span>⌕</span>
-                <input id="admin-search" type="search" placeholder="Buscar...">
-              </div>
-            </div>
-
-            <div id="admin-products" class="admin-products" aria-live="polite"></div>
-            <div id="admin-empty" class="state-inline hidden">No hay productos.</div>
-          </section>
+        <!-- Estimated Budget Tier Selector (Strict Amazon Compliance: Tiers, not manual live price promises) -->
+        <div class="glass-panel p-3.5 rounded-xl border border-slate-800">
+          <div class="flex justify-between items-center mb-2">
+            <label class="text-xs font-semibold text-slate-300">
+              2. Rango de presupuesto estimado
+            </label>
+            <span id="budgetDisplay" class="text-xs font-bold text-orange-400 bg-orange-500/10 px-2 py-0.5 rounded border border-orange-500/20">
+              Hasta ~50€
+            </span>
+          </div>
+          <input 
+            type="range" 
+            id="budgetSlider" 
+            min="25" 
+            max="150" 
+            step="25" 
+            value="50"
+            class="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-orange-500"
+            oninput="updateBudgetDisplay(this.value)"
+          >
         </div>
-      </section>
-    </main>
 
-    <footer class="footer">
-      <span>© <span id="current-year"></span> El Murazo</span>
-      <span>Los enlaces pueden ser de afiliación para mantener el proyecto.</span>
-    </footer>
+        <!-- Generate Button & Action -->
+        <div class="glass-panel p-3.5 rounded-xl border border-slate-800 flex flex-col justify-center">
+          <button 
+            onclick="generateSetupCombo()" 
+            class="w-full py-2.5 px-4 bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white text-xs font-bold rounded-xl shadow-lg shadow-orange-500/20 flex items-center justify-center gap-2 transition-all transform active:scale-95"
+          >
+            <i class="fa-solid fa-bolt"></i>
+            <span>Calcular Combo Recomendado</span>
+          </button>
+          <span class="text-[10px] text-slate-500 text-center mt-1.5">
+            *Cálculo estimativo para no infringir precios en tiempo real de Amazon.
+          </span>
+        </div>
+
+      </div>
+
+      <!-- Combo Result Area (Dynamically Rendered) -->
+      <div id="comboResultContainer" class="hidden mt-4 pt-4 border-t border-slate-800/80">
+        <!-- Injected by JavaScript -->
+      </div>
+
+    </div>
+  </section>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full">
     
-    <div id="toast" class="toast" role="status"></div>
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+      
+      <!-- Category Tabs -->
+      <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1 sm:pb-0" id="categoryFilters">
+        <button 
+          onclick="setCategory('all')" 
+          data-category="all"
+          class="filter-tab active-tab px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all bg-orange-600 text-white"
+        >
+          <i class="fa-solid fa-border-all mr-1.5"></i> Todos los Gadgets
+        </button>
+        <button 
+          onclick="setCategory('setup')" 
+          data-category="setup"
+          class="filter-tab px-3.5 py-1.5 rounded-xl text-xs font-medium whitespace-nowrap transition-all bg-slate-900 text-slate-300 hover:bg-slate-800 hover:text-white border border-slate-800"
+        >
+          <i class="fa-solid fa-desktop mr-1.5 text-blue-400"></i> Setups & Mesa
+        </button>
+        <button 
+          onclick="setCategory('viral')" 
+          data-category="viral"
+          class="filter-tab px-3.5 py-1.5 rounded-xl text-xs font-medium whitespace-nowrap transition-all bg-slate-900 text-slate-300 hover:bg-slate-800 hover:text-white border border-slate-800"
+        >
+          <i class="fa-solid fa-fire mr-1.5 text-orange-400"></i> Gadgets Raros & Virales
+        </button>
+        <button 
+          onclick="setCategory('regalo')" 
+          data-category="regalo"
+          class="filter-tab px-3.5 py-1.5 rounded-xl text-xs font-medium whitespace-nowrap transition-all bg-slate-900 text-slate-300 hover:bg-slate-800 hover:text-white border border-slate-800"
+        >
+          <i class="fa-solid fa-gift mr-1.5 text-pink-400"></i> Ideas de Regalo
+        </button>
+      </div>
+
+      <!-- Sorting & Active Count -->
+      <div class="flex items-center justify-between sm:justify-end gap-3 text-xs text-slate-400">
+        <span id="resultsCount">Mostrando 12 productos</span>
+        <div class="flex items-center gap-1.5 bg-slate-900 px-2.5 py-1.5 rounded-lg border border-slate-800">
+          <i class="fa-solid fa-arrow-down-wide-short text-slate-500"></i>
+          <select id="sortSelect" onchange="handleSort(this.value)" class="bg-transparent text-slate-300 focus:outline-none cursor-pointer">
+            <option value="code_asc">Código (#01 → #12)</option>
+            <option value="popular">Más vistos en TikTok</option>
+            <option value="budget_asc">Gama (Económica primero)</option>
+            <option value="budget_desc">Gama (Pro primero)</option>
+          </select>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Active Search Banner (Shown when searching) -->
+    <div id="searchIndicator" class="hidden mb-4 p-3 bg-slate-900 border border-slate-800 rounded-xl flex items-center justify-between text-xs">
+      <div class="flex items-center gap-2 text-slate-300">
+        <i class="fa-solid fa-filter text-orange-400"></i>
+        <span>Filtro activo: <strong id="searchIndicatorText" class="text-white">""</strong></span>
+      </div>
+      <button onclick="clearSearch()" class="text-orange-400 hover:text-orange-300 font-semibold underline">
+        Mostrar todo
+      </button>
+    </div>
+
+    <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <!-- Cards will be populated by JavaScript -->
+    </div>
+
+    <!-- No Results / Empty State -->
+    <div id="emptyState" class="hidden py-16 text-center max-w-md mx-auto">
+      <div class="w-16 h-16 mx-auto rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-500 text-2xl mb-4">
+        <i class="fa-solid fa-layer-group"></i>
+      </div>
+      <h3 id="emptyStateTitle" class="text-lg font-bold text-white font-display">Aún no hay gadgets publicados</h3>
+      <p id="emptyStateDesc" class="text-xs text-slate-400 mt-1">
+        El catálogo está listo. Inicia sesión con tu cuenta de administrador para publicar tus primeros productos comprobados.
+      </p>
+      <div id="emptyStateAction" class="mt-4">
+        <button onclick="openAdminModal()" class="px-4 py-2 bg-orange-600 hover:bg-orange-500 text-white font-semibold text-xs rounded-xl transition-colors inline-flex items-center gap-1.5 shadow-lg shadow-orange-500/20">
+          <i class="fa-solid fa-lock"></i>
+          <span>Acceder al Panel Admin</span>
+        </button>
+      </div>
+    </div>
+
+  </main>
+
+  <div id="productModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-fade-in" onclick="closeModalOnBackdrop(event)">
+    <div class="glass-panel w-full max-w-lg rounded-2xl border border-slate-700 overflow-hidden shadow-2xl relative" onclick="event.stopPropagation()">
+      
+      <!-- Close Button -->
+      <button onclick="closeProductModal()" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-slate-800/80 text-slate-300 hover:text-white flex items-center justify-center z-10">
+        <i class="fa-solid fa-xmark text-sm"></i>
+      </button>
+
+      <!-- Modal Content Body -->
+      <div id="modalContent">
+        <!-- Injected via JavaScript -->
+      </div>
+
+    </div>
   </div>
 
-  <!-- SCRIPT UNIFICADO Y FIREBASE -->
+  <div id="suggestModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm" onclick="closeSuggestOnBackdrop(event)">
+    <div class="glass-panel w-full max-w-md rounded-2xl border border-slate-700 p-6 relative shadow-2xl" onclick="event.stopPropagation()">
+      <button onclick="closeSuggestModal()" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-slate-800 text-slate-300 hover:text-white flex items-center justify-center">
+        <i class="fa-solid fa-xmark text-sm"></i>
+      </button>
+      
+      <div class="flex items-center gap-2.5 mb-4">
+        <span class="w-8 h-8 rounded-lg bg-orange-500/20 text-orange-400 flex items-center justify-center text-sm">
+          <i class="fa-solid fa-lightbulb"></i>
+        </span>
+        <h3 class="text-base font-bold text-white font-display">¿Viste un gadget sospechoso o viral?</h3>
+      </div>
+      
+      <p class="text-xs text-slate-400 mb-4">
+        Pásanos el enlace de TikTok o Amazon. Lo probaremos para confirmar si vale la pena o si es un murazo en toda regla.
+      </p>
+
+      <form id="suggestForm" onsubmit="submitSuggestion(event)" class="space-y-3">
+        <div>
+          <label class="block text-[11px] font-semibold text-slate-300 mb-1">Enlace del vídeo o producto</label>
+          <input type="text" id="suggestLink" required placeholder="https://vm.tiktok.com/... o enlace de Amazon" class="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-orange-500">
+        </div>
+        <div>
+          <label class="block text-[11px] font-semibold text-slate-300 mb-1">¿Por qué te llama la atención?</label>
+          <textarea id="suggestComment" rows="2" placeholder="Tiene pinta de romperse en dos días / Lo usa todo el mundo..." class="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-orange-500"></textarea>
+        </div>
+        <button type="submit" class="w-full py-2.5 bg-orange-600 hover:bg-orange-500 text-white font-bold text-xs rounded-xl transition-colors">
+          Enviar para análisis
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ADMIN AUTH & DASHBOARD MODAL -->
+  <div id="adminModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md" onclick="closeAdminOnBackdrop(event)">
+    <div class="glass-panel w-full max-w-2xl rounded-2xl border border-slate-700 max-h-[90vh] flex flex-col relative shadow-2xl overflow-hidden" onclick="event.stopPropagation()">
+      
+      <!-- Modal Header -->
+      <div class="px-6 py-4 border-b border-slate-800 flex items-center justify-between bg-slate-900/60">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-lg bg-orange-500/20 text-orange-400 flex items-center justify-center text-sm">
+            <i class="fa-solid fa-shield-halved"></i>
+          </div>
+          <div>
+            <h3 class="text-sm font-bold text-white font-display">Panel de Administración de El Murazo</h3>
+            <p class="text-[10px] text-slate-400">Acceso exclusivo: <span class="font-mono text-orange-400">gerardlopezgarcia1@gmail.com</span></p>
+          </div>
+        </div>
+        <button onclick="closeAdminModal()" class="w-7 h-7 rounded-full bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center transition-colors">
+          <i class="fa-solid fa-xmark text-xs"></i>
+        </button>
+      </div>
+
+      <!-- State 1: Login Request (Not logged in as Gerard) -->
+      <div id="adminLoginSection" class="p-8 text-center space-y-4">
+        <div class="w-14 h-14 mx-auto rounded-2xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-400 text-2xl">
+          <i class="fa-solid fa-key"></i>
+        </div>
+        <div>
+          <h4 class="text-base font-bold text-white">Identificación requerida</h4>
+          <p class="text-xs text-slate-400 mt-1 max-w-sm mx-auto">
+            Inicia sesión con tu cuenta de Google autorizada para gestionar los gadgets publicados en la web.
+          </p>
+        </div>
+        <button 
+          id="googleLoginBtn"
+          onclick="loginWithGoogle()" 
+          class="px-6 py-3 bg-white hover:bg-slate-100 text-slate-900 font-bold text-xs rounded-xl shadow-lg transition-all inline-flex items-center gap-2.5 active:scale-95"
+        >
+          <svg class="w-4 h-4" viewBox="0 0 24 24">
+            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+          </svg>
+          <span>Acceder con Google</span>
+        </button>
+      </div>
+
+      <!-- State 2: Active Dashboard (Logged in as Gerard) -->
+      <div id="adminDashboardSection" class="hidden flex-1 flex flex-col overflow-hidden">
+        
+        <!-- Action Toolbar -->
+        <div class="p-4 border-b border-slate-800 bg-slate-900/40 flex items-center justify-between gap-4">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span class="text-xs text-slate-300 font-medium truncate">
+              Conectado: <strong class="text-white font-mono">gerardlopezgarcia1@gmail.com</strong>
+            </span>
+          </div>
+
+          <div class="flex items-center gap-2 shrink-0">
+            <button 
+              onclick="openProductFormModal(null)" 
+              class="px-3 py-1.5 bg-orange-600 hover:bg-orange-500 text-white rounded-lg text-xs font-bold transition-colors flex items-center gap-1 shadow-md shadow-orange-500/20"
+            >
+              <i class="fa-solid fa-plus text-[10px]"></i>
+              <span>Nuevo Producto</span>
+            </button>
+            <button 
+              onclick="handleLogout()" 
+              class="px-3 py-1.5 bg-slate-800 hover:bg-red-500/20 text-slate-300 hover:text-red-400 border border-slate-700 rounded-lg text-xs transition-colors"
+              title="Cerrar sesión"
+            >
+              <i class="fa-solid fa-arrow-right-from-bracket"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Product Table / Listing -->
+        <div class="p-4 overflow-y-auto flex-1 space-y-2" id="adminProductsList">
+          <!-- Injected via JavaScript -->
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PRODUCT CREATE / EDIT MODAL -->
+  <div id="productFormModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md" onclick="closeProductFormOnBackdrop(event)">
+    <div class="glass-panel w-full max-w-xl rounded-2xl border border-slate-700 p-6 max-h-[90vh] overflow-y-auto relative shadow-2xl" onclick="event.stopPropagation()">
+      
+      <button onclick="closeProductFormModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center transition-colors">
+        <i class="fa-solid fa-xmark text-sm"></i>
+      </button>
+
+      <div class="flex items-center gap-2.5 mb-4">
+        <span class="w-8 h-8 rounded-lg bg-orange-500/20 text-orange-400 flex items-center justify-center text-sm">
+          <i class="fa-solid fa-pen-to-square"></i>
+        </span>
+        <h3 id="productFormTitle" class="text-base font-bold text-white font-display">Publicar Nuevo Gadget</h3>
+      </div>
+
+      <form id="productCrudForm" onsubmit="handleProductSubmit(event)" class="space-y-4">
+        <input type="hidden" id="formProductId">
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <!-- Code: e.g. #01 -->
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-300 mb-1">Código Vídeo (TikTok)</label>
+            <input type="text" id="formCode" required placeholder="#01" class="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-orange-500 font-mono">
+          </div>
+
+          <!-- Category -->
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-300 mb-1">Categoría Principal</label>
+            <select id="formCategory" class="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-orange-500">
+              <option value="setup">Setups & Mesa</option>
+              <option value="viral">Gadgets Virales</option>
+              <option value="regalo">Ideas de Regalo</option>
+            </select>
+          </div>
+
+          <!-- Estimated Value for Combo Slider -->
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-300 mb-1">
+              Valor Est. Combo (€)
+              <i class="fa-solid fa-circle-question text-slate-500" title="Uso interno exclusivo para el calculador de combos. No se publica como precio directo."></i>
+            </label>
+            <input type="number" id="formEstimatedValue" required min="1" max="500" placeholder="25" class="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-orange-500">
+          </div>
+        </div>
+
+        <!-- Title -->
+        <div>
+          <label class="block text-[11px] font-semibold text-slate-300 mb-1">Título del Producto</label>
+          <input type="text" id="formTitle" required placeholder="Ej: Barra de Luz Monitor ScreenBar Asimétrica USB" class="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-orange-500">
+        </div>
+
+        <!-- Tier Label & Views -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-300 mb-1">Etiqueta de Gama (Visible)</label>
+            <input type="text" id="formTier" required placeholder="Gama Media (~25-35€)" class="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-orange-500">
+          </div>
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-300 mb-1">Vistas en Redes (Opcional)</label>
+            <input type="text" id="formViews" placeholder="125K" class="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-orange-500">
+          </div>
+        </div>
+
+        <!-- Rating & Enlace de Amazon -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-300 mb-1">Valoración Media (1-5)</label>
+            <input type="number" id="formRating" step="0.1" min="1" max="5" value="4.8" class="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-orange-500">
+          </div>
+          <div class="sm:col-span-2">
+            <label class="block text-[11px] font-semibold text-slate-300 mb-1">Enlace de Afiliado Amazon (o ASIN)</label>
+            <input type="url" id="formAmzUrl" required placeholder="https://www.amazon.es/dp/B08C4V4427?tag=elmurazo-21" class="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-orange-500">
+          </div>
+        </div>
+
+        <!-- Image URL -->
+        <div>
+          <label class="block text-[11px] font-semibold text-slate-300 mb-1">URL de la Imagen (Amazon o Unsplash)</label>
+          <input type="url" id="formImage" required placeholder="https://images.unsplash.com/..." class="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-orange-500">
+        </div>
+
+        <!-- Hook / Punchline -->
+        <div>
+          <label class="block text-[11px] font-semibold text-slate-300 mb-1">Gancho breve (resumen en tarjeta)</label>
+          <textarea id="formHook" rows="2" required placeholder="Ilumina el escritorio sin reflejar jamás en la pantalla..." class="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-orange-500"></textarea>
+        </div>
+
+        <!-- Por qué no es un murazo -->
+        <div>
+          <label class="block text-[11px] font-semibold text-emerald-400 mb-1 flex items-center gap-1">
+            <i class="fa-solid fa-shield-halved"></i> ¿Por qué NO es un murazo? (Ficha de confianza)
+          </label>
+          <textarea id="formWhyNotMurazo" rows="2" required placeholder="A diferencia de los modelos baratos de plástico, este soporte está hecho de una sola pieza..." class="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-orange-500"></textarea>
+        </div>
+
+        <!-- Ambience check tags for combo builder -->
+        <div>
+          <label class="block text-[11px] font-semibold text-slate-300 mb-1">Apto para generador de combos en:</label>
+          <div class="flex flex-wrap gap-3 text-xs text-slate-300">
+            <label class="inline-flex items-center gap-1.5 cursor-pointer">
+              <input type="checkbox" value="minimal" class="form-ambience rounded bg-slate-800 text-orange-500 border-slate-700">
+              <span>Minimalista</span>
+            </label>
+            <label class="inline-flex items-center gap-1.5 cursor-pointer">
+              <input type="checkbox" value="productive" class="form-ambience rounded bg-slate-800 text-orange-500 border-slate-700">
+              <span>Productividad</span>
+            </label>
+            <label class="inline-flex items-center gap-1.5 cursor-pointer">
+              <input type="checkbox" value="creator" class="form-ambience rounded bg-slate-800 text-orange-500 border-slate-700">
+              <span>Creador / Stream</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Tags separated by comma -->
+        <div>
+          <label class="block text-[11px] font-semibold text-slate-300 mb-1">Etiquetas de búsqueda (separadas por comas)</label>
+          <input type="text" id="formTags" placeholder="setup, luz, pantalla, usb" class="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-orange-500">
+        </div>
+
+        <!-- Submit Buttons -->
+        <div class="pt-2 flex items-center justify-end gap-3">
+          <button type="button" onclick="closeProductFormModal()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-semibold transition-colors">
+            Cancelar
+          </button>
+          <button type="submit" id="formSubmitBtn" class="px-5 py-2 bg-orange-600 hover:bg-orange-500 text-white rounded-xl text-xs font-bold transition-all shadow-lg shadow-orange-500/20 flex items-center gap-1.5">
+            <i class="fa-solid fa-floppy-disk"></i>
+            <span>Guardar Producto</span>
+          </button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- CONFIRM DELETE MODAL (Zero browser confirm()) -->
+  <div id="deleteModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md" onclick="closeDeleteOnBackdrop(event)">
+    <div class="glass-panel w-full max-w-sm rounded-2xl border border-red-500/30 p-6 text-center shadow-2xl relative" onclick="event.stopPropagation()">
+      <div class="w-12 h-12 mx-auto rounded-xl bg-red-500/10 text-red-400 flex items-center justify-center text-xl mb-3">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+      </div>
+      <h3 class="text-sm font-bold text-white font-display">¿Eliminar este gadget?</h3>
+      <p id="deleteItemTitle" class="text-xs text-slate-400 mt-1 mb-4 truncate"></p>
+      
+      <div class="flex items-center justify-center gap-2">
+        <button onclick="closeDeleteModal()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-semibold transition-colors">
+          Cancelar
+        </button>
+        <button id="confirmDeleteBtn" onclick="executeProductDelete()" class="px-4 py-2 bg-red-600 hover:bg-red-500 text-white rounded-xl text-xs font-bold transition-all shadow-lg shadow-red-600/20">
+          Sí, eliminar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="bg-slate-950 border-t border-slate-900 text-slate-400 text-xs py-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+      
+      <!-- Upper Section -->
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div class="flex items-center gap-2">
+          <div class="w-7 h-7 rounded-lg bg-orange-500 flex items-center justify-center text-white text-xs font-black">
+            M
+          </div>
+          <span class="font-display font-black text-sm tracking-tight text-white">ELMURAZO.COM</span>
+        </div>
+        
+        <div class="flex flex-wrap gap-4 text-slate-400 text-xs">
+          <span>• Libre de publicidad invasiva</span>
+          <span>• Enlaces auditados</span>
+          <span>• Cumplimiento RGPD & Amazon EU</span>
+        </div>
+      </div>
+
+      <!-- Legal Disclosure Notice (Mandatory by Amazon Associates Program in Spain & EU) -->
+      <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800 text-[11px] leading-relaxed text-slate-400 space-y-2">
+        <p class="font-semibold text-slate-300 flex items-center gap-1.5">
+          <i class="fa-solid fa-circle-info text-orange-400"></i> Aviso Legal de Afiliación y Precios:
+        </p>
+        <p>
+          En calidad de Afiliado de Amazon, <strong>elmurazo.com</strong> obtiene ingresos por las compras adscritas que cumplen los requisitos aplicables. El clic en los botones de compra redirige directamente a la plataforma oficial de Amazon España.
+        </p>
+        <p class="text-slate-500">
+          *Para cumplir con la política de transparencia de precios de Amazon, en esta web no publicamos precios fijos manuales, ya que las ofertas y el stock fluctúan en tiempo real. Los valores indicados en el generador son estimaciones orientativas por gamas de coste. El precio final y vinculante es el que aparece directamente en Amazon en el momento de tramitar el pedido.
+        </p>
+      </div>
+
+      <!-- Copyright -->
+      <div class="pt-4 border-t border-slate-900 flex flex-col sm:flex-row justify-between items-center text-slate-500 text-[11px] gap-2">
+        <p>© <span id="currentYear">2026</span> elmurazo.com — Todos los derechos reservados.</p>
+        <div class="flex items-center gap-4">
+          <button onclick="openAdminModal()" class="hover:text-orange-400 transition-colors flex items-center gap-1">
+            <i class="fa-solid fa-lock text-[9px]"></i> Panel Admin
+          </button>
+          <button onclick="showLegalNotice()" class="hover:text-slate-300 transition-colors">Términos y Privacidad</button>
+          <button onclick="openSuggestModal()" class="hover:text-slate-300 transition-colors">Contacto / Sugerencias</button>
+        </div>
+      </div>
+
+    </div>
+  </footer>
+
+  <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
-    import {
-      getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, Timestamp
-    } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore.js";
-    import {
-      getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut
-    } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-auth.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { 
+      getAuth, 
+      signInWithPopup, 
+      GoogleAuthProvider, 
+      signOut, 
+      onAuthStateChanged,
+      signInAnonymously
+    } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { 
+      getFirestore, 
+      collection, 
+      doc, 
+      addDoc, 
+      updateDoc, 
+      deleteDoc, 
+      onSnapshot 
+    } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCFE0T4m16MOyn9JqMujJZZwMJCLen-LgA",
@@ -454,405 +709,858 @@
       measurementId: "G-P003BX46Z4"
     };
 
-    const ADMIN_EMAIL = "gerardlopezgarcia1@gmail.com";
     const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
     const auth = getAuth(app);
-    const $ = (selector, root = document) => root.querySelector(selector);
+    const db = getFirestore(app);
 
-    // ESTADOS GLOBALES
-    let allProducts = [];
-    let isDataLoaded = false;
-    
-    // DICCIONARIO DE CATEGORÍAS PARA VISUALIZACIÓN
-    const CATEGORY_LABELS = {
-      'ofertas': '🔥 OFERTA REAL',
-      'gadgets': '🧠 GADGET ÚTIL',
-      'setup': '🎮 SETUP Y TECH',
-      'util': '🏠 DÍA A DÍA'
-    };
+    // Official Admin email definition
+    const ADMIN_EMAIL = "gerardlopezgarcia1@gmail.com";
+    const appId = typeof __app_id !== 'undefined' ? __app_id : 'elmurazo';
 
-    /* =================== UTILIDADES =================== */
-    function escapeHtml(value = "") {
-      return String(value).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#039;");
-    }
-    
-    function safeUrl(value, fallback = "#") {
-      try { const url = new URL(String(value || ""), window.location.href); if (url.protocol === "http:" || url.protocol === "https:") return url.href; } catch (_) {}
-      return fallback;
-    }
+    // Strict path matching Rule 1
+    const productsCollectionRef = collection(db, 'artifacts', appId, 'public', 'data', 'products');
 
-    function showToast(message, type = "success") {
-      const toast = $("#toast");
-      toast.textContent = message;
-      toast.dataset.type = type;
-      toast.classList.add("show");
-      clearTimeout(showToast.timer);
-      showToast.timer = setTimeout(() => toast.classList.remove("show"), 3200);
-    }
+    let products = []; // Starts clean, synced in real time via Firestore
+    let currentUser = null;
+    let isAdmin = false;
+    let currentCategory = "all";
+    let searchQuery = "";
+    let currentSort = "code_asc";
+    let isBuilderExpanded = true;
+    let pendingDeleteId = null;
+    let unsubscribeProducts = null;
 
-    /* =================== INTEGRACIÓN GEMINI API =================== */
-    async function callGeminiAPI(prompt, systemInstruction = "") {
-      const apiKey = ""; // La API key será provista de manera segura en el entorno Canvas
-      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
-      
-      const payload = {
-        contents: [{ parts: [{ text: prompt }] }]
-      };
-      
-      if (systemInstruction) {
-        payload.systemInstruction = { parts: [{ text: systemInstruction }] };
-      }
+    // Monitor authentication state
+    onAuthStateChanged(auth, (user) => {
+      currentUser = user;
+      isAdmin = !!(user && user.email === ADMIN_EMAIL);
+      updateAdminUI();
+      renderCatalog();
+    });
 
+    // Initialize Auth first, then connect real-time Firestore listener
+    async function initFirebaseSync() {
       try {
-        const response = await fetch(apiUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
+        await auth.authStateReady();
+        if (!auth.currentUser) {
+          try {
+            await signInAnonymously(auth);
+            console.log("[Auth] Visitante conectado con éxito");
+          } catch (authErr) {
+            console.warn("[Auth] Activa el proveedor 'Anónimo' en Firebase Console > Authentication:", authErr.code);
+          }
+        }
+
+        // Attach real-time snapshot after auth initialization
+        if (unsubscribeProducts) unsubscribeProducts();
+        unsubscribeProducts = onSnapshot(productsCollectionRef, (snapshot) => {
+          products = [];
+          snapshot.forEach(docSnap => {
+            products.push({
+              id: docSnap.id,
+              ...docSnap.data()
+            });
+          });
+          renderCatalog();
+          renderAdminProductsList();
+        }, (error) => {
+          console.error("[Firestore Error]", error);
+          if (error.code === 'permission-denied') {
+            showToast("Aviso: Pega las reglas en Firebase Console para habilitar la lectura de productos.");
+          } else {
+            showToast("Error conectando con la base de datos de productos");
+          }
         });
-        const result = await response.json();
-        return result.candidates?.[0]?.content?.parts?.[0]?.text || "Vaya, la IA está descansando. Inténtalo de nuevo.";
-      } catch (error) {
-        console.error("Gemini API Error:", error);
-        return "Hubo un error de conexión con la IA.";
+      } catch (e) {
+        console.error("[Init Error]", e);
       }
     }
 
-    /* =================== PARSEO DE DATOS =================== */
-    function normalizeProduct(docSnap) {
-      const data = docSnap.data() || {};
-      let millis = 0;
-      if (data.fecha?.toMillis) millis = data.fecha.toMillis();
-      else if (data.fecha?.seconds) millis = data.fecha.seconds * 1000;
-      else if (data.fecha instanceof Date) millis = data.fecha.getTime();
-      
-      return {
-        id: docSnap.id,
-        titulo: String(data.titulo || "Sin título"),
-        imagen: String(data.imagen || ""),
-        precio: String(data.precio || ""),
-        enlace: String(data.enlace || "#"),
-        enOferta: data.enOferta !== false, // Por defecto true si es antiguo
-        categoria: String(data.categoria || "ofertas"),
-        resena: String(data.resena || ""),
-        fechaMillis: millis
-      };
-    }
+    initFirebaseSync();
 
-    // FORMATEO INTELIGENTE DE PRECIO (Añade € si falta)
-    function formatDisplayPrice(rawPrice) {
-      const p = rawPrice.trim();
-      if (!p) return "";
-      return (p.includes('€') || p.toLowerCase().includes('eur')) ? p : `${p} €`;
-    }
+    function updateAdminUI() {
+      const navBtn = document.getElementById("adminNavBtn");
+      const navLabel = document.getElementById("adminNavLabel");
+      const loginSection = document.getElementById("adminLoginSection");
+      const dashboardSection = document.getElementById("adminDashboardSection");
 
-    /* =================== RENDERIZADO PÚBLICO =================== */
-    function createProductCard(product) {
-      const article = document.createElement("article");
-      article.className = "product-card";
-      const image = safeUrl(product.imagen, "https://placehold.co/900x700/111318/ffffff?text=El+Murazo");
-      const displayPrice = formatDisplayPrice(product.precio);
-      const catLabel = CATEGORY_LABELS[product.categoria] || CATEGORY_LABELS['ofertas'];
-      
-      // Control visual del badge según interruptor de Admin
-      const badgeClass = product.enOferta ? 'badge-oferta' : 'badge-recomendado';
-      const badgeText = product.enOferta ? '🔥 OFERTA' : '⭐ RECOMENDADO';
-      
-      // Control visual de la frase personal ("El Murazo Score")
-      const reviewHtml = product.resena ? `<div class="product-review">"${escapeHtml(product.resena)}"</div>` : '';
-
-      article.innerHTML = `
-        <a class="product-image-wrap" href="${escapeHtml(safeUrl(product.enlace))}" target="_blank" rel="noopener noreferrer sponsored">
-          <img class="product-image" src="${escapeHtml(image)}" alt="" loading="lazy" referrerpolicy="no-referrer">
-          <span class="deal-badge ${badgeClass}">${badgeText}</span>
-        </a>
-        <div class="product-body">
-          <span class="product-category">${catLabel}</span>
-          <h2 class="product-title">${escapeHtml(product.titulo)}</h2>
-          ${reviewHtml}
-          <div class="product-footer">
-            <strong class="product-price">${escapeHtml(displayPrice)}</strong>
-            <a class="buy-btn" href="${escapeHtml(safeUrl(product.enlace))}" target="_blank" rel="noopener noreferrer sponsored">
-              Ver chollo <span>↗</span>
-            </a>
-          </div>
-        </div>
-      `;
-
-      const img = $(".product-image", article);
-      img.addEventListener("error", () => { img.src = "https://placehold.co/900x700/111318/ffffff?text=Imagen+no+disponible"; });
-      return article;
-    }
-
-    function renderPublicProducts() {
-      const container = $("#muro-container");
-      const search = ($("#search-input")?.value || "").trim().toLowerCase();
-      const filtered = allProducts.filter(p => !search || p.titulo.toLowerCase().includes(search));
-
-      $("#offer-count").textContent = allProducts.length;
-      $("#results-count").textContent = `${filtered.length} ${filtered.length === 1 ? "resultado" : "resultados"}`;
-
-      container.innerHTML = "";
-      if (!filtered.length && isDataLoaded) {
-        $("#empty-state").classList.remove("hidden");
+      if (isAdmin) {
+        navBtn.classList.add("border-orange-500/50", "bg-orange-500/10", "text-orange-400");
+        navLabel.textContent = "Panel Admin ✓";
+        loginSection.classList.add("hidden");
+        dashboardSection.classList.remove("hidden");
       } else {
-        $("#empty-state").classList.add("hidden");
-        filtered.forEach(p => container.appendChild(createProductCard(p)));
+        navBtn.classList.remove("border-orange-500/50", "bg-orange-500/10", "text-orange-400");
+        navLabel.textContent = "Admin";
+        loginSection.classList.remove("hidden");
+        dashboardSection.classList.add("hidden");
       }
     }
 
-    /* =================== RENDERIZADO ADMIN =================== */
-    function renderAdminProducts() {
-      const container = $("#admin-products");
-      const search = ($("#admin-search")?.value || "").trim().toLowerCase();
-      const filtered = allProducts.filter(p => !search || p.titulo.toLowerCase().includes(search));
-      
-      $("#admin-count").textContent = String(allProducts.length);
-      container.innerHTML = "";
-      $("#admin-empty").classList.toggle("hidden", filtered.length > 0);
+    async function loginWithGoogle() {
+      const provider = new GoogleAuthProvider();
+      try {
+        const result = await signInWithPopup(auth, provider);
+        const loggedUser = result.user;
+        if (loggedUser.email !== ADMIN_EMAIL) {
+          await signOut(auth);
+          await signInAnonymously(auth);
+          showToast(`Acceso denegado: solo ${ADMIN_EMAIL} tiene permisos de administrador.`);
+        } else {
+          showToast("¡Bienvenido, Gerard! Panel de administración desbloqueado.");
+          updateAdminUI();
+        }
+      } catch (err) {
+        console.error("Login failed:", err);
+        showToast("No se pudo completar el inicio de sesión con Google.");
+      }
+    }
 
-      filtered.forEach(p => {
-        const row = document.createElement("article");
-        row.className = "admin-product-row";
-        const thumb = p.imagen || "https://placehold.co/180x140/111318/ffffff?text=Sin+imagen";
-        const displayPrice = formatDisplayPrice(p.precio);
+    async function handleLogout() {
+      try {
+        await signOut(auth);
+        await signInAnonymously(auth);
+        closeAdminModal();
+        showToast("Sesión de administrador cerrada.");
+      } catch (err) {
+        console.error("Logout failed:", err);
+      }
+    }
 
-        row.innerHTML = `
-          <img src="${escapeHtml(thumb)}" alt="" class="admin-thumb" referrerpolicy="no-referrer">
-          <div class="admin-product-info">
-            <strong>${escapeHtml(p.titulo)}</strong>
-            <span>${escapeHtml(displayPrice)}</span>
-            <small>Cat: ${escapeHtml(CATEGORY_LABELS[p.categoria] || p.categoria)}</small>
+    function renderCatalog() {
+      const grid = document.getElementById("productGrid");
+      const empty = document.getElementById("emptyState");
+      const countLabel = document.getElementById("resultsCount");
+      const searchIndicator = document.getElementById("searchIndicator");
+      const searchIndicatorText = document.getElementById("searchIndicatorText");
+
+      // Filter products
+      let filtered = products.filter(item => {
+        const matchesCategory = (currentCategory === "all") || (item.category === currentCategory);
+        const cleanQuery = searchQuery.trim().toLowerCase().replace(/^#/, '');
+        const itemCodeClean = (item.code || "").toLowerCase().replace(/^#/, '');
+        
+        const matchesSearch = !cleanQuery || 
+          (item.title && item.title.toLowerCase().includes(cleanQuery)) ||
+          (item.hook && item.hook.toLowerCase().includes(cleanQuery)) ||
+          itemCodeClean.includes(cleanQuery) ||
+          (Array.isArray(item.tags) && item.tags.some(t => t.toLowerCase().includes(cleanQuery)));
+
+        return matchesCategory && matchesSearch;
+      });
+
+      // Sorting
+      filtered.sort((a, b) => {
+        if (currentSort === "code_asc") return (a.code || "").localeCompare(b.code || "");
+        if (currentSort === "popular") return parseInt(b.views || 0) - parseInt(a.views || 0);
+        if (currentSort === "budget_asc") return (a.estimatedValue || 0) - (b.estimatedValue || 0);
+        if (currentSort === "budget_desc") return (b.estimatedValue || 0) - (a.estimatedValue || 0);
+        return 0;
+      });
+
+      // Search Indicator
+      if (searchQuery.trim()) {
+        searchIndicator.classList.remove("hidden");
+        searchIndicatorText.textContent = `"${searchQuery}"`;
+      } else {
+        searchIndicator.classList.add("hidden");
+      }
+
+      // Empty State Handling
+      if (filtered.length === 0) {
+        grid.innerHTML = "";
+        empty.classList.remove("hidden");
+        countLabel.textContent = "0 productos";
+
+        const titleEl = document.getElementById("emptyStateTitle");
+        const descEl = document.getElementById("emptyStateDesc");
+        const actionEl = document.getElementById("emptyStateAction");
+
+        if (products.length === 0) {
+          titleEl.textContent = "El Muro está listo para publicar";
+          descEl.textContent = isAdmin 
+            ? "No hay gadgets activos en la base de datos. Haz clic a continuación para añadir el primero."
+            : "Aún no se han añadido gadgets a la tienda. Vuelve pronto para descubrir los productos del canal.";
+          actionEl.innerHTML = isAdmin 
+            ? `<button onclick="openProductFormModal(null)" class="px-4 py-2 bg-orange-600 hover:bg-orange-500 text-white font-bold text-xs rounded-xl shadow-lg shadow-orange-500/20 inline-flex items-center gap-1.5"><i class="fa-solid fa-plus"></i> Publicar Primer Gadget</button>`
+            : `<button onclick="openAdminModal()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs rounded-xl inline-flex items-center gap-1.5"><i class="fa-solid fa-lock"></i> Acceso Admin</button>`;
+        } else {
+          titleEl.textContent = "No encontramos ese gadget";
+          descEl.textContent = "Prueba con otra palabra clave o restablece los filtros.";
+          actionEl.innerHTML = `<button onclick="clearSearch()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs rounded-xl">Restablecer catálogo</button>`;
+        }
+        return;
+      }
+
+      empty.classList.add("hidden");
+      countLabel.textContent = `Mostrando ${filtered.length} producto${filtered.length > 1 ? 's' : ''}`;
+
+      grid.innerHTML = filtered.map(item => `
+        <article class="glass-panel rounded-2xl overflow-hidden border border-slate-800 hover:border-orange-500/40 transition-all duration-300 flex flex-col group hover:-translate-y-1 hover:shadow-xl hover:shadow-orange-500/5 relative">
+          
+          <!-- Admin inline quick actions (Only visible to Gerard) -->
+          ${isAdmin ? `
+            <div class="absolute top-3 right-3 z-20 flex items-center gap-1 bg-slate-950/90 backdrop-blur-md p-1 rounded-lg border border-slate-700 shadow-lg">
+              <button onclick="openProductFormModal('${item.id}')" class="w-6 h-6 rounded bg-slate-800 hover:bg-orange-600 text-slate-300 hover:text-white flex items-center justify-center text-[10px]" title="Editar">
+                <i class="fa-solid fa-pen"></i>
+              </button>
+              <button onclick="promptDeleteProduct('${item.id}', '${escapeQuotes(item.title)}')" class="w-6 h-6 rounded bg-slate-800 hover:bg-red-600 text-slate-300 hover:text-white flex items-center justify-center text-[10px]" title="Eliminar">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </div>
+          ` : ''}
+
+          <!-- Image Container with Badges -->
+          <div class="relative aspect-video sm:aspect-square overflow-hidden bg-slate-900">
+            <img 
+              src="${item.image || 'https://placehold.co/600x600/1e293b/f97316?text=El+Murazo'}" 
+              alt="${item.title}" 
+              loading="lazy" 
+              class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+              onerror="this.src='https://placehold.co/600x600/1e293b/f97316?text=El+Murazo'"
+            >
+            
+            <!-- Video Code Badge (Tied to TikTok) -->
+            <div class="absolute top-3 left-3 badge-code text-white text-xs font-black px-2.5 py-1 rounded-lg shadow-md flex items-center gap-1 tracking-wider z-10">
+              <i class="fa-brands fa-tiktok text-[10px]"></i>
+              <span>${item.code || '#00'}</span>
+            </div>
+
+            <!-- Estimated Tier Pill (Amazon compliant) -->
+            <div class="absolute ${isAdmin ? 'top-11 right-3' : 'top-3 right-3'} bg-slate-950/80 backdrop-blur-md border border-slate-700/60 text-slate-300 text-[10px] font-semibold px-2 py-0.5 rounded-md z-10">
+              ${item.tier || 'Gama Estimada'}
+            </div>
+
+            <!-- Social views pill -->
+            ${item.views ? `
+              <div class="absolute bottom-3 left-3 bg-slate-950/70 backdrop-blur-sm text-slate-300 text-[10px] font-medium px-2 py-0.5 rounded flex items-center gap-1">
+                <i class="fa-solid fa-eye text-orange-400 text-[9px]"></i>
+                <span>${item.views} vistas</span>
+              </div>
+            ` : ''}
           </div>
-          <div class="row-actions">
-            <button class="row-btn edit" data-action="edit" data-id="${escapeHtml(p.id)}">Editar</button>
-            <button class="row-btn delete" data-action="delete" data-id="${escapeHtml(p.id)}">Borrar</button>
+
+          <!-- Card Body -->
+          <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center gap-1.5 text-amber-400 text-[11px] font-semibold mb-1">
+                <i class="fa-solid fa-star text-[10px]"></i>
+                <span>${item.rating || '4.8'}</span>
+                <span class="text-slate-500">• Verificado</span>
+              </div>
+
+              <h3 class="font-display font-bold text-sm sm:text-base text-white group-hover:text-orange-400 transition-colors line-clamp-2 leading-snug">
+                ${item.title}
+              </h3>
+
+              <p class="text-xs text-slate-400 mt-2 line-clamp-2 leading-relaxed">
+                ${item.hook}
+              </p>
+            </div>
+
+            <!-- Card Actions -->
+            <div class="mt-4 pt-3 border-t border-slate-800/80 flex items-center gap-2">
+              
+              <!-- Direct Amazon CTA -->
+              <a 
+                href="${item.amzUrl}" 
+                target="_blank" 
+                rel="nofollow sponsored noopener"
+                class="flex-1 py-2 px-3 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-slate-950 hover:text-black font-bold text-xs rounded-xl transition-all shadow-md shadow-orange-500/10 flex items-center justify-center gap-1.5"
+                onclick="trackOutboundClick('${item.code}')"
+              >
+                <i class="fa-brands fa-amazon text-sm"></i>
+                <span>Ver precio</span>
+                <i class="fa-solid fa-arrow-up-right-from-square text-[10px] opacity-75"></i>
+              </a>
+
+              <!-- Info / Breakdown Modal Button -->
+              <button 
+                onclick="openProductModal('${item.id}')"
+                class="p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded-xl text-xs transition-colors border border-slate-700/50"
+                title="Ver por qué no es un murazo"
+              >
+                <i class="fa-solid fa-circle-info"></i>
+              </button>
+
+              <!-- Copy Short Link -->
+              <button 
+                onclick="copyProductLink('${item.code}', '${item.amzUrl}')"
+                class="p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded-xl text-xs transition-colors border border-slate-700/50"
+                title="Copiar enlace"
+              >
+                <i class="fa-solid fa-share-nodes"></i>
+              </button>
+
+            </div>
+
+          </div>
+
+        </article>
+      `).join("");
+    }
+
+    function renderAdminProductsList() {
+      const container = document.getElementById("adminProductsList");
+      if (!container) return;
+
+      if (products.length === 0) {
+        container.innerHTML = `
+          <div class="p-8 text-center text-slate-500 text-xs">
+            <i class="fa-solid fa-box-open text-2xl mb-2 text-slate-600"></i>
+            <p>Aún no hay productos en la base de datos.</p>
+            <button onclick="openProductFormModal(null)" class="mt-3 px-3 py-1.5 bg-orange-600 text-white rounded-lg text-xs font-semibold">
+              Crear el primero
+            </button>
           </div>
         `;
-        container.appendChild(row);
-      });
+        return;
+      }
+
+      container.innerHTML = products.map(item => `
+        <div class="p-3 bg-slate-900/80 rounded-xl border border-slate-800 flex items-center justify-between gap-3 hover:border-slate-700 transition-colors">
+          <div class="flex items-center gap-3 min-w-0">
+            <img src="${item.image}" alt="${item.title}" class="w-10 h-10 rounded-lg object-cover bg-slate-950 shrink-0">
+            <div class="min-w-0">
+              <div class="flex items-center gap-2">
+                <span class="font-mono text-xs font-black text-orange-400">${item.code || '#--'}</span>
+                <span class="text-[10px] px-1.5 py-0.2 bg-slate-800 text-slate-400 rounded">${item.category}</span>
+                <span class="text-[10px] text-slate-500">Est: ~${item.estimatedValue || 0}€</span>
+              </div>
+              <p class="text-xs font-semibold text-white truncate max-w-xs sm:max-w-md">${item.title}</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-1.5 shrink-0">
+            <button onclick="openProductFormModal('${item.id}')" class="px-2.5 py-1.5 bg-slate-800 hover:bg-orange-600 text-slate-300 hover:text-white rounded-lg text-xs transition-colors flex items-center gap-1">
+              <i class="fa-solid fa-pen text-[10px]"></i>
+              <span class="hidden sm:inline">Editar</span>
+            </button>
+            <button onclick="promptDeleteProduct('${item.id}', '${escapeQuotes(item.title)}')" class="px-2.5 py-1.5 bg-slate-800 hover:bg-red-600 text-slate-300 hover:text-white rounded-lg text-xs transition-colors flex items-center gap-1">
+              <i class="fa-solid fa-trash text-[10px]"></i>
+              <span class="hidden sm:inline">Borrar</span>
+            </button>
+          </div>
+        </div>
+      `).join("");
     }
 
-    /* =================== GESTIÓN DE DATOS Y SUSCRIPCIÓN =================== */
-    function subscribeToData() {
-      onSnapshot(collection(db, "productos"), snapshot => {
-        allProducts = snapshot.docs.map(normalizeProduct).sort((a, b) => b.fechaMillis - a.fechaMillis);
-        isDataLoaded = true;
-        $("#error-state").classList.add("hidden");
-        
-        // Al estar unificados, actualizamos ambas vistas automáticamente
-        renderPublicProducts();
-        renderAdminProducts();
-      }, err => {
-        console.error(err);
-        $("#error-state").classList.remove("hidden");
-      });
-    }
+    function openProductFormModal(productId = null) {
+      if (!isAdmin) {
+        showToast("Acceso denegado. Inicia sesión como administrador.");
+        return;
+      }
 
-    /* =================== FORMULARIO ADMIN =================== */
-    function resetProductForm() {
-      $("#product-form").reset();
-      $("#edit-id").value = "";
-      $("#form-title").textContent = "Nuevo chollo";
-      $("#submit-product").textContent = "Publicar recomendación";
-      $("#cancel-edit").classList.add("hidden");
-      $("#upload-msg").textContent = "";
-      $("#prod-oferta").checked = true; // Por defecto oferta activa
-      $("#image-preview").innerHTML = `<div class="image-preview-placeholder">La vista previa aparecerá aquí</div>`;
-    }
+      const modal = document.getElementById("productFormModal");
+      const titleEl = document.getElementById("productFormTitle");
+      const form = document.getElementById("productCrudForm");
+      form.reset();
 
-    function startEdit(product) {
-      $("#edit-id").value = product.id;
-      $("#prod-title").value = product.titulo;
-      // Quitamos el símbolo € si existía en base de datos para que la edición sea limpia
-      $("#prod-price").value = product.precio.replace(/€/g, '').trim(); 
-      $("#prod-link").value = product.enlace;
-      $("#prod-img").value = product.imagen;
-      
-      $("#prod-oferta").checked = product.enOferta;
-      $("#prod-category").value = product.categoria;
-      $("#prod-review").value = product.resena;
+      if (productId) {
+        const item = products.find(p => p.id === productId);
+        if (!item) return;
 
-      $("#form-title").textContent = "Editar recomendación";
-      $("#submit-product").textContent = "Guardar cambios";
-      $("#cancel-edit").classList.remove("hidden");
-      
-      const box = $("#image-preview");
-      box.innerHTML = `<img src="${escapeHtml(product.imagen)}" alt="Preview">`;
-      window.scrollTo({ top: 0, behavior: "smooth" });
+        titleEl.textContent = `Editar Gadget: ${item.code || ''}`;
+        document.getElementById("formProductId").value = item.id;
+        document.getElementById("formCode").value = item.code || "";
+        document.getElementById("formCategory").value = item.category || "setup";
+        document.getElementById("formEstimatedValue").value = item.estimatedValue || 25;
+        document.getElementById("formTitle").value = item.title || "";
+        document.getElementById("formTier").value = item.tier || "";
+        document.getElementById("formViews").value = item.views || "";
+        document.getElementById("formRating").value = item.rating || 4.8;
+        document.getElementById("formAmzUrl").value = item.amzUrl || "";
+        document.getElementById("formImage").value = item.image || "";
+        document.getElementById("formHook").value = item.hook || "";
+        document.getElementById("formWhyNotMurazo").value = item.whyNotMurazo || "";
+        document.getElementById("formTags").value = Array.isArray(item.tags) ? item.tags.join(", ") : "";
+
+        // Checkbox values
+        const checkboxes = document.querySelectorAll(".form-ambience");
+        checkboxes.forEach(cb => {
+          cb.checked = Array.isArray(item.ambience) && item.ambience.includes(cb.value);
+        });
+      } else {
+        titleEl.textContent = "Publicar Nuevo Gadget";
+        document.getElementById("formProductId").value = "";
+        const nextNumber = products.length + 1;
+        document.getElementById("formCode").value = `#${nextNumber < 10 ? '0' + nextNumber : nextNumber}`;
+        document.getElementById("formRating").value = 4.8;
+        document.getElementById("formTier").value = "Gama Media (~25-35€)";
+      }
+
+      modal.classList.remove("hidden");
     }
 
     async function handleProductSubmit(e) {
       e.preventDefault();
-      const id = $("#edit-id").value.trim();
-      const titulo = $("#prod-title").value.trim();
-      const imagen = $("#prod-img").value.trim();
-      const precio = $("#prod-price").value.trim(); // Se guarda limpio. Ej: "129,99"
-      const enlace = $("#prod-link").value.trim();
-      const enOferta = $("#prod-oferta").checked;
-      const categoria = $("#prod-category").value;
-      const resena = $("#prod-review").value.trim();
-      
-      const msg = $("#upload-msg");
-      const button = $("#submit-product");
+      if (!isAdmin) {
+        showToast("Permiso denegado");
+        return;
+      }
 
-      msg.textContent = ""; button.disabled = true; button.textContent = "Guardando...";
+      const submitBtn = document.getElementById("formSubmitBtn");
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Guardando...`;
 
       try {
-        const payload = { titulo, imagen, precio, enlace, enOferta, categoria, resena, actualizadoEn: Timestamp.now() };
+        const id = document.getElementById("formProductId").value;
+        const code = document.getElementById("formCode").value.trim();
+        const category = document.getElementById("formCategory").value;
+        const estimatedValue = parseInt(document.getElementById("formEstimatedValue").value, 10) || 20;
+        const title = document.getElementById("formTitle").value.trim();
+        const tier = document.getElementById("formTier").value.trim();
+        const views = document.getElementById("formViews").value.trim();
+        const rating = parseFloat(document.getElementById("formRating").value) || 4.8;
+        const amzUrl = document.getElementById("formAmzUrl").value.trim();
+        const image = document.getElementById("formImage").value.trim();
+        const hook = document.getElementById("formHook").value.trim();
+        const whyNotMurazo = document.getElementById("formWhyNotMurazo").value.trim();
+
+        // Ambience checkboxes
+        const selectedAmbiences = [];
+        document.querySelectorAll(".form-ambience:checked").forEach(cb => {
+          selectedAmbiences.push(cb.value);
+        });
+        if (selectedAmbiences.length === 0) selectedAmbiences.push("minimal");
+
+        // Tags array
+        const tagsInput = document.getElementById("formTags").value;
+        const tags = tagsInput.split(",").map(t => t.trim().toLowerCase()).filter(Boolean);
+
+        const payload = {
+          code,
+          category,
+          estimatedValue,
+          title,
+          tier,
+          views,
+          rating,
+          amzUrl,
+          image,
+          hook,
+          whyNotMurazo,
+          ambience: selectedAmbiences,
+          tags,
+          updatedAt: new Date().toISOString()
+        };
+
         if (id) {
-          await updateDoc(doc(db, "productos", id), payload);
-          showToast("Cambios guardados.");
+          // Update existing doc
+          const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'products', id);
+          await updateDoc(docRef, payload);
+          showToast(`¡Gadget ${code} actualizado correctamente!`);
         } else {
-          payload.fecha = Timestamp.now();
-          await addDoc(collection(db, "productos"), payload);
-          showToast("Recomendación publicada.");
+          // Create new doc
+          payload.createdAt = new Date().toISOString();
+          await addDoc(productsCollectionRef, payload);
+          showToast(`¡Gadget ${code} publicado en El Murazo!`);
         }
-        resetProductForm();
+
+        closeProductFormModal();
       } catch (err) {
-        msg.textContent = "Error al guardar los datos.";
-        msg.className = "form-message error";
+        console.error("Error saving product:", err);
+        showToast("Error al guardar el producto en Firestore. Revisa las reglas.");
       } finally {
-        button.disabled = false;
-        button.textContent = id ? "Guardar cambios" : "Publicar recomendación";
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = `<i class="fa-solid fa-floppy-disk"></i> Guardar Producto`;
       }
     }
 
-    /* =================== ENRUTAMIENTO Y AUTH (SPA) =================== */
-    function handleRoute() {
-      const hash = window.location.hash;
-      if (hash === '#admin') {
-        $("#view-public").classList.add("hidden");
-        $("#view-admin").classList.remove("hidden");
-        $("#nav-mode-btn").href = "#";
-        $("#nav-mode-btn").textContent = "Ver Muro Público";
-      } else {
-        $("#view-public").classList.remove("hidden");
-        $("#view-admin").classList.add("hidden");
-        $("#nav-mode-btn").href = "#admin";
-        $("#nav-mode-btn").textContent = "Panel Admin";
-      }
-      window.scrollTo(0,0);
+    function promptDeleteProduct(id, title) {
+      if (!isAdmin) return;
+      pendingDeleteId = id;
+      document.getElementById("deleteItemTitle").textContent = title;
+      document.getElementById("deleteModal").classList.remove("hidden");
     }
 
-    function initAuth() {
-      onAuthStateChanged(auth, user => {
-        if (user) {
-          if (user.email?.toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
-            $("#login-section").classList.add("hidden");
-            $("#admin-section").classList.remove("hidden");
-            $("#login-error").textContent = "";
-          } else {
-            // Un usuario normal ha intentado entrar. Lo expulsamos y mostramos error.
-            signOut(auth);
-            $("#login-error").textContent = "Acceso denegado: Tu cuenta no tiene permisos.";
-            $("#login-section").classList.remove("hidden");
-            $("#admin-section").classList.add("hidden");
-          }
-        } else {
-          $("#login-section").classList.remove("hidden");
-          $("#admin-section").classList.add("hidden");
-        }
-      });
-      
-      const btnGoogle = $("#btn-google-login");
-      btnGoogle.addEventListener("click", async () => {
-        const provider = new GoogleAuthProvider();
-        btnGoogle.disabled = true; 
-        const originalHtml = btnGoogle.innerHTML;
-        btnGoogle.textContent = "Autenticando...";
-        try { 
-          await signInWithPopup(auth, provider); 
-          // Si va bien, el 'onAuthStateChanged' de arriba ya se encarga de mostrar el panel
-        } catch (err) { 
-          console.error(err);
-          $("#login-error").textContent = "Error al conectar con Google."; 
-        } finally { 
-          btnGoogle.disabled = false; 
-          btnGoogle.innerHTML = originalHtml; 
-        }
-      });
+    async function executeProductDelete() {
+      if (!isAdmin || !pendingDeleteId) return;
+      const btn = document.getElementById("confirmDeleteBtn");
+      btn.disabled = true;
+      btn.textContent = "Eliminando...";
 
-      $("#btn-logout").addEventListener("click", () => { signOut(auth); resetProductForm(); });
-    }
-
-    /* =================== INICIALIZACIÓN =================== */
-    function initEvents() {
-      // Tema Oscuro/Claro
-      const themeBtn = $("#theme-toggle");
-      const themeIcon = $("#theme-icon");
-      if (localStorage.getItem("elmurazo-theme") === "light") document.documentElement.dataset.theme = "light";
-      const syncTheme = () => themeIcon.textContent = document.documentElement.dataset.theme === "light" ? "☀" : "☾";
-      syncTheme();
-      themeBtn?.addEventListener("click", () => {
-        if (document.documentElement.dataset.theme === "light") { delete document.documentElement.dataset.theme; localStorage.setItem("elmurazo-theme", "dark"); } 
-        else { document.documentElement.dataset.theme = "light"; localStorage.setItem("elmurazo-theme", "light"); }
-        syncTheme();
-      });
-
-      if ($("#current-year")) $("#current-year").textContent = new Date().getFullYear();
-      
-      // Buscadores y recarga
-      $("#search-input")?.addEventListener("input", renderPublicProducts);
-      $("#admin-search")?.addEventListener("input", renderAdminProducts);
-      $("#refresh-btn")?.addEventListener("click", renderPublicProducts);
-      
-      /* =================== EVENTOS DE INTELIGENCIA ARTIFICIAL =================== */
-      // IA Redactora de Reseñas (Admin)
-      $("#btn-ai-review")?.addEventListener("click", async () => {
-        const title = $("#prod-title").value.trim();
-        if (!title) {
-          showToast("Escribe primero el título del producto para guiar a la IA.", "error");
-          return;
-        }
-        
-        const btn = $("#btn-ai-review");
-        btn.classList.add("is-loading");
-        btn.disabled = true;
-        
-        const catSelect = $("#prod-category");
-        const category = catSelect.options[catSelect.selectedIndex].text;
-        
-        const systemPrompt = "Eres el editor creativo de 'El Murazo'. Escribes reseñas extremadamente cortas (una sola frase concisa, máximo 110 caracteres), directas y con muchísimo gancho comercial para vender tecnología. Estilo coloquial español, inteligente y sincero.";
-        const prompt = `Escribe la frase-reseña corta para este producto: "${title}". Categoría orientativa: "${category}". Responde ÚNICAMENTE con la frase. No uses comillas al principio ni al final.`;
-        
-        const aiReview = await callGeminiAPI(prompt, systemPrompt);
-        $("#prod-review").value = aiReview.replace(/^"|"$/g, '').trim();
-        
-        btn.classList.remove("is-loading");
+      try {
+        const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'products', pendingDeleteId);
+        await deleteDoc(docRef);
+        showToast("Gadget eliminado del catálogo.");
+        closeDeleteModal();
+      } catch (err) {
+        console.error("Error deleting:", err);
+        showToast("No se pudo eliminar el producto.");
+      } finally {
         btn.disabled = false;
-        showToast("¡Reseña generada con IA!");
-      });
-      /* ======================================================================== */
-
-      // Admin Forms & List
-      $("#cancel-edit")?.addEventListener("click", resetProductForm);
-      $("#product-form")?.addEventListener("submit", handleProductSubmit);
-      $("#prod-img")?.addEventListener("input", e => {
-        const preview = $("#image-preview");
-        if(preview) preview.innerHTML = e.target.value ? `<img src="${escapeHtml(e.target.value)}" alt="Preview">` : `<div class="image-preview-placeholder">La vista previa aparecerá aquí</div>`;
-      });
-      
-      $("#admin-products")?.addEventListener("click", async e => {
-        const btn = e.target.closest("button[data-action]"); if (!btn) return;
-        const p = allProducts.find(x => x.id === btn.dataset.id); if (!p) return;
-        if (btn.dataset.action === "edit") startEdit(p);
-        if (btn.dataset.action === "delete" && window.confirm(`¿Borrar "${p.titulo}"?`)) {
-          await deleteDoc(doc(db, "productos", p.id));
-          if ($("#edit-id").value === p.id) resetProductForm();
-          showToast("Borrado.");
-        }
-      });
-      
-      // Router SPA
-      window.addEventListener("hashchange", handleRoute);
-      handleRoute();
+        btn.textContent = "Sí, eliminar";
+        pendingDeleteId = null;
+      }
     }
 
-    // ARRANQUE APLICACIÓN
-    initEvents();
-    initAuth();
-    subscribeToData();
+    function generateSetupCombo() {
+      const ambience = document.getElementById("comboAmbience").value;
+      const budgetMax = parseInt(document.getElementById("budgetSlider").value, 10);
+      const container = document.getElementById("comboResultContainer");
+
+      const pool = products.filter(p => Array.isArray(p.ambience) && p.ambience.includes(ambience));
+      
+      if (pool.length === 0) {
+        showToast("No hay gadgets cargados para este rincón aún. Añade productos desde el admin.");
+        return;
+      }
+
+      let selected = [];
+      let totalEst = 0;
+      const shuffled = [...pool].sort(() => 0.5 - Math.random());
+      
+      for (const item of shuffled) {
+        const val = item.estimatedValue || 20;
+        if (totalEst + val <= budgetMax + 10) {
+          selected.push(item);
+          totalEst += val;
+        }
+        if (selected.length >= 3) break;
+      }
+
+      if (selected.length === 0 && pool.length > 0) {
+        selected = [pool.sort((a,b) => (a.estimatedValue||0) - (b.estimatedValue||0))[0]];
+      }
+
+      container.classList.remove("hidden");
+      container.innerHTML = `
+        <div class="glass-panel p-4 rounded-xl border border-orange-500/30 bg-slate-900/90">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+            <div>
+              <span class="text-[10px] font-bold uppercase tracking-wider text-orange-400 bg-orange-500/10 px-2 py-0.5 rounded border border-orange-500/20">
+                Combo Sugerido
+              </span>
+              <h3 class="text-sm font-bold text-white mt-1">
+                ${selected.length} Accesorios complementarios para tu rincón
+              </h3>
+            </div>
+            <div class="text-right">
+              <span class="text-xs text-slate-400 font-mono">Gama estimada: <strong class="text-white">~${budgetMax}€ aprox.</strong></span>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 my-3">
+            ${selected.map(item => `
+              <div class="bg-slate-950 p-3 rounded-lg border border-slate-800 flex items-center gap-3">
+                <img src="${item.image}" alt="${item.title}" class="w-12 h-12 rounded-lg object-cover shrink-0">
+                <div class="min-w-0 flex-1">
+                  <span class="text-[9px] font-black text-orange-400 font-mono">${item.code}</span>
+                  <p class="text-xs font-semibold text-white truncate">${item.title}</p>
+                  <a href="${item.amzUrl}" target="_blank" rel="nofollow sponsored" class="text-[11px] text-amber-400 hover:underline flex items-center gap-1 font-medium mt-0.5">
+                    Ver en Amazon <i class="fa-solid fa-arrow-up-right-from-square text-[8px]"></i>
+                  </a>
+                </div>
+              </div>
+            `).join("")}
+          </div>
+
+          <div class="flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-slate-400 pt-2 border-t border-slate-800">
+            <span>✨ Combinación pensada para optimizar ergonomía y estética sin cables desordenados.</span>
+            <button onclick="copyComboSummary('${selected.map(i => i.code).join(", ")}')" class="text-orange-400 hover:text-orange-300 font-semibold flex items-center gap-1">
+              <i class="fa-solid fa-copy"></i> Copiar códigos del combo
+            </button>
+          </div>
+        </div>
+      `;
+
+      showToast("¡Combo generado según tu presupuesto estimado!");
+    }
+
+    function openProductModal(id) {
+      const item = products.find(p => p.id === id);
+      if (!item) return;
+
+      const modal = document.getElementById("productModal");
+      const content = document.getElementById("modalContent");
+
+      content.innerHTML = `
+        <div class="relative aspect-video w-full bg-slate-900">
+          <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover">
+          <div class="absolute bottom-3 left-4 badge-code text-white text-xs font-black px-2.5 py-1 rounded shadow flex items-center gap-1">
+            <i class="fa-brands fa-tiktok"></i> Vídeo ${item.code}
+          </div>
+        </div>
+        
+        <div class="p-6 space-y-4">
+          <div>
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-[10px] font-bold uppercase tracking-wider text-orange-400 bg-orange-500/10 px-2 py-0.5 rounded border border-orange-500/20">
+                ${item.tier || 'Gama Estimada'}
+              </span>
+              <span class="text-xs text-amber-400 font-semibold">
+                <i class="fa-solid fa-star text-[10px]"></i> ${item.rating || '4.8'} en Amazon
+              </span>
+            </div>
+            <h2 class="font-display font-bold text-lg text-white mt-1.5 leading-snug">${item.title}</h2>
+          </div>
+
+          <div class="bg-emerald-950/30 border border-emerald-500/30 p-3.5 rounded-xl">
+            <h4 class="text-xs font-bold text-emerald-400 flex items-center gap-1.5 mb-1">
+              <i class="fa-solid fa-shield-halved"></i> ¿Por qué NO es un murazo?
+            </h4>
+            <p class="text-xs text-emerald-200/90 leading-relaxed">${item.whyNotMurazo || 'Producto seleccionado por durabilidad y rendimiento óptimo en nuestros análisis.'}</p>
+          </div>
+
+          ${item.views ? `
+            <div class="text-xs text-slate-400">
+              <strong>Visto en redes:</strong> ${item.views} personas han visto este gadget en nuestro canal.
+            </div>
+          ` : ''}
+
+          <div class="pt-2">
+            <a 
+              href="${item.amzUrl}" 
+              target="_blank" 
+              rel="nofollow sponsored" 
+              class="w-full py-3 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-slate-950 font-black text-xs uppercase tracking-wider rounded-xl transition-all shadow-lg shadow-orange-500/20 flex items-center justify-center gap-2"
+              onclick="trackOutboundClick('${item.code}')"
+            >
+              <i class="fa-brands fa-amazon text-base"></i>
+              <span>Consultar Precio y Disponibilidad en Amazon</span>
+              <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+            </a>
+            <p class="text-[10px] text-slate-500 text-center mt-2">
+              El precio final y los costes de envío se muestran en Amazon según tu cuenta Prime.
+            </p>
+          </div>
+        </div>
+      `;
+
+      modal.classList.remove("hidden");
+    }
+
+    function handleAdminNavClick() {
+      openAdminModal();
+    }
+
+    function openAdminModal() {
+      document.getElementById("adminModal").classList.remove("hidden");
+    }
+
+    function closeAdminModal() {
+      document.getElementById("adminModal").classList.add("hidden");
+    }
+
+    function closeAdminOnBackdrop(e) {
+      if (e.target.id === "adminModal") closeAdminModal();
+    }
+
+    function closeProductFormModal() {
+      document.getElementById("productFormModal").classList.add("hidden");
+    }
+
+    function closeProductFormOnBackdrop(e) {
+      if (e.target.id === "productFormModal") closeProductFormModal();
+    }
+
+    function closeDeleteModal() {
+      document.getElementById("deleteModal").classList.add("hidden");
+    }
+
+    function closeDeleteOnBackdrop(e) {
+      if (e.target.id === "deleteModal") closeDeleteModal();
+    }
+
+    function closeProductModal() {
+      document.getElementById("productModal").classList.add("hidden");
+    }
+
+    function closeModalOnBackdrop(e) {
+      if (e.target.id === "productModal") closeProductModal();
+    }
+
+    function openSuggestModal() {
+      document.getElementById("suggestModal").classList.remove("hidden");
+    }
+
+    function closeSuggestModal() {
+      document.getElementById("suggestModal").classList.add("hidden");
+    }
+
+    function closeSuggestOnBackdrop(e) {
+      if (e.target.id === "suggestModal") closeSuggestModal();
+    }
+
+    function submitSuggestion(e) {
+      e.preventDefault();
+      closeSuggestModal();
+      document.getElementById("suggestForm").reset();
+      showToast("¡Recibido! Lo pondremos a prueba para el próximo vídeo.");
+    }
+
+    function updateBudgetDisplay(val) {
+      document.getElementById("budgetDisplay").textContent = `Hasta ~${val}€`;
+    }
+
+    function toggleComboBuilder() {
+      const controls = document.getElementById("comboControls");
+      const icon = document.getElementById("comboToggleIcon");
+      const result = document.getElementById("comboResultContainer");
+
+      isBuilderExpanded = !isBuilderExpanded;
+      if (isBuilderExpanded) {
+        controls.classList.remove("hidden");
+        icon.className = "fa-solid fa-chevron-up";
+      } else {
+        controls.classList.add("hidden");
+        result.classList.add("hidden");
+        icon.className = "fa-solid fa-chevron-down";
+      }
+    }
+
+    function handleSearch(val) {
+      searchQuery = val;
+      const clearBtn = document.getElementById("clearSearchBtn");
+      if (val.trim()) {
+        clearBtn.classList.remove("hidden");
+      } else {
+        clearBtn.classList.add("hidden");
+      }
+      renderCatalog();
+    }
+
+    function clearSearch() {
+      searchQuery = "";
+      document.getElementById("searchInput").value = "";
+      document.getElementById("clearSearchBtn").classList.add("hidden");
+      renderCatalog();
+    }
+
+    function setCategory(cat) {
+      currentCategory = cat;
+      const tabs = document.querySelectorAll(".filter-tab");
+      tabs.forEach(tab => {
+        if (tab.dataset.category === cat) {
+          tab.className = "filter-tab active-tab px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all bg-orange-600 text-white";
+        } else {
+          tab.className = "filter-tab px-3.5 py-1.5 rounded-xl text-xs font-medium whitespace-nowrap transition-all bg-slate-900 text-slate-300 hover:bg-slate-800 hover:text-white border border-slate-800";
+        }
+      });
+      renderCatalog();
+    }
+
+    function handleSort(val) {
+      currentSort = val;
+      renderCatalog();
+    }
+
+    function resetFilters(e) {
+      e.preventDefault();
+      currentCategory = "all";
+      searchQuery = "";
+      document.getElementById("searchInput").value = "";
+      document.getElementById("clearSearchBtn").classList.add("hidden");
+      setCategory("all");
+    }
+
+    function copyProductLink(code, url) {
+      const tempInput = document.createElement("input");
+      tempInput.value = `${window.location.origin}${window.location.pathname}?ref=${(code||'').replace('#', '')}`;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      try {
+        document.execCommand("copy");
+        showToast(`Enlace directo al gadget ${code} copiado al portapapeles`);
+      } catch (err) {
+        showToast(`Código ${code} listo`);
+      }
+      document.body.removeChild(tempInput);
+    }
+
+    function copyComboSummary(codes) {
+      const tempInput = document.createElement("input");
+      tempInput.value = `Gadgets recomendados en elmurazo.com: ${codes}`;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand("copy");
+      document.body.removeChild(tempInput);
+      showToast("Códigos del combo copiados al portapapeles");
+    }
+
+    function trackOutboundClick(code) {
+      console.log(`[El Murazo Analytics] Clic hacia Amazon: ${code}`);
+    }
+
+    function showLegalNotice() {
+      showToast("Cumplimiento RGPD y Afiliación de Amazon España activo.");
+    }
+
+    function showToast(message) {
+      const container = document.getElementById("toastContainer");
+      const toast = document.createElement("div");
+      toast.className = "glass-panel px-4 py-3 rounded-xl border border-orange-500/40 text-xs font-semibold text-white shadow-2xl flex items-center gap-2 transform transition-all duration-300 translate-y-2 opacity-0";
+      toast.innerHTML = `
+        <i class="fa-solid fa-check-circle text-orange-400"></i>
+        <span>${message}</span>
+      `;
+      container.appendChild(toast);
+
+      requestAnimationFrame(() => {
+        toast.classList.remove("translate-y-2", "opacity-0");
+      });
+
+      setTimeout(() => {
+        toast.classList.add("opacity-0", "translate-y-2");
+        setTimeout(() => toast.remove(), 300);
+      }, 3500);
+    }
+
+    function escapeQuotes(str) {
+      return (str || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+    }
+
+    window.handleAdminNavClick = handleAdminNavClick;
+    window.openAdminModal = openAdminModal;
+    window.closeAdminModal = closeAdminModal;
+    window.closeAdminOnBackdrop = closeAdminOnBackdrop;
+    window.loginWithGoogle = loginWithGoogle;
+    window.handleLogout = handleLogout;
+    window.openProductFormModal = openProductFormModal;
+    window.closeProductFormModal = closeProductFormModal;
+    window.closeProductFormOnBackdrop = closeProductFormOnBackdrop;
+    window.handleProductSubmit = handleProductSubmit;
+    window.promptDeleteProduct = promptDeleteProduct;
+    window.executeProductDelete = executeProductDelete;
+    window.closeDeleteModal = closeDeleteModal;
+    window.closeDeleteOnBackdrop = closeDeleteOnBackdrop;
+    window.openProductModal = openProductModal;
+    window.closeProductModal = closeProductModal;
+    window.closeModalOnBackdrop = closeModalOnBackdrop;
+    window.openSuggestModal = openSuggestModal;
+    window.closeSuggestModal = closeSuggestModal;
+    window.closeSuggestOnBackdrop = closeSuggestOnBackdrop;
+    window.submitSuggestion = submitSuggestion;
+    window.generateSetupCombo = generateSetupCombo;
+    window.updateBudgetDisplay = updateBudgetDisplay;
+    window.toggleComboBuilder = toggleComboBuilder;
+    window.handleSearch = handleSearch;
+    window.clearSearch = clearSearch;
+    window.setCategory = setCategory;
+    window.handleSort = handleSort;
+    window.resetFilters = resetFilters;
+    window.copyProductLink = copyProductLink;
+    window.copyComboSummary = copyComboSummary;
+    window.trackOutboundClick = trackOutboundClick;
+    window.showLegalNotice = showLegalNotice;
+
+    // Initialization on load
+    window.addEventListener("DOMContentLoaded", () => {
+      document.getElementById("currentYear").textContent = new Date().getFullYear();
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const refParam = urlParams.get('ref');
+      const qParam = urlParams.get('q');
+
+      if (refParam) {
+        document.getElementById("searchInput").value = `#${refParam}`;
+        handleSearch(`#${refParam}`);
+      } else if (qParam) {
+        document.getElementById("searchInput").value = qParam;
+        handleSearch(qParam);
+      }
+    });
   </script>
+
 </body>
 </html>
