@@ -406,11 +406,11 @@
                 <p class="text-[10px] text-slate-400">Curiosidades tech y novedades</p>
               </div>
             </button>
-            <button type="button" onclick="selectGiftAnswer('profile', 'anyone')" data-group="profile" data-val="anyone" class="gift-option-btn p-3 rounded-xl border border-slate-800 bg-slate-900/60 hover:border-orange-500/50 text-left transition-all flex items-center gap-3">
-              <span class="w-9 h-9 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center text-sm shrink-0"><i class="fa-solid fa-user-astronaut"></i></span>
+            <button type="button" onclick="selectGiftAnswer('profile', 'school')" data-group="profile" data-val="school" class="gift-option-btn p-3 rounded-xl border border-slate-800 bg-slate-900/60 hover:border-orange-500/50 text-left transition-all flex items-center gap-3">
+              <span class="w-9 h-9 rounded-lg bg-yellow-500/10 text-yellow-400 flex items-center justify-center text-sm shrink-0"><i class="fa-solid fa-graduation-cap"></i></span>
               <div>
-                <p class="text-xs font-bold text-white">Cualquier persona</p>
-                <p class="text-[10px] text-slate-400">Un regalo comodín para acertar sí o sí</p>
+                <p class="text-xs font-bold text-white">Estudiante / Colegio / Profe</p>
+                <p class="text-[10px] text-slate-400">Estudio, material escolar y organización</p>
               </div>
             </button>
           </div>
@@ -544,15 +544,15 @@
   <div id="adminModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md" onclick="closeAdminOnBackdrop(event)">
     <div class="glass-panel w-full max-w-2xl rounded-2xl border border-slate-700 max-h-[90vh] flex flex-col relative shadow-2xl overflow-hidden" onclick="event.stopPropagation()">
       
-      <!-- Modal Header -->
+      <!-- Modal Header (Seguro: No revela el email público a ningún visitante) -->
       <div class="px-6 py-4 border-b border-slate-800 flex items-center justify-between bg-slate-900/60">
         <div class="flex items-center gap-2.5">
           <div class="w-8 h-8 rounded-lg bg-orange-500/20 text-orange-400 flex items-center justify-center text-sm">
             <i class="fa-solid fa-shield-halved"></i>
           </div>
           <div>
-            <h3 class="text-sm font-bold text-white font-display">Panel de Administración de El Murazo</h3>
-            <p class="text-[10px] text-slate-400">Acceso exclusivo: <span class="font-mono text-orange-400">gerardlopezgarcia1@gmail.com</span></p>
+            <h3 class="text-sm font-bold text-white font-display">Panel de Gestión de El Murazo</h3>
+            <p class="text-[10px] text-slate-400">Acceso restringido para administradores autorizados</p>
           </div>
         </div>
         <button onclick="closeAdminModal()" class="w-7 h-7 rounded-full bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center transition-colors">
@@ -560,15 +560,15 @@
         </button>
       </div>
 
-      <!-- State 1: Login Request -->
+      <!-- State 1: Login Request (Protegido sin mostrar correos) -->
       <div id="adminLoginSection" class="p-8 text-center space-y-4">
         <div class="w-14 h-14 mx-auto rounded-2xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-400 text-2xl">
-          <i class="fa-solid fa-key"></i>
+          <i class="fa-solid fa-lock"></i>
         </div>
         <div>
-          <h4 class="text-base font-bold text-white">Identificación requerida</h4>
+          <h4 class="text-base font-bold text-white">Identificación de Administrador</h4>
           <p class="text-xs text-slate-400 mt-1 max-w-sm mx-auto">
-            Inicia sesión con tu cuenta de Google autorizada para gestionar los gadgets publicados en la web.
+            Inicia sesión con tu cuenta de Google para gestionar los productos del catálogo de El Murazo.
           </p>
         </div>
         <button 
@@ -586,7 +586,7 @@
         </button>
       </div>
 
-      <!-- State 2: Active Dashboard -->
+      <!-- State 2: Active Dashboard (Solo visible cuando YA has iniciado sesión correctamente) -->
       <div id="adminDashboardSection" class="hidden flex-1 flex flex-col overflow-hidden">
         
         <!-- Action Toolbar -->
@@ -594,7 +594,7 @@
           <div class="flex items-center gap-2">
             <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
             <span class="text-xs text-slate-300 font-medium truncate">
-              Conectado: <strong class="text-white font-mono">gerardlopezgarcia1@gmail.com</strong>
+              Administrador conectado: <strong id="adminConnectedEmail" class="text-white font-mono"></strong>
             </span>
           </div>
 
@@ -651,13 +651,14 @@
             <input type="text" id="formCode" required placeholder="#01" class="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-orange-500 font-mono">
           </div>
 
-          <!-- Category (Expanded with top gadget niches) -->
+          <!-- Category (Incluyendo Material Escolar & Papelería) -->
           <div>
             <label class="block text-[11px] font-semibold text-slate-300 mb-1">Categoría Principal</label>
             <select id="formCategory" class="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-orange-500">
               <option value="setup">🖥️ Setups & Mesa</option>
               <option value="viral">🔥 Gadgets Raros & Virales</option>
               <option value="regalo">🎁 Ideas de Regalo</option>
+              <option value="escolar">📚 Material Escolar & Papelería</option>
               <option value="audio">🎧 Audio & Auriculares</option>
               <option value="iluminacion">💡 Iluminación & Tiras LED</option>
               <option value="cables">🔌 Orden, Cables & Soportes</option>
@@ -884,6 +885,7 @@
       setup: { label: "Setups & Mesa", icon: "fa-solid fa-desktop", color: "text-blue-400" },
       viral: { label: "Gadgets Virales", icon: "fa-solid fa-fire", color: "text-orange-400" },
       regalo: { label: "Ideas de Regalo", icon: "fa-solid fa-gift", color: "text-pink-400" },
+      escolar: { label: "Material Escolar", icon: "fa-solid fa-graduation-cap", color: "text-yellow-400" },
       audio: { label: "Audio & Auriculares", icon: "fa-solid fa-headphones", color: "text-purple-400" },
       iluminacion: { label: "Iluminación & LED", icon: "fa-solid fa-lightbulb", color: "text-amber-400" },
       cables: { label: "Orden & Cables", icon: "fa-solid fa-plug", color: "text-emerald-400" },
@@ -960,17 +962,24 @@
       const navLabel = document.getElementById("adminNavLabel");
       const loginSection = document.getElementById("adminLoginSection");
       const dashboardSection = document.getElementById("adminDashboardSection");
+      const connectedEmailEl = document.getElementById("adminConnectedEmail");
 
-      if (isAdmin) {
+      if (isAdmin && currentUser) {
         navBtn.classList.add("border-orange-500/50", "bg-orange-500/10", "text-orange-400");
         navLabel.textContent = "Panel Admin ✓";
         loginSection.classList.add("hidden");
         dashboardSection.classList.remove("hidden");
+        if (connectedEmailEl) {
+          connectedEmailEl.textContent = currentUser.email;
+        }
       } else {
         navBtn.classList.remove("border-orange-500/50", "bg-orange-500/10", "text-orange-400");
         navLabel.textContent = "Admin";
         loginSection.classList.remove("hidden");
         dashboardSection.classList.add("hidden");
+        if (connectedEmailEl) {
+          connectedEmailEl.textContent = "";
+        }
       }
     }
 
@@ -982,9 +991,9 @@
         if (loggedUser.email !== ADMIN_EMAIL) {
           await signOut(auth);
           await signInAnonymously(auth);
-          showToast(`Acceso denegado: solo ${ADMIN_EMAIL} tiene permisos de administrador.`);
+          showToast("Acceso denegado: cuenta de Google no autorizada como administrador.");
         } else {
-          showToast("¡Bienvenido, Gerard! Panel de administración desbloqueado.");
+          showToast("¡Sesión iniciada con éxito en el Panel de Administración!");
           updateAdminUI();
         }
       } catch (err) {
@@ -1168,10 +1177,10 @@
       const container = document.getElementById("categoryFilters");
       if (!container) return;
 
-      // Always show 'all', plus any category that either has products or is one of the core 3
+      // Always show 'all', plus setup, viral, regalo, escolar, and any active category in products
       const activeCategoryKeys = new Set(products.map(p => p.category));
       const tabsToRender = Object.keys(CATEGORIES).filter(key => {
-        if (key === 'all' || key === 'setup' || key === 'viral' || key === 'regalo') return true;
+        if (key === 'all' || key === 'setup' || key === 'viral' || key === 'regalo' || key === 'escolar') return true;
         return activeCategoryKeys.has(key);
       });
 
@@ -1772,8 +1781,10 @@
         } else if (giftAnswers.profile === "viral") {
           if (cat === "viral") score += 5;
           if (tags.some(t => ["gadget", "viral", "curioso"].includes(t))) score += 3;
+        } else if (giftAnswers.profile === "school") {
+          if (cat === "escolar") score += 6;
+          if (tags.some(t => ["colegio", "escuela", "estudiante", "papeleria", "mochila", "cuaderno", "estuche"].includes(t))) score += 4;
         } else {
-          // anyone
           if (cat === "regalo" || cat === "viral") score += 3;
           score += 2;
         }
@@ -1783,16 +1794,13 @@
           if (cat === "viral") score += 3;
           if (parseFloat(item.rating || 0) >= 4.7) score += 2;
         } else if (giftAnswers.goal === "useful") {
-          if (cat === "setup" || ambience.includes("productive")) score += 3;
+          if (cat === "setup" || cat === "escolar" || ambience.includes("productive")) score += 3;
         } else if (giftAnswers.goal === "clean") {
-          if (ambience.includes("minimal")) score += 4;
+          if (ambience.includes("minimal") || cat === "cables") score += 4;
         } else if (giftAnswers.goal === "safe") {
           if (parseFloat(item.rating || 0) >= 4.7) score += 3;
-          if (cat === "regalo") score += 2;
+          if (cat === "regalo" || cat === "escolar") score += 2;
         }
-
-        // Category bonus
-        if (cat === "regalo") score += 2;
 
         return { item, score };
       });
