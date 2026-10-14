@@ -3,133 +3,133 @@
   "owner": "Álex V.",
   "phoneClock": "02:15",
   "title": "CASO #01: El Último Directo",
-  "summary": "Móvil hallado en la Plaza 24 del Parking Norte. Averigua quién tendió la trampa a Álex.",
-  "briefing": "Álex desapareció a las 02:15 AM. Tienes acceso completo a sus Mensajes, su correo M-Mail y su rastreador GPS (GeoTrack). Úsalos para desbloquear su app bancaria (NeoBank) y su carpeta de Notas antes de emitir la orden de arresto.",
+  "summary": "Teléfono hallado junto al coche de Álex en el Parking Norte. Desentraña las coartadas.",
+  "briefing": "Álex V. desapareció a las 02:15 AM antes de publicar pruebas sobre un robo de 40.000 € en su productora. Nadie te dirá las contraseñas directamente: tendrás que deducirlas leyendo entre líneas sus correos, chats y ubicaciones.",
   "suspects": [
     {
-      "name": "Marc (Socio del canal)",
-      "alibi": "Asegura que aparcó el coche en el Parking Norte a las 23:40 y se fue directo a su casa a dormir."
+      "name": "Marc Serra (Socio)",
+      "alibi": "Declara que dejó el coche de empresa en el Parking Norte a las 23:40, se fue en taxi a su casa y estuvo durmiendo desde las 00:30 AM sin tocar el coche ni la tarjeta de la empresa."
     },
     {
-      "name": "Elena (Ex-pareja y contable)",
-      "alibi": "Declara que estuvo encerrada de guardia en el Hospital Central desde las 22:00 hasta las 06:00 AM sin salir."
+      "name": "Elena Vega (Contable)",
+      "alibi": "Declara que estuvo trabajando en el turno de noche del Hospital Central desde las 22:00 hasta las 06:00 AM sin salir del recinto en toda la noche."
     },
     {
-      "name": "Héctor ('Usuario_99')",
-      "alibi": "Ex-editor despedido. Amenazó a Álex por chat, pero afirma que estaba a 30 km de distancia toda la noche."
+      "name": "Héctor Ruiz (Ex-editor)",
+      "alibi": "Despedido hace una semana. Amenazó a Álex por mensajes, pero asegura que pasó toda la noche en su piso a 35 km de distancia."
     }
   ],
   "chats": [
     {
-      "contact": "Marc (Socio)",
+      "contact": "Marc Serra",
       "messages": [
-        { "fromMe": false, "time": "23:40", "text": "Tío, ya te he dejado el coche aparcado en el Parking Norte. Me voy directo a casa a dormir que estoy muerto." },
-        { "fromMe": true, "time": "23:42", "text": "Perfecto. Por cierto, he cambiado el PIN de NeoBank: ahora son los 2 números de la plaza donde has aparcado seguidos del día del mes de mi cumpleaños." },
-        { "fromMe": false, "time": "23:44", "text": "Jajaja vale, ni que te fuera a robar. Mañana nos vemos." }
+        { "fromMe": false, "time": "23:40", "text": "Álex, ya te he dejado el coche aparcado en el sótano del Parking Norte, en la misma plaza de siempre." },
+        { "fromMe": true, "time": "23:42", "text": "Gracias tío. ¿Seguro que te vas ya a casa? Necesito revisar unas facturas raras de la empresa." },
+        { "fromMe": false, "time": "23:45", "text": "Estoy reventado, a las 00:30 como tarde estoy en la cama durmiendo. Mañana lo miramos sin falta." }
       ]
     },
     {
-      "contact": "Elena (Contable)",
+      "contact": "Elena Vega",
       "messages": [
-        { "fromMe": true, "time": "00:15", "text": "Elena, faltan 40.000 € en la cuenta de la empresa. Sé que alguien hizo una transferencia hoy." },
-        { "fromMe": false, "time": "00:20", "text": "Álex, estoy en urgencias del Hospital Central hasta las 6 de la mañana, no puedo salir de aquí. A la 01:10 te llamo en un descanso." }
+        { "fromMe": true, "time": "00:18", "text": "Elena, acabo de ver un agujero de 40.000 € en las cuentas. Dime que es un error contable tuyo." },
+        { "fromMe": false, "time": "00:22", "text": "Álex, te juro que no sé nada. Estoy encerrada en urgencias del Hospital Central hasta las 6 de la mañana, es imposible que salga de aquí ahora." }
       ]
     },
     {
-      "contact": "Héctor (Ex-editor)",
+      "contact": "Héctor Ruiz",
       "messages": [
-        { "fromMe": false, "time": "01:50", "text": "Si mencionas mi nombre en el directo te juro que voy a buscarte." },
-        { "fromMe": true, "time": "01:52", "text": "Tú ya no me importas, Héctor. Acabo de descubrir quién me ha robado de verdad." }
+        { "fromMe": false, "time": "01:50", "text": "Me han dicho que vas a hablar de mí en el directo. Como me culpes del dinero que falta te vas a arrepentir." },
+        { "fromMe": true, "time": "01:53", "text": "Tranquilo Héctor, ya sé que tú no tienes acceso a las firmas bancarias ni a las tarjetas físicas." }
       ]
     }
   ],
   "emails": [
     {
-      "from": "club-clientes@optica-vision.es",
-      "time": "Ayer, 10:00",
-      "subject": "¡Feliz cumpleaños el día 19, Álex!",
-      "body": "Hola Álex, como cada día 19 de este mes celebramos tu cumpleaños regalándote un descuento en tus próximas gafas."
+      "from": "marketing@optica-mirada.es",
+      "time": "Ayer, 09:15",
+      "subject": "¡Felices 23 primaveras, Álex!",
+      "body": "Hola Álex,\nHoy cumples 23 años y queremos celebrarlo contigo con un cupón especial en monturas. ¡Disfruta de tus recién estrenados 23!"
     },
     {
-      "from": "seguridad@hospital-central.org",
-      "time": "00:35 AM",
-      "subject": "Copia solicitada: Registro de Tornos",
-      "body": "Estimado Álex, tal como pediste a tu amigo de recepción, te confirmamos que la Dra./Contable Elena (Tarjeta #04) fichó la SALIDA del parking del hospital a las 00:12 AM."
+      "from": "control-acceso@hospital-central.org",
+      "time": "00:40 AM",
+      "subject": "RE: Consulta urgente de salida de personal",
+      "body": "Hola Álex, te miro lo que me acabas de pedir por favor personal: la empleada Elena Vega pasó su tarjeta por el torno de SALIDA hacia la calle a las 00:12 AM. No ha vuelto a fichar entrada."
     },
     {
-      "from": "alertas@parking-norte.com",
-      "time": "02:14 AM",
-      "subject": "Salida de vehículo detectada",
-      "body": "El abono vinculado a su cuenta ha registrado la apertura de barrera con un segundo vehículo (Matrícula terminada en 88)."
+      "from": "automatico@parking-norte.com",
+      "time": "23:39 PM",
+      "subject": "Vehículo estacionado correctamente",
+      "body": "Su vehículo con abono mensual ha sido detectado por el sensor de suelo en la Plaza Reservada Nº 24 (Sótano -2)."
     }
   ],
   "locations": [
     {
-      "time": "23:38 PM",
+      "time": "23:39 PM",
       "coords": "41.5632° N, 2.0089° E",
-      "place": "Parking Subterráneo Norte - Sótano 2",
-      "detail": "El sensor Bluetooth del coche confirma estacionamiento en la PLAZA Nº 24."
+      "place": "Parking Subterráneo Norte",
+      "detail": "Vehículo estacionado en el Sótano -2. Sincronización automática con el correo del parking."
     },
     {
       "time": "01:15 AM",
       "coords": "41.5640° N, 2.0102° E",
-      "place": "Cafetería Nocturna 'El Faro' (Frente al Parking)",
-      "detail": "Parada de 25 minutos antes de bajar de nuevo al coche."
+      "place": "Cafetería 24h 'El Faro'",
+      "detail": "Álex permanece 25 minutos en la mesa del fondo antes de regresar caminando al Parking Norte."
     },
     {
-      "time": "02:12 AM",
+      "time": "02:14 AM",
       "coords": "41.5632° N, 2.0089° E",
-      "place": "Parking Subterráneo Norte - Plaza 24",
-      "detail": "Impacto brusco detectado por el acelerómetro del teléfono. Pérdida de conexión."
+      "place": "Parking Norte - Nivel -2",
+      "detail": "Caída brusca del terminal móvil al suelo y desconexión forzada."
     }
   ],
   "bankPuzzle": {
-    "pin": "2419",
-    "hint": "Pista: [Nº Plaza de Parking (2 cifras)] + [Día de cumpleaños de Álex (2 cifras)]. Revisa GeoTrack y M-Mail.",
+    "pin": "2324",
+    "hint": "Mi edad actual recién cumplida (2 dígitos) + El número de plaza donde duerme mi coche (2 dígitos).",
     "balance": "1.420,50 €",
     "transactions": [
       {
-        "concept": "TRANSFERENCIA SALIENTE #91",
+        "concept": "TRANSFERENCIA EXTERNA",
         "time": "22:30 PM",
-        "detail": "Autorizada con clave de contabilidad (Elena) a cuenta compartida con Marc",
+        "detail": "Firmada digitalmente por: ELENA VEGA -> Destino: Sociedad Offshore",
         "amount": "-40.000,00 €"
       },
       {
+        "concept": "GASOLINERA AUTOPISTA SUR",
+        "time": "01:05 AM",
+        "detail": "Pago presencial con CHIP + PIN • Tarjeta Física #02 (Titular: MARC SERRA)",
+        "amount": "-65,00 €"
+      },
+      {
         "concept": "CAFETERÍA EL FARO 24H",
-        "time": "01:18 AM",
-        "detail": "Ticket #77 • 2 Cafés + Parking Invitado",
-        "amount": "-6,50 €"
+        "time": "01:20 AM",
+        "detail": "Tarjeta #01 (Álex) • 2 Cafés",
+        "amount": "-4,80 €"
       }
     ]
   },
   "notesPuzzle": {
-    "pin": "9177",
-    "hint": "Pista: [Nº de Transferencia de los 40.000 € en NeoBank (2 cifras)] + [Nº de Ticket de la Cafetería en NeoBank (2 cifras)].",
-    "title": "SI ME PASA ALGO ESTA NOCHE",
-    "content": "Estoy en la cafetería El Faro con Elena. Me ha mentido: me dijo por WhatsApp que estaba encerrada en el hospital, pero se escapó a las 00:12 AM.\n\nAl verse acorralada por la transferencia #91 de 40.000 €, me ha confesado llorando que lo planeó todo con Marc. Pero acabo de ver por la ventana que Marc acaba de entrar al parking aunque me dijo que estaba durmiendo. Voy a bajar al coche a grabarles a los dos."
+    "pin": "0105",
+    "hint": "Hora exacta en formato 24h (4 dígitos HHMM) en la que la tarjeta bancaria de mi socio demostró que NO estaba durmiendo.",
+    "title": "PRUEBAS PARA LA POLICÍA",
+    "content": "1. Elena me mintió por WhatsApp diciendo que no podía salir del hospital: el correo de seguridad confirma que salió por el torno a las 00:12 AM y vino a verme a la cafetería El Faro tras robar los 40.000 €.\n\n2. Marc también me ha traicionado: me juró que a las 00:30 estaría durmiendo, pero a las 01:05 AM acaba de llenar el depósito de su coche con la tarjeta de la empresa para huir con Elena.\n\nAcabo de ver el coche de Marc entrando al Parking Norte. Si me pasa algo, han sido ellos dos."
   },
   "solution": {
-    "q1Options": [
-      "Selecciona al autor principal...",
-      "Héctor (Ex-editor)",
-      "Elena (Contable y ex-pareja)",
-      "Un ladrón de coches fortuito"
-    ],
-    "q2Options": [
-      "Selecciona al cómplice...",
-      "Actuó totalmente sola",
-      "Marc (Socio del canal)",
-      "Héctor (Ex-editor)"
-    ],
-    "q3Options": [
-      "Selecciona la prueba definitiva...",
-      "Las amenazas de Héctor a la 01:50 AM",
-      "La salida del hospital a las 00:12 AM y la transferencia #91 de 40.000 €",
-      "El correo de cumpleaños de la óptica"
-    ],
-    "a1": "Elena (Contable y ex-pareja)",
-    "a2": "Marc (Socio del canal)",
-    "a3": "La salida del hospital a las 00:12 AM y la transferencia #91 de 40.000 €",
-    "epilogue": "¡Enhorabuena, Inspector! Con los registros de NeoBank y el correo del torno del hospital, la policía interceptó a Elena y Marc antes de que pudieran vaciar la cuenta. Has completado el Caso #01 sin pagar nada."
+    "q1Label": "AUTORA DEL ROBO DE LOS 40.000 € (NOMBRE):",
+    "q1Placeholder": "Ej: Carlos...",
+    "q1Hint": "Escribe el nombre de la persona que firmó la transferencia y mintió sobre el hospital.",
+    "a1Accepted": ["elena", "elena vega"],
+
+    "q2Label": "CÓMPLICE EN LA HUIDA (NOMBRE):",
+    "q2Placeholder": "Ej: Pedro...",
+    "q2Hint": "Escribe el nombre de quien fingió estar durmiendo a las 00:30.",
+    "a2Accepted": ["marc", "marc serra"],
+
+    "q3Label": "HORA EXACTA DE SALIDA DEL HOSPITAL (HH:MM):",
+    "q3Placeholder": "Ej: 03:45",
+    "q3Hint": "Revisa el correo de control de accesos del hospital.",
+    "a3Accepted": ["0012", "00:12", "12:12"],
+
+    "epilogue": "¡Caso cerrado magistralmente! Al tener que deducir y escribir cada prueba sin ayuda de desplegables, has demostrado que Elena Vega (salida a las 00:12) y Marc Serra (repostaje a las 01:05) tendieron la emboscada en la Plaza 24."
   }
 }
