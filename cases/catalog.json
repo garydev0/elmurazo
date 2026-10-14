@@ -1,0 +1,20 @@
+{
+  "cases": [
+    {
+      "id": "caso-01",
+      "title": "CASO #01: El Último Directo",
+      "difficulty": "Media",
+      "available": true,
+      "freeFile": "cases/caso-01-free.json",
+      "vipFile": "cases/caso-01-vip.json"
+    },
+    {
+      "id": "caso-02",
+      "title": "CASO #02: Habitación 404",
+      "difficulty": "Difícil",
+      "available": false,
+      "freeFile": "cases/caso-02-free.json",
+      "vipFile": "cases/caso-02-vip.json"
+    }
+  ]
+}
