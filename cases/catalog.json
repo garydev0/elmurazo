@@ -4,17 +4,17 @@
       "id": "caso-01",
       "title": "CASO #01: El Último Directo",
       "difficulty": "Media",
-      "available": true,
-      "freeFile": "cases/caso-01-free.json",
-      "vipFile": "cases/caso-01-vip.json"
+      "isFree": true,
+      "teaser": "Álex V. desaparece en un parking subterráneo a las 02:15 AM antes de revelar quién robó 40.000 € de su empresa.",
+      "file": "cases/caso-01.json"
     },
     {
       "id": "caso-02",
       "title": "CASO #02: Habitación 404",
-      "difficulty": "Difícil",
-      "available": false,
-      "freeFile": "cases/caso-02-free.json",
-      "vipFile": "cases/caso-02-vip.json"
+      "difficulty": "Alta",
+      "isFree": false,
+      "teaser": "Aparece un teléfono sin tarjeta SIM en la suite de un hotel de lujo en Barcelona. Todas las reservas fueron borradas.",
+      "checkoutUrl": "https://stripe.com"
     }
   ]
 }
