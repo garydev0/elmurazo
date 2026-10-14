@@ -2,59 +2,73 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  
+  <!-- CONFIGURACIÓN NATIVA PARA BARRAS NEGRAS EN SAFARI iOS -->
+  <meta name="theme-color" content="#090d16">
+  <meta name="color-scheme" content="dark">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  
   <title>EL MURAZO | Sistema Forense Móvil</title>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-outer: #030712;
+      color-scheme: dark;
       --phone-bg: #090d16;
-      --card-bg: rgba(30, 41, 59, 0.65);
-      --card-border: rgba(255, 255, 255, 0.08);
+      --card-bg: rgba(22, 31, 48, 0.78);
+      --card-border: rgba(255, 255, 255, 0.1);
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
       --accent-red: #f43f5e;
       --accent-blue: #38bdf8;
       --accent-green: #10b981;
       --accent-amber: #f59e0b;
-      --accent-purple: #a855f7;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
-    body {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      background: radial-gradient(circle at 50% 20%, #1e1b4b 0%, #030712 70%);
+    /* Fondo sólido #090d16 en html y body para que Safari iOS pinte las barras de negro */
+    html, body {
+      background-color: #090d16;
       color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', sans-serif;
       height: 100dvh;
+      width: 100vw;
+      overflow: hidden;
       display: flex;
       justify-content: center;
       align-items: center;
-      overflow: hidden;
+    }
+
+    /* En ordenador se ve un halo alrededor del móvil */
+    @media (min-width: 451px) {
+      body {
+        background: radial-gradient(circle at 50% 20%, #1e1b4b 0%, #030712 75%);
+      }
     }
 
     /* CHASIS DEL SMARTPHONE */
     .phone-chassis {
-      width: 390px;
-      height: 820px;
+      width: 395px;
+      height: 830px;
       max-height: 96dvh;
-      background: var(--phone-bg);
-      border-radius: 50px;
+      background-color: var(--phone-bg);
+      border-radius: 52px;
       border: 10px solid #1e293b;
       box-shadow: 
         0 0 0 2px #0f172a,
-        0 30px 80px rgba(0, 0, 0, 0.85),
-        inset 0 0 25px rgba(56, 189, 248, 0.05);
+        0 30px 90px rgba(0, 0, 0, 0.9),
+        inset 0 0 30px rgba(56, 189, 248, 0.06);
       display: flex;
       flex-direction: column;
       position: relative;
       overflow: hidden;
       background-image: 
-        radial-gradient(at 0% 0%, rgba(244, 63, 94, 0.12) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(56, 189, 248, 0.12) 0px, transparent 50%);
+        radial-gradient(at 0% 0%, rgba(244, 63, 94, 0.14) 0px, transparent 55%),
+        radial-gradient(at 100% 100%, rgba(56, 189, 248, 0.14) 0px, transparent 55%);
     }
 
-    /* En móviles reales ocupa toda la pantalla sin bordes */
     @media (max-width: 450px) {
       .phone-chassis {
         width: 100vw;
@@ -62,25 +76,27 @@
         max-height: 100dvh;
         border-radius: 0;
         border: none;
+        box-shadow: none;
+        padding-top: env(safe-area-inset-top);
+        padding-bottom: env(safe-area-inset-bottom);
       }
     }
 
     /* BARRA DE ESTADO E ISLA DINÁMICA */
     .status-bar {
-      height: 44px;
+      height: 46px;
       padding: 0 24px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 0.78rem;
+      font-size: 0.8rem;
       font-weight: 700;
-      letter-spacing: 0.3px;
       z-index: 20;
       flex-shrink: 0;
     }
     .dynamic-island {
-      width: 110px;
-      height: 24px;
+      width: 118px;
+      height: 26px;
       background: #000;
       border-radius: 20px;
       display: flex;
@@ -90,14 +106,15 @@
       font-family: 'JetBrains Mono', monospace;
       font-size: 0.65rem;
       color: var(--accent-red);
-      border: 1px solid rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
     }
     .rec-dot {
       width: 6px;
       height: 6px;
       background: var(--accent-red);
       border-radius: 50%;
-      animation: pulse 1.5s infinite;
+      animation: pulse 1.4s infinite;
     }
     @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
 
@@ -105,7 +122,7 @@
     .phone-viewport {
       flex: 1;
       overflow-y: auto;
-      padding: 16px 20px 24px;
+      padding: 14px 20px 24px;
       display: flex;
       flex-direction: column;
       scrollbar-width: none;
@@ -114,20 +131,20 @@
 
     /* WIDGET SUPERIOR DEL HOME */
     .forensic-widget {
-      background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9));
-      border: 1px solid var(--card-border);
+      background: linear-gradient(145deg, rgba(30, 41, 59, 0.85), rgba(15, 23, 42, 0.95));
+      border: 1px solid rgba(255, 255, 255, 0.12);
       border-left: 3px solid var(--accent-red);
-      border-radius: 20px;
+      border-radius: 22px;
       padding: 16px;
-      margin-bottom: 22px;
-      backdrop-filter: blur(12px);
+      margin-bottom: 24px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.4);
     }
     .widget-tag {
       font-family: 'JetBrains Mono', monospace;
       font-size: 0.68rem;
       color: var(--accent-red);
       text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 0.8px;
       display: flex;
       justify-content: space-between;
       margin-bottom: 6px;
@@ -135,11 +152,11 @@
     .forensic-widget h1 { font-size: 1.15rem; font-weight: 800; margin-bottom: 6px; }
     .forensic-widget p { font-size: 0.8rem; color: var(--text-muted); line-height: 1.45; }
 
-    /* GRID DE ICONOS ESTILO iOS */
+    /* GRID DE ICONOS ULTRA-BRILLANTES (ESTILO iOS 18) */
     .ios-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 18px 14px;
+      gap: 22px 14px;
       margin-top: 4px;
     }
     .app-Launcher {
@@ -148,54 +165,106 @@
       align-items: center;
       cursor: pointer;
       user-select: none;
-      transition: transform 0.15s ease;
+      transition: transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
-    .app-Launcher:active { transform: scale(0.92); }
+    .app-Launcher:hover { transform: translateY(-3px) scale(1.03); }
+    .app-Launcher:active { transform: scale(0.91); }
+
     .app-squircle {
-      width: 64px;
-      height: 64px;
-      border-radius: 18px;
+      width: 68px;
+      height: 68px;
+      border-radius: 20px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.75rem;
-      margin-bottom: 7px;
+      margin-bottom: 8px;
       position: relative;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.35), inset 0 1px 1px rgba(255,255,255,0.2);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      box-shadow: 
+        inset 0 2px 3px rgba(255, 255, 255, 0.45),
+        inset 0 -3px 6px rgba(0, 0, 0, 0.35);
     }
+    /* Brillo cristalino superior en cada icono */
+    .app-squircle::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 19px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.38) 0%, rgba(255,255,255,0.05) 45%, transparent 50%);
+      pointer-events: none;
+    }
+    .app-squircle svg {
+      width: 32px;
+      height: 32px;
+      stroke: #ffffff;
+      stroke-width: 2.1;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.35));
+      z-index: 2;
+    }
+
     .app-badge {
       position: absolute;
-      top: -5px;
-      right: -5px;
-      background: var(--accent-red);
+      top: -6px;
+      right: -6px;
+      background: linear-gradient(135deg, #ff2e4c, #e11d48);
       color: white;
-      font-size: 0.68rem;
+      font-size: 0.7rem;
       font-weight: 800;
-      min-width: 20px;
-      height: 20px;
-      padding: 0 5px;
-      border-radius: 10px;
+      min-width: 22px;
+      height: 22px;
+      padding: 0 6px;
+      border-radius: 11px;
       display: flex;
       align-items: center;
       justify-content: center;
       border: 2px solid var(--phone-bg);
+      box-shadow: 0 4px 10px rgba(244, 63, 94, 0.6);
+      z-index: 5;
     }
     .app-label {
-      font-size: 0.76rem;
+      font-size: 0.78rem;
       font-weight: 600;
-      color: #e2e8f0;
+      color: #f1f5f9;
       text-align: center;
+      letter-spacing: 0.1px;
     }
 
-    /* COLORES DE CADA APP */
-    .bg-cases { background: linear-gradient(135deg, #6366f1, #4338ca); }
-    .bg-Suspects { background: linear-gradient(135deg, #f43f5e, #be123c); }
-    .bg-chat { background: linear-gradient(135deg, #10b981, #047857); }
-    .bg-mail { background: linear-gradient(135deg, #38bdf8, #0284c7); }
-    .bg-maps { background: linear-gradient(135deg, #f59e0b, #b45309); }
-    .bg-bank { background: linear-gradient(135deg, #a855f7, #6b21a8); }
-    .bg-notes { background: linear-gradient(135deg, #eab308, #a16207); }
-    .bg-solve { background: linear-gradient(135deg, #ec4899, #9d174d); }
+    /* DEGRADADOS VIVOS Y SOMBRAS DE NEÓN POR APP */
+    .bg-suspects {
+      background: linear-gradient(145deg, #ff4d6d, #c9184a);
+      box-shadow: 0 10px 22px -4px rgba(244, 63, 94, 0.55), inset 0 2px 3px rgba(255,255,255,0.45);
+    }
+    .bg-chat {
+      background: linear-gradient(145deg, #34d399, #059669);
+      box-shadow: 0 10px 22px -4px rgba(16, 185, 129, 0.55), inset 0 2px 3px rgba(255,255,255,0.45);
+    }
+    .bg-mail {
+      background: linear-gradient(145deg, #38bdf8, #0284c7);
+      box-shadow: 0 10px 22px -4px rgba(56, 189, 248, 0.55), inset 0 2px 3px rgba(255,255,255,0.45);
+    }
+    .bg-maps {
+      background: linear-gradient(145deg, #fbbf24, #d97706);
+      box-shadow: 0 10px 22px -4px rgba(245, 158, 11, 0.55), inset 0 2px 3px rgba(255,255,255,0.45);
+    }
+    .bg-bank {
+      background: linear-gradient(145deg, #c084fc, #7e22ce);
+      box-shadow: 0 10px 22px -4px rgba(168, 85, 247, 0.55), inset 0 2px 3px rgba(255,255,255,0.45);
+    }
+    .bg-notes {
+      background: linear-gradient(145deg, #facc15, #ca8a04);
+      box-shadow: 0 10px 22px -4px rgba(234, 179, 8, 0.5), inset 0 2px 3px rgba(255,255,255,0.45);
+    }
+    .bg-cases {
+      background: linear-gradient(145deg, #818cf8, #4f46e5);
+      box-shadow: 0 10px 22px -4px rgba(99, 102, 241, 0.55), inset 0 2px 3px rgba(255,255,255,0.45);
+    }
+    .bg-solve {
+      background: linear-gradient(145deg, #f472b6, #db2777);
+      box-shadow: 0 10px 22px -4px rgba(236, 72, 153, 0.55), inset 0 2px 3px rgba(255,255,255,0.45);
+    }
 
     /* CABECERA INTERNA DE LAS APPS */
     .app-topbar {
@@ -207,15 +276,15 @@
       border-bottom: 1px solid var(--card-border);
       position: sticky;
       top: 0;
-      background: rgba(9, 13, 22, 0.9);
-      backdrop-filter: blur(8px);
+      background: rgba(9, 13, 22, 0.92);
+      backdrop-filter: blur(10px);
       z-index: 10;
     }
     .btn-back-ios {
-      background: rgba(255,255,255,0.07);
-      border: none;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.1);
       color: var(--accent-blue);
-      padding: 6px 12px;
+      padding: 6px 13px;
       border-radius: 20px;
       font-weight: 700;
       font-size: 0.8rem;
@@ -223,19 +292,19 @@
     }
     .app-title-header { font-size: 0.95rem; font-weight: 800; }
 
-    /* COMPONENTES INTERNOS DE LAS APPS (CARDS, CHATS, MAPS, BANCO) */
+    /* COMPONENTES INTERNOS */
     .glass-card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 16px;
-      padding: 14px;
+      padding: 15px;
       margin-bottom: 12px;
     }
     .meta-line {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 0.7rem;
+      font-size: 0.69rem;
       color: var(--accent-blue);
-      margin-bottom: 4px;
+      margin-bottom: 5px;
       display: flex;
       justify-content: space-between;
     }
@@ -245,7 +314,7 @@
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 16px;
-      padding: 14px;
+      padding: 15px;
       margin-bottom: 10px;
       color: var(--text-main);
       cursor: pointer;
@@ -255,7 +324,7 @@
     }
     .bubble {
       background: #1e293b;
-      padding: 10px 14px;
+      padding: 11px 14px;
       border-radius: 16px 16px 16px 4px;
       margin-bottom: 10px;
       font-size: 0.84rem;
@@ -263,7 +332,7 @@
       max-width: 88%;
     }
     .bubble.sent {
-      background: #065f46;
+      background: linear-gradient(135deg, #059669, #047857);
       border-radius: 16px 16px 4px 16px;
       align-self: flex-end;
       margin-left: auto;
@@ -276,11 +345,15 @@
       position: relative;
     }
     .timeline-node::before {
-      content: '📍';
+      content: '';
+      width: 10px;
+      height: 10px;
+      background: var(--accent-amber);
+      border-radius: 50%;
       position: absolute;
-      left: -11px;
-      top: 0;
-      font-size: 0.85rem;
+      left: -6px;
+      top: 4px;
+      box-shadow: 0 0 8px var(--accent-amber);
     }
     .bank-row {
       display: flex;
@@ -291,7 +364,7 @@
     }
     .amount-neg { font-family: 'JetBrains Mono', monospace; color: var(--accent-red); font-weight: 700; }
 
-    /* INPUTS Y BOTONES */
+    /* INPUTS DE PIN Y CAMPOS DE TEXTO DE ACUSACIÓN */
     .pin-box {
       width: 100%;
       padding: 14px;
@@ -300,20 +373,34 @@
       text-align: center;
       letter-spacing: 8px;
       background: #030712;
-      border: 1px solid rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.18);
       color: white;
       border-radius: 14px;
       margin: 12px 0;
+      outline: none;
     }
-    .select-modern {
+    .pin-box:focus, .text-input-forensic:focus {
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.25);
+    }
+    .text-input-forensic {
       width: 100%;
-      padding: 12px;
-      background: #0f172a;
-      border: 1px solid rgba(255,255,255,0.15);
+      padding: 13px 14px;
+      background: #050811;
+      border: 1px solid rgba(255,255,255,0.16);
       color: white;
       border-radius: 12px;
-      margin: 6px 0 14px;
-      font-size: 0.85rem;
+      margin: 6px 0 16px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.88rem;
+      outline: none;
+    }
+    .input-hint {
+      display: block;
+      font-size: 0.73rem;
+      color: var(--text-muted);
+      margin-top: -10px;
+      margin-bottom: 14px;
     }
     .btn-primary {
       width: 100%;
@@ -325,12 +412,13 @@
       font-weight: 800;
       font-size: 0.9rem;
       cursor: pointer;
-      margin-top: 8px;
+      margin-top: 6px;
+      box-shadow: 0 8px 20px rgba(244, 63, 94, 0.35);
     }
 
-    /* BARRA INFERIOR HOME (DOCK BAR) */
+    /* BARRA INFERIOR HOME */
     .home-bar-Area {
-      height: 34px;
+      height: 32px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -338,13 +426,11 @@
       flex-shrink: 0;
     }
     .home-pill {
-      width: 130px;
+      width: 134px;
       height: 5px;
-      background: rgba(255, 255, 255, 0.35);
+      background: rgba(255, 255, 255, 0.4);
       border-radius: 10px;
-      transition: background 0.2s, transform 0.2s;
     }
-    .home-bar-Area:hover .home-pill { background: white; transform: scaleX(1.08); }
 
     @keyframes shake {
       0%, 100% { transform: translateX(0); }
@@ -357,7 +443,6 @@
 <body>
 
   <div class="phone-chassis" id="phone-chassis">
-    <!-- BARRA DE ESTADO DEL MÓVIL -->
     <div class="status-bar">
       <span id="os-clock">02:15</span>
       <div class="dynamic-island">
@@ -367,11 +452,9 @@
       <span style="cursor:pointer;" id="btn-mute" onclick="SoundEngine.toggleMute()">🔊 5G</span>
     </div>
 
-    <!-- PANTALLA CAMBIANTE DEL MÓVIL -->
     <div class="phone-viewport" id="screen"></div>
 
-    <!-- BARRA INFERIOR PARA VOLVER AL MENÚ EN CUALQUIER MOMENTO -->
-    <div class="home-bar-Area" onclick="OS.goHome()" title="Volver a la pantalla de inicio">
+    <div class="home-bar-Area" onclick="OS.goHome()" title="Inicio">
       <div class="home-pill"></div>
     </div>
   </div>
