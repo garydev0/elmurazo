@@ -1,0 +1,69 @@
+{
+  "vipBoardClues": [
+    {
+      "isVip": true,
+      "tag": "REGISTRO HOSPITAL CENTRAL (VIP)",
+      "title": "Ficha de Salida de Urgencias",
+      "body": "El control de tornos del Hospital confirma que la tarjeta de empleada nº 04 (Elena) fichó la SALIDA a las 00:12 AM, rompiendo su coartada."
+    }
+  ],
+  "extraChats": [
+    {
+      "sender": "Elena (Mensaje Recuperado)",
+      "time": "01:05",
+      "text": "Álex, estoy en la cafetería de enfrente. Baja con los papeles de las cuentas y lo hablamos en tu coche. No avises a nadie."
+    }
+  ],
+  "audios": [
+    {
+      "title": "AUDIO_PARKING_0210.MP3",
+      "duration": "DURACIÓN: 00:42 | MICRÓFONO OCULTO",
+      "transcript": "[Se escuchan pasos rápidos en el hormigón]. Voz de Elena: 'Álex, danos la clave del banco, sabemos que vas a denunciarnos por los 40.000 €'. Voz de Marc: 'Rápido, Elena, borra la foto de tu coche de su galería y métela en la papelera antes de que baje el vigilante'."
+    },
+    {
+      "title": "AUDIO_PARKING_0214.MP3",
+      "duration": "DURACIÓN: 00:19 | PISTA DE PAPELERA",
+      "transcript": "Voz de Marc: 'Ya he bloqueado su Papelera de fotos con los 2 dígitos de tu número de empleada del hospital seguidos del minuto exacto en que fichaste la salida a medianoche (Mira el Tablón Policial VIP)'."
+    }
+  ],
+  "trashPuzzle": {
+    "pinCode": "0412",
+    "hint": "Pista Forense: [Nº Empleada de Elena (2 cifras)] + [Minuto en que salió del hospital a medianoche (2 cifras)]. Revisa el Tablón VIP."
+  },
+  "trashPhotos": [
+    {
+      "title": "ELIMINADO_01.JPG - Transferencia Oculta",
+      "visualText": "CUENTA DESTINO: ELENA Y MARC | IMPORTE: 40.000 €",
+      "caption": "Captura que Álex iba a mostrar en directo antes de ser secuestrado."
+    },
+    {
+      "title": "ELIMINADO_02.JPG - Cámara del Parking",
+      "visualText": "MATRÍCULA 9921-KLP (COCHE DE ELENA) | 02:14 AM",
+      "caption": "Elena condujo el vehículo mientras Marc retenía a Álex."
+    }
+  ],
+  "solution": {
+    "killerOptions": [
+      "Selecciona al autor principal...",
+      "Usuario_99 (Hater del chat)",
+      "Elena (Ex-pareja y contable)",
+      "El vigilante del parking"
+    ],
+    "accompliceOptions": [
+      "Selecciona al cómplice...",
+      "Actuó en solitario",
+      "Marc (Socio del canal)",
+      "Usuario_99"
+    ],
+    "evidenceOptions": [
+      "Selecciona el móvil y prueba clave...",
+      "Amenazas por comentarios en directo",
+      "Desfalco de 40.000 € y salida del hospital a las 00:12 (Código 0412)",
+      "Robo del vehículo en la plaza 24"
+    ],
+    "correctKiller": "Elena (Ex-pareja y contable)",
+    "correctAccomplice": "Marc (Socio del canal)",
+    "correctEvidence": "Desfalco de 40.000 € y salida del hospital a las 00:12 (Código 0412)",
+    "epilogue": "¡Orden de arresto ejecutada! La policía interceptó el coche de Elena (9921-KLP) antes de cruzar la frontera. Álex fue liberado ileso y las pruebas recuperadas de la Papelera condenaron a Elena y Marc."
+  }
+}
