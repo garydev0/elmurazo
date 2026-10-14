@@ -59,6 +59,7 @@
     .view-switcher {
       display: flex;
       gap: 8px;
+      align-items: center;
     }
     .btn-tab {
       background: var(--panel-bg);
@@ -75,6 +76,15 @@
       background: var(--accent);
       color: white;
       border-color: var(--accent);
+    }
+    .btn-sound {
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      color: var(--text-main);
+      padding: 8px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9rem;
     }
 
     /* CONTENEDOR PRINCIPAL */
@@ -207,10 +217,6 @@
       font-size: 0.85rem;
       line-height: 1.4;
     }
-    .chat-bubble.me {
-      background: var(--green-chat);
-      align-self: flex-end;
-    }
     .chat-meta {
       font-size: 0.7rem;
       color: var(--accent-amber);
@@ -258,7 +264,20 @@
       font-weight: 700;
       cursor: pointer;
       margin-top: 8px;
+      transition: opacity 0.2s;
     }
+    .btn-action:disabled {
+      opacity: 0.6;
+      cursor: wait;
+    }
+
+    /* ANIMACIÓN DE TEMBLOR EN ERROR O INTERFERENCIA */
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-6px); }
+      40%, 80% { transform: translateX(6px); }
+    }
+    .shake-anim { animation: shake 0.35s ease-in-out; }
 
     /* MODAL MURO DE PAGO (EL MURAZO VIP) */
     .modal-overlay {
@@ -296,6 +315,7 @@
     <div class="view-switcher">
       <button class="btn-tab active" id="tab-board" onclick="switchMainView('board')">📋 Tablón</button>
       <button class="btn-tab" id="tab-phone" onclick="switchMainView('phone')">📱 Móvil Hallado</button>
+      <button class="btn-sound" id="btn-mute" onclick="SoundEngine.toggleMute()" title="Activar/Silenciar Audio">🔊</button>
     </div>
   </header>
 
@@ -305,7 +325,7 @@
 
     <!-- VISTA B: TELÉFONO DE LA VÍCTIMA -->
     <section id="view-phone">
-      <div class="phone-frame">
+      <div class="phone-frame" id="phone-frame-el">
         <div class="phone-statusbar">
           <span>02:15 AM</span>
           <span>🔋 12% | SIN SIM</span>
@@ -320,15 +340,15 @@
   <!-- MODAL DE PAGO / DESBLOQUEO DEL CASO COMPLETO -->
   <div class="modal-overlay" id="paywall-modal">
     <div class="modal-box">
-      <span class="badge-case">EXPEDIENTE CLASIFICADO</span>
+      <span class="badge-case">SEÑAL DE AUDIO INTERRUMPIDA</span>
       <h2 style="margin-top:10px;">Has chocado contra El Murazo</h2>
-      <p>Solo el 18% de los investigadores descubre el PIN <strong>2489</strong>. El audio del parking contiene la voz del culpable y desbloquea los interrogatorios finales.</p>
-      <button class="btn-action" onclick="window.open('https://stripe.com', '_blank')">
+      <p>Solo el 18% de los investigadores descubre el PIN <strong>2489</strong>. El archivo de audio completo contiene la voz del culpable en el parking y desbloquea los interrogatorios finales.</p>
+      <button class="btn-action" onclick="SoundEngine.click(); window.open('https://stripe.com', '_blank')">
         🔓 Desbloquear Caso Completo (4,99 €)
       </button>
       <div style="margin-top:16px; padding-top:14px; border-top:1px solid var(--border);">
         <small style="color:var(--text-muted);">¿Ya tienes tu código de acceso VIP? (Prueba: <strong>MURAZO99</strong>)</small>
-        <input type="text" id="vip-code-input" class="pin-input" style="font-size:0.95rem; letter-spacing:2px; padding:8px;" placeholder="INTRODUCE CÓDIGO VIP">
+        <input type="text" id="vip-code-input" class="pin-input" style="font-size:0.95rem; letter-spacing:2px; padding:8px;" placeholder="INTRODUCE CÓDIGO VIP" oninput="SoundEngine.key()">
         <button class="btn-tab" style="width:100%;" onclick="verifyVipCode()">Validar Código</button>
       </div>
       <button class="btn-back" style="margin-top:12px;" onclick="closePaywall()">Cerrar ventana</button>
@@ -338,252 +358,99 @@
   <script>
     /**
      * ============================================================================
-     * 1. CARTUCHO DE DATOS (En producción, esto va en /cases/caso-01-free.json)
-     * Para crear el Caso #02 en el futuro, solo creas otro JSON con esta estructura.
+     * 0. MOTOR DE AUDIO PROCEDURAL (Web Audio API - 0 Archivos Externos)
      * ============================================================================
      */
-    const CASE_01_DATA = {
-      id: "caso-01",
-      title: "CASO #01: EL ÚLTIMO DIRECTO",
-      pinCode: "2489",
-      vipAccessCode: "MURAZO99",
-      boardClues: [
-        {
-          tag: "INFORME POLICIAL #01",
-          title: "Desaparición en el Parking",
-          body: "Álex V. (23 años) cortó su emisión en directo a las 02:15 AM. Su teléfono apareció en el suelo del parking subterráneo Norte. La carpeta de Notas tiene un bloqueo de 4 dígitos."
-        },
-        {
-          tag: "DECLARACIÓN DE SOSPECHOSOS",
-          title: "3 Personas en el punto de mira",
-          suspects: [
-            { name: "Marc (Socio)", alibi: "Asegura que se fue a dormir a las 00:30 AM tras aparcar el coche y no volvió a salir." },
-            { name: "Elena (Ex-pareja)", alibi: "Dice que estuvo de turno de noche en urgencias hasta las 06:00 AM." },
-            { name: "Usuario_99", alibi: "Amenazó a Álex en el chat diciendo que sabía dónde aparcaba." }
-          ]
-        },
-        {
-          tag: "OBJETIVO INICIAL (FASE GRATIS)",
-          title: "¿Cómo empezar?",
-          body: "Entra en el 'Móvil Hallado' arriba a la derecha. Cruza los mensajes de WhatsApp con las fotos de la Galería para deducir el PIN de 4 dígitos de la App de Notas."
+    const SoundEngine = {
+      ctx: null,
+      muted: false,
+
+      init() {
+        if (!this.ctx) {
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          this.ctx = new AudioCtx();
         }
-      ],
-      chats: [
-        { sender: "Marc (Socio)", time: "23:40", text: "Tío, ya te he dejado el coche en el parking Norte. Está en la plaza de siempre, justo al lado del ascensor (los 2 primeros números de tu PIN)." },
-        { sender: "Marc (Socio)", time: "23:42", text: "Acuérdate de que la segunda mitad del PIN es el número de pedido de donde cenamos hoy. Yo me voy a dormir ya." },
-        { sender: "Usuario_99", time: "01:50", text: "Deja de enseñar esos papeles en directo o bajo al parking ahora mismo." }
-      ],
-      photos: [
-        {
-          title: "IMG_8821.JPG - Columna del Parking",
-          visualText: "[ PLAZA RESERVADA Nº 24 ]",
-          caption: "Foto tomada a las 23:55 al llegar al coche."
-        },
-        {
-          title: "IMG_8825.JPG - Ticket Cafetería 24h",
-          visualText: "PEDIDO #89 | HORA: 01:15 AM | 2x CAFÉ SOLO",
-          caption: "Espera... Si Marc estaba durmiendo a las 00:30, ¿con quién tomaba café Álex a la 01:15 AM?"
+        if (this.ctx.state === 'suspended') {
+          this.ctx.resume();
         }
-      ],
-      secretNoteUnlocked: {
-        title: "NOTA: SI ME PASA ALGO",
-        content: "Marc me ha mentido. No estaba durmiendo, acaba de bajar al parking con otra persona. He dejado el móvil grabando audio en el bolsillo antes de que se acerquen. El archivo está en 'Grabadora VIP'."
-      }
-    };
+      },
 
-    /**
-     * ============================================================================
-     * 2. ESTADO DEL JUGADOR (Guardado automático en localStorage)
-     * ============================================================================
-     */
-    let gameState = JSON.parse(localStorage.getItem('elmurazo_state_caso01')) || {
-      noteUnlocked: false,
-      vipUnlocked: false
-    };
+      toggleMute() {
+        this.muted = !this.muted;
+        document.getElementById('btn-mute').textContent = this.muted ? '🔇' : '🔊';
+        if (!this.muted) this.click();
+      },
 
-    function saveProgress() {
-      localStorage.setItem('elmurazo_state_caso01', JSON.stringify(gameState));
-    }
+      // Sonido corto al tocar botones o pestañas
+      click() {
+        if (this.muted) return;
+        this.init();
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(750, this.ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(300, this.ctx.currentTime + 0.04);
 
-    /**
-     * ============================================================================
-     * 3. MOTOR DE RENDERIZADO (No tendrás que tocarlo al añadir futuros casos)
-     * ============================================================================
-     */
-    function initEngine(caseData) {
-      document.getElementById('case-title-badge').textContent = caseData.title;
-      renderBoard(caseData);
-      renderPhoneHome();
-    }
+        gain.gain.setValueAtTime(0.12, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.04);
 
-    function switchMainView(view) {
-      document.getElementById('view-board').style.display = view === 'board' ? 'grid' : 'none';
-      document.getElementById('view-phone').style.display = view === 'phone' ? 'flex' : 'none';
-      document.getElementById('tab-board').classList.toggle('active', view === 'board');
-      document.getElementById('tab-phone').classList.toggle('active', view === 'phone');
-    }
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + 0.04);
+      },
 
-    function renderBoard(caseData) {
-      const board = document.getElementById('view-board');
-      board.innerHTML = caseData.boardClues.map(clue => `
-        <div class="clue-card">
-          <span class="clue-tag">${clue.tag}</span>
-          <h3>${clue.title}</h3>
-          ${clue.body ? `<p>${clue.body}</p>` : ''}
-          ${clue.suspects ? clue.suspects.map(s => `
-            <div class="suspect-item"><strong>${s.name}:</strong> <span style="color:#94a3b8">${s.alibi}</span></div>
-          `).join('') : ''}
-        </div>
-      `).join('');
-    }
+      // Sonido de tecla al escribir el PIN
+      key() {
+        if (this.muted) return;
+        this.init();
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(1100, this.ctx.currentTime);
 
-    // PANTALLA DE INICIO DEL MÓVIL
-    function renderPhoneHome() {
-      const screen = document.getElementById('phone-screen-content');
-      screen.innerHTML = `
-        <div style="text-align:center; margin: 15px 0 20px;">
-          <h2 style="font-size:1.4rem; font-family:'JetBrains Mono',monospace;">Móvil de Álex V.</h2>
-          <small style="color:var(--text-muted);">Evidencia Policial #04</small>
-        </div>
-        <div class="app-grid">
-          <div class="app-icon" onclick="openApp('chats')">
-            <span>💬</span>
-            <small>Mensajes (3)</small>
-          </div>
-          <div class="app-icon" onclick="openApp('photos')">
-            <span>🖼️</span>
-            <small>Galería (2)</small>
-          </div>
-          <div class="app-icon" onclick="openApp('notes')">
-            <span>${gameState.noteUnlocked ? '🔓' : '🔒'}</span>
-            <small>Notas (PIN)</small>
-          </div>
-          <div class="app-icon" onclick="openApp('audio')">
-            <span>🎙️</span>
-            <small>Grabadora VIP</small>
-          </div>
-        </div>
-      `;
-    }
+        gain.gain.setValueAtTime(0.08, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.03);
 
-    function openApp(appName) {
-      const screen = document.getElementById('phone-screen-content');
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + 0.03);
+      },
 
-      if (appName === 'chats') {
-        screen.innerHTML = `
-          <div class="app-header">
-            <button class="btn-back" onclick="renderPhoneHome()">← Volver</button>
-            <strong>WhatsApp</strong>
-          </div>
-          ${CASE_01_DATA.chats.map(c => `
-            <div class="chat-bubble">
-              <span class="chat-meta">${c.sender} • ${c.time}</span>${c.text}
-            </div>
-          `).join('')}
-        `;
-      }
+      // Sonido de desbloqueo exitoso (2 tonos ascendentes)
+      success() {
+        if (this.muted) return;
+        this.init();
+        const now = this.ctx.currentTime;
+        [523.25, 783.99].forEach((freq, idx) => {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, now + idx * 0.11);
 
-      if (appName === 'photos') {
-        screen.innerHTML = `
-          <div class="app-header">
-            <button class="btn-back" onclick="renderPhoneHome()">← Volver</button>
-            <strong>Galería Reciente</strong>
-          </div>
-          ${CASE_01_DATA.photos.map(p => `
-            <div class="photo-item">
-              <div class="photo-visual">${p.visualText}</div>
-              <strong style="font-size:0.85rem; display:block; margin-bottom:4px;">${p.title}</strong>
-              <p style="font-size:0.8rem; color:var(--text-muted);">${p.caption}</p>
-            </div>
-          `).join('')}
-        `;
-      }
+          gain.gain.setValueAtTime(0.18, now + idx * 0.11);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.11 + 0.22);
 
-      if (appName === 'notes') {
-        if (!gameState.noteUnlocked) {
-          screen.innerHTML = `
-            <div class="app-header">
-              <button class="btn-back" onclick="renderPhoneHome()">← Volver</button>
-              <strong>Carpeta Protegida</strong>
-            </div>
-            <p style="font-size:0.85rem; color:var(--text-muted); text-align:center; margin-top:20px;">
-              Introduce el PIN de 4 dígitos (Pista: Plaza de Parking + Nº Pedido Cafetería)
-            </p>
-            <input type="text" maxlength="4" id="pin-attempt" class="pin-input" placeholder="••••">
-            <button class="btn-action" onclick="checkPin()">Desbloquear Nota</button>
-            <p id="pin-error" style="color:var(--accent); font-size:0.8rem; text-align:center; margin-top:10px;"></p>
-          `;
-        } else {
-          screen.innerHTML = `
-            <div class="app-header">
-              <button class="btn-back" onclick="renderPhoneHome()">← Volver</button>
-              <strong>Nota Desbloqueada</strong>
-            </div>
-            <div class="photo-item" style="border-color:var(--accent);">
-              <span class="clue-tag">DESBLOQUEADO CON ÉXITO</span>
-              <h4 style="margin-bottom:8px;">${CASE_01_DATA.secretNoteUnlocked.title}</h4>
-              <p style="font-size:0.9rem; line-height:1.5; color:#e2e8f0;">${CASE_01_DATA.secretNoteUnlocked.content}</p>
-              <button class="btn-action" style="margin-top:15px;" onclick="openApp('audio')">
-                ▶ Escuchar AUDIO_PARKING_0210.MP3
-              </button>
-            </div>
-          `;
-        }
-      }
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now + idx * 0.11);
+          osc.stop(now + idx * 0.11 + 0.22);
+        });
+      },
 
-      if (appName === 'audio') {
-        if (!gameState.vipUnlocked) {
-          document.getElementById('paywall-modal').style.display = 'flex';
-        } else {
-          screen.innerHTML = `
-            <div class="app-header">
-              <button class="btn-back" onclick="renderPhoneHome()">← Volver</button>
-              <strong>Grabadora Forense (VIP)</strong>
-            </div>
-            <div class="photo-item" style="border-color:#10b981;">
-              <span class="clue-tag" style="color:#10b981;">ACCESO COMPLETO ACTIVADO</span>
-              <h4>AUDIO_PARKING_0210.MP3</h4>
-              <p style="font-size:0.85rem; color:var(--text-muted); margin:10px 0;">
-                [Transcripción Forense]: Se escucha la puerta de un coche abrirse. Una voz femenina dice: "Marc, quítale el teléfono antes de que vea que salí del hospital a las 12".
-              </p>
-              <button class="btn-action" style="background:#10b981;" onclick="alert('¡Aquí se abrirá el formulario final de acusación del Caso 1!')">
-                ⚖️ Acusar al Culpable Final
-              </button>
-            </div>
-          `;
-        }
-      }
-    }
+      // Zumbido grave de error
+      error() {
+        if (this.muted) return;
+        this.init();
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(150, now);
+        osc.frequency.setValueAtTime(115, now + 0.12);
 
-    function checkPin() {
-      const attempt = document.getElementById('pin-attempt').value.trim();
-      if (attempt === CASE_01_DATA.pinCode) {
-        gameState.noteUnlocked = true;
-        saveProgress();
-        openApp('notes');
-      } else {
-        document.getElementById('pin-error').textContent = "❌ PIN incorrecto. Revisa el chat de Marc y las fotos.";
-      }
-    }
+        gain.gain.setValueAtTime(0.18, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
 
-    function closePaywall() {
-      document.getElementById('paywall-modal').style.display = 'none';
-    }
-
-    function verifyVipCode() {
-      const code = document.getElementById('vip-code-input').value.trim().toUpperCase();
-      if (code === CASE_01_DATA.vipAccessCode) {
-        gameState.vipUnlocked = true;
-        saveProgress();
-        closePaywall();
-        openApp('audio');
-      } else {
-        alert("Código VIP no válido. Prueba con: MURAZO99");
-      }
-    }
-
-    // Arrancar el motor con el Caso 01
-    initEngine(CASE_01_DATA);
-  </script>
-</body>
-</html>
+        osc.connect(
