@@ -1,0 +1,135 @@
+{
+  "id": "caso-01",
+  "owner": "Álex V.",
+  "phoneClock": "02:15",
+  "title": "CASO #01: El Último Directo",
+  "summary": "Móvil hallado en la Plaza 24 del Parking Norte. Averigua quién tendió la trampa a Álex.",
+  "briefing": "Álex desapareció a las 02:15 AM. Tienes acceso completo a sus Mensajes, su correo M-Mail y su rastreador GPS (GeoTrack). Úsalos para desbloquear su app bancaria (NeoBank) y su carpeta de Notas antes de emitir la orden de arresto.",
+  "suspects": [
+    {
+      "name": "Marc (Socio del canal)",
+      "alibi": "Asegura que aparcó el coche en el Parking Norte a las 23:40 y se fue directo a su casa a dormir."
+    },
+    {
+      "name": "Elena (Ex-pareja y contable)",
+      "alibi": "Declara que estuvo encerrada de guardia en el Hospital Central desde las 22:00 hasta las 06:00 AM sin salir."
+    },
+    {
+      "name": "Héctor ('Usuario_99')",
+      "alibi": "Ex-editor despedido. Amenazó a Álex por chat, pero afirma que estaba a 30 km de distancia toda la noche."
+    }
+  ],
+  "chats": [
+    {
+      "contact": "Marc (Socio)",
+      "messages": [
+        { "fromMe": false, "time": "23:40", "text": "Tío, ya te he dejado el coche aparcado en el Parking Norte. Me voy directo a casa a dormir que estoy muerto." },
+        { "fromMe": true, "time": "23:42", "text": "Perfecto. Por cierto, he cambiado el PIN de NeoBank: ahora son los 2 números de la plaza donde has aparcado seguidos del día del mes de mi cumpleaños." },
+        { "fromMe": false, "time": "23:44", "text": "Jajaja vale, ni que te fuera a robar. Mañana nos vemos." }
+      ]
+    },
+    {
+      "contact": "Elena (Contable)",
+      "messages": [
+        { "fromMe": true, "time": "00:15", "text": "Elena, faltan 40.000 € en la cuenta de la empresa. Sé que alguien hizo una transferencia hoy." },
+        { "fromMe": false, "time": "00:20", "text": "Álex, estoy en urgencias del Hospital Central hasta las 6 de la mañana, no puedo salir de aquí. A la 01:10 te llamo en un descanso." }
+      ]
+    },
+    {
+      "contact": "Héctor (Ex-editor)",
+      "messages": [
+        { "fromMe": false, "time": "01:50", "text": "Si mencionas mi nombre en el directo te juro que voy a buscarte." },
+        { "fromMe": true, "time": "01:52", "text": "Tú ya no me importas, Héctor. Acabo de descubrir quién me ha robado de verdad." }
+      ]
+    }
+  ],
+  "emails": [
+    {
+      "from": "club-clientes@optica-vision.es",
+      "time": "Ayer, 10:00",
+      "subject": "¡Feliz cumpleaños el día 19, Álex!",
+      "body": "Hola Álex, como cada día 19 de este mes celebramos tu cumpleaños regalándote un descuento en tus próximas gafas."
+    },
+    {
+      "from": "seguridad@hospital-central.org",
+      "time": "00:35 AM",
+      "subject": "Copia solicitada: Registro de Tornos",
+      "body": "Estimado Álex, tal como pediste a tu amigo de recepción, te confirmamos que la Dra./Contable Elena (Tarjeta #04) fichó la SALIDA del parking del hospital a las 00:12 AM."
+    },
+    {
+      "from": "alertas@parking-norte.com",
+      "time": "02:14 AM",
+      "subject": "Salida de vehículo detectada",
+      "body": "El abono vinculado a su cuenta ha registrado la apertura de barrera con un segundo vehículo (Matrícula terminada en 88)."
+    }
+  ],
+  "locations": [
+    {
+      "time": "23:38 PM",
+      "coords": "41.5632° N, 2.0089° E",
+      "place": "Parking Subterráneo Norte - Sótano 2",
+      "detail": "El sensor Bluetooth del coche confirma estacionamiento en la PLAZA Nº 24."
+    },
+    {
+      "time": "01:15 AM",
+      "coords": "41.5640° N, 2.0102° E",
+      "place": "Cafetería Nocturna 'El Faro' (Frente al Parking)",
+      "detail": "Parada de 25 minutos antes de bajar de nuevo al coche."
+    },
+    {
+      "time": "02:12 AM",
+      "coords": "41.5632° N, 2.0089° E",
+      "place": "Parking Subterráneo Norte - Plaza 24",
+      "detail": "Impacto brusco detectado por el acelerómetro del teléfono. Pérdida de conexión."
+    }
+  ],
+  "bankPuzzle": {
+    "pin": "2419",
+    "hint": "Pista: [Nº Plaza de Parking (2 cifras)] + [Día de cumpleaños de Álex (2 cifras)]. Revisa GeoTrack y M-Mail.",
+    "balance": "1.420,50 €",
+    "transactions": [
+      {
+        "concept": "TRANSFERENCIA SALIENTE #91",
+        "time": "22:30 PM",
+        "detail": "Autorizada con clave de contabilidad (Elena) a cuenta compartida con Marc",
+        "amount": "-40.000,00 €"
+      },
+      {
+        "concept": "CAFETERÍA EL FARO 24H",
+        "time": "01:18 AM",
+        "detail": "Ticket #77 • 2 Cafés + Parking Invitado",
+        "amount": "-6,50 €"
+      }
+    ]
+  },
+  "notesPuzzle": {
+    "pin": "9177",
+    "hint": "Pista: [Nº de Transferencia de los 40.000 € en NeoBank (2 cifras)] + [Nº de Ticket de la Cafetería en NeoBank (2 cifras)].",
+    "title": "SI ME PASA ALGO ESTA NOCHE",
+    "content": "Estoy en la cafetería El Faro con Elena. Me ha mentido: me dijo por WhatsApp que estaba encerrada en el hospital, pero se escapó a las 00:12 AM.\n\nAl verse acorralada por la transferencia #91 de 40.000 €, me ha confesado llorando que lo planeó todo con Marc. Pero acabo de ver por la ventana que Marc acaba de entrar al parking aunque me dijo que estaba durmiendo. Voy a bajar al coche a grabarles a los dos."
+  },
+  "solution": {
+    "q1Options": [
+      "Selecciona al autor principal...",
+      "Héctor (Ex-editor)",
+      "Elena (Contable y ex-pareja)",
+      "Un ladrón de coches fortuito"
+    ],
+    "q2Options": [
+      "Selecciona al cómplice...",
+      "Actuó totalmente sola",
+      "Marc (Socio del canal)",
+      "Héctor (Ex-editor)"
+    ],
+    "q3Options": [
+      "Selecciona la prueba definitiva...",
+      "Las amenazas de Héctor a la 01:50 AM",
+      "La salida del hospital a las 00:12 AM y la transferencia #91 de 40.000 €",
+      "El correo de cumpleaños de la óptica"
+    ],
+    "a1": "Elena (Contable y ex-pareja)",
+    "a2": "Marc (Socio del canal)",
+    "a3": "La salida del hospital a las 00:12 AM y la transferencia #91 de 40.000 €",
+    "epilogue": "¡Enhorabuena, Inspector! Con los registros de NeoBank y el correo del torno del hospital, la policía interceptó a Elena y Marc antes de que pudieran vaciar la cuenta. Has completado el Caso #01 sin pagar nada."
+  }
+}
