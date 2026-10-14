@@ -1,6 +1,6 @@
 /**
  * ============================================================================
- * 1. SINTETIZADOR DE SONIDO PROCEDURAL (0 Archivos Externos)
+ * 1. SINTETIZADOR DE SONIDO (0 Archivos Externos)
  * ============================================================================
  */
 const SoundEngine = {
@@ -17,7 +17,7 @@ const SoundEngine = {
 
   toggleMute() {
     this.muted = !this.muted;
-    document.getElementById('btn-mute').textContent = this.muted ? '🔇' : '🔊';
+    document.getElementById('btn-mute').textContent = this.muted ? '🔇 5G' : '🔊 5G';
     if (!this.muted) this.click();
   },
 
@@ -27,14 +27,14 @@ const SoundEngine = {
     const osc = this.ctx.createOscillator();
     const gain = this.ctx.createGain();
     osc.type = 'sine';
-    osc.frequency.setValueAtTime(750, this.ctx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(300, this.ctx.currentTime + 0.04);
-    gain.gain.setValueAtTime(0.12, this.ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.04);
+    osc.frequency.setValueAtTime(800, this.ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(320, this.ctx.currentTime + 0.035);
+    gain.gain.setValueAtTime(0.1, this.ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.035);
     osc.connect(gain);
     gain.connect(this.ctx.destination);
     osc.start();
-    osc.stop(this.ctx.currentTime + 0.04);
+    osc.stop(this.ctx.currentTime + 0.035);
   },
 
   key() {
@@ -43,13 +43,13 @@ const SoundEngine = {
     const osc = this.ctx.createOscillator();
     const gain = this.ctx.createGain();
     osc.type = 'triangle';
-    osc.frequency.setValueAtTime(1100, this.ctx.currentTime);
-    gain.gain.setValueAtTime(0.08, this.ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.03);
+    osc.frequency.setValueAtTime(1150, this.ctx.currentTime);
+    gain.gain.setValueAtTime(0.07, this.ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.025);
     osc.connect(gain);
     gain.connect(this.ctx.destination);
     osc.start();
-    osc.stop(this.ctx.currentTime + 0.03);
+    osc.stop(this.ctx.currentTime + 0.025);
   },
 
   success() {
@@ -60,13 +60,13 @@ const SoundEngine = {
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
       osc.type = 'sine';
-      osc.frequency.setValueAtTime(freq, now + idx * 0.11);
-      gain.gain.setValueAtTime(0.18, now + idx * 0.11);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.11 + 0.22);
+      osc.frequency.setValueAtTime(freq, now + idx * 0.1);
+      gain.gain.setValueAtTime(0.16, now + idx * 0.1);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.1 + 0.2);
       osc.connect(gain);
       gain.connect(this.ctx.destination);
-      osc.start(now + idx * 0.11);
-      osc.stop(now + idx * 0.11 + 0.22);
+      osc.start(now + idx * 0.1);
+      osc.stop(now + idx * 0.1 + 0.2);
     });
   },
 
@@ -78,75 +78,24 @@ const SoundEngine = {
     const gain = this.ctx.createGain();
     osc.type = 'sawtooth';
     osc.frequency.setValueAtTime(150, now);
-    osc.frequency.setValueAtTime(115, now + 0.12);
-    gain.gain.setValueAtTime(0.18, now);
-    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
+    osc.frequency.setValueAtTime(110, now + 0.12);
+    gain.gain.setValueAtTime(0.16, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
     osc.connect(gain);
     gain.connect(this.ctx.destination);
     osc.start(now);
-    osc.stop(now + 0.28);
-  },
-
-  glitchTape(onEndedCallback) {
-    if (this.muted) {
-      setTimeout(onEndedCallback, 400);
-      return;
-    }
-    this.init();
-    const duration = 1.25;
-    const bufferSize = this.ctx.sampleRate * duration;
-    const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
-    const data = buffer.getChannelData(0);
-    for (let i = 0; i < bufferSize; i++) {
-      data[i] = (Math.random() * 2 - 1) * 0.25;
-    }
-
-    const noise = this.ctx.createBufferSource();
-    noise.buffer = buffer;
-
-    const filter = this.ctx.createBiquadFilter();
-    filter.type = 'bandpass';
-    filter.frequency.value = 1100;
-
-    const gain = this.ctx.createGain();
-    gain.gain.setValueAtTime(0.25, this.ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.02, this.ctx.currentTime + duration);
-
-    const cutoffBeep = this.ctx.createOscillator();
-    cutoffBeep.type = 'square';
-    cutoffBeep.frequency.setValueAtTime(380, this.ctx.currentTime + 0.85);
-    cutoffBeep.frequency.setValueAtTime(140, this.ctx.currentTime + 1.05);
-
-    const beepGain = this.ctx.createGain();
-    beepGain.gain.setValueAtTime(0.15, this.ctx.currentTime + 0.85);
-    beepGain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + duration);
-
-    noise.connect(filter);
-    filter.connect(gain);
-    gain.connect(this.ctx.destination);
-    cutoffBeep.connect(beepGain);
-    beepGain.connect(this.ctx.destination);
-
-    noise.start();
-    cutoffBeep.start(this.ctx.currentTime + 0.85);
-    cutoffBeep.stop(this.ctx.currentTime + duration);
-
-    setTimeout(() => {
-      if (onEndedCallback) onEndedCallback();
-    }, duration * 1000);
+    osc.stop(now + 0.25);
   }
 };
 
 /**
  * ============================================================================
- * 2. MOTOR PRINCIPAL DE CASOS (Carga Modular JSON + Autoguardado)
+ * 2. SISTEMA OPERATIVO DEL MÓVIL (MURAZO OS)
  * ============================================================================
  */
-const Engine = {
+const OS = {
   catalog: [],
-  currentCaseMeta: null,
-  freeData: null,
-  vipData: null,
+  caseData: null,
   state: {},
 
   async init() {
@@ -154,411 +103,425 @@ const Engine = {
       const res = await fetch('cases/catalog.json');
       const data = await res.json();
       this.catalog = data.cases;
-      this.renderCatalogSelector();
-
-      const firstAvailable = this.catalog.find(c => c.available);
-      if (firstAvailable) {
-        await this.loadCase(firstAvailable.id);
-      }
-    } catch (err) {
-      document.getElementById('view-board').innerHTML = `
-        <div class="clue-card">
-          <span class="clue-tag">AVISO TÉCNICO</span>
-          <h3>Abre el proyecto con un Servidor Local</h3>
-          <p>Para cargar los archivos JSON de <code>/cases/</code>, abre esta carpeta con <strong>Live Server</strong> en VS Code o súbela a Firebase/Vercel.</p>
+      await this.loadCase(this.catalog[0].id, false);
+    } catch (e) {
+      document.getElementById('screen').innerHTML = `
+        <div class="glass-card" style="margin-top:40px; border-color:var(--accent-red);">
+          <span class="meta-line">ERROR DE SERVIDOR LOCAL</span>
+          <h3 style="margin:8px 0;">Abre con Live Server</h3>
+          <p style="font-size:0.85rem; color:var(--text-muted);">
+            Para que el navegador lea los archivos de la carpeta <code>/cases/</code>, abre el proyecto con la extensión <strong>Live Server</strong> de VS Code.
+          </p>
         </div>`;
     }
   },
 
-  renderCatalogSelector() {
-    const sel = document.getElementById('case-selector');
-    sel.innerHTML = this.catalog.map(c => `
-      <option value="${c.id}" ${!c.available ? 'disabled' : ''}>
-        ${c.title} (${c.difficulty}) ${!c.available ? '🔒 PRÓXIMAMENTE' : ''}
-      </option>
-    `).join('');
-  },
+  async loadCase(caseId, playSound = true) {
+    if (playSound) SoundEngine.click();
+    const meta = this.catalog.find(c => c.id === caseId);
 
-  async changeCase(caseId) {
-    SoundEngine.click();
-    await this.loadCase(caseId);
-  },
-
-  async loadCase(caseId) {
-    this.currentCaseMeta = this.catalog.find(c => c.id === caseId);
-    const saved = localStorage.getItem(`elmurazo_save_${caseId}`);
+    const saved = localStorage.getItem(`elmurazo_v2_${caseId}`);
     this.state = saved ? JSON.parse(saved) : {
-      noteUnlocked: false,
-      vipUnlocked: false,
-      trashUnlocked: false,
-      caseSolved: false,
+      notesUnlocked: false,
+      bankUnlocked: false,
+      solved: false,
       attempts: 0
     };
 
-    // 1. Cargar el JSON gratuito del caso
-    const resFree = await fetch(this.currentCaseMeta.freeFile);
-    this.freeData = await resFree.json();
-    this.vipData = null;
-
-    // 2. Si ya tenía el VIP desbloqueado, cargar también el JSON VIP
-    if (this.state.vipUnlocked) {
-      await this.loadVipJson();
-    }
-
-    document.getElementById('btn-buy-link').onclick = () => {
-      SoundEngine.click();
-      window.open(this.freeData.stripeCheckoutUrl, '_blank');
-    };
-
-    this.renderBoard();
-    this.renderPhoneHome(false);
+    const res = await fetch(meta.file);
+    this.caseData = await res.json();
+    document.getElementById('os-clock').textContent = this.caseData.phoneClock || "02:15";
+    this.goHome(false);
   },
 
-  async loadVipJson() {
-    const resVip = await fetch(this.currentCaseMeta.vipFile);
-    this.vipData = await resVip.json();
+  save() {
+    localStorage.setItem(`elmurazo_v2_${this.caseData.id}`, JSON.stringify(this.state));
   },
 
-  saveState() {
-    localStorage.setItem(`elmurazo_save_${this.currentCaseMeta.id}`, JSON.stringify(this.state));
-  },
-
-  switchMainView(view) {
-    SoundEngine.click();
-    document.getElementById('view-board').style.display = view === 'board' ? 'grid' : 'none';
-    document.getElementById('view-phone').style.display = view === 'phone' ? 'flex' : 'none';
-    document.getElementById('tab-board').classList.toggle('active', view === 'board');
-    document.getElementById('tab-phone').classList.toggle('active', view === 'phone');
-  },
-
-  renderBoard() {
-    const board = document.getElementById('view-board');
-    let clues = [...this.freeData.boardClues];
-    if (this.vipData && this.vipData.vipBoardClues) {
-      clues = clues.concat(this.vipData.vipBoardClues);
-    }
-
-    board.innerHTML = clues.map(clue => `
-      <div class="clue-card ${clue.isVip ? 'vip-card' : ''}">
-        <span class="clue-tag">${clue.tag}</span>
-        <h3>${clue.title}</h3>
-        ${clue.body ? `<p>${clue.body}</p>` : ''}
-        ${clue.suspects ? clue.suspects.map(s => `
-          <div class="suspect-item"><strong>${s.name}:</strong> <span style="color:#94a3b8">${s.alibi}</span></div>
-        `).join('') : ''}
-      </div>
-    `).join('');
-  },
-
-  renderPhoneHome(playSound = true) {
+  // PANTALLA DE INICIO (HOME DEL MÓVIL)
+  goHome(playSound = true) {
     if (playSound) SoundEngine.click();
-    const screen = document.getElementById('phone-screen-content');
-    const totalChats = this.freeData.chats.length + (this.vipData ? this.vipData.extraChats.length : 0);
+    const screen = document.getElementById('screen');
+    const c = this.caseData;
 
     screen.innerHTML = `
-      <div style="text-align:center; margin: 10px 0 16px;">
-        <h2 style="font-size:1.3rem; font-family:'JetBrains Mono',monospace;">${this.freeData.victimPhoneName}</h2>
-        <small style="color:var(--text-muted);">${this.state.vipUnlocked ? '🔓 MODO FORENSE VIP ACTIVO' : 'Evidencia Policial #04'}</small>
+      <!-- WIDGET DEL CASO ACTIVO -->
+      <div class="forensic-widget" onclick="OS.openApp('cases')" style="cursor:pointer;">
+        <div class="widget-tag">
+          <span>📱 DISPOSITIVO CLONADO: ${c.owner}</span>
+          <span>CAMBIAR ▾</span>
+        </div>
+        <h1>${c.title}</h1>
+        <p>${c.summary}</p>
       </div>
-      <div class="app-grid">
-        <div class="app-icon" onclick="Engine.openApp('chats')">
-          <span>💬</span>
-          <small>Mensajes (${totalChats})</small>
+
+      <!-- ICONOS DE APLICACIONES -->
+      <div class="ios-grid">
+        <div class="app-Launcher" onclick="OS.openApp('suspects')">
+          <div class="app-squircle bg-Suspects">
+            📋
+            <span class="app-badge">${c.suspects.length}</span>
+          </div>
+          <span class="app-label">Pol-Dossier</span>
         </div>
-        <div class="app-icon" onclick="Engine.openApp('photos')">
-          <span>🖼️</span>
-          <small>Galería (${this.freeData.photos.length})</small>
+
+        <div class="app-Launcher" onclick="OS.openApp('chats')">
+          <div class="app-squircle bg-chat">
+            💬
+            <span class="app-badge">${c.chats.length}</span>
+          </div>
+          <span class="app-label">Mensajes</span>
         </div>
-        <div class="app-icon" onclick="Engine.openApp('notes')">
-          <span>${this.state.noteUnlocked ? '🔓' : '🔒'}</span>
-          <small>Notas (PIN)</small>
+
+        <div class="app-Launcher" onclick="OS.openApp('mail')">
+          <div class="app-squircle bg-mail">
+            ✉️
+            <span class="app-badge">${c.emails.length}</span>
+          </div>
+          <span class="app-label">M-Mail</span>
         </div>
-        <div class="app-icon" onclick="Engine.openApp('audio')">
-          <span>🎙️</span>
-          <small>Grabadora VIP</small>
+
+        <div class="app-Launcher" onclick="OS.openApp('maps')">
+          <div class="app-squircle bg-maps">📍</div>
+          <span class="app-label">GeoTrack</span>
         </div>
-        <div class="app-icon" onclick="Engine.openApp('trash')">
-          <span>🗑️</span>
-          <small>Papelera ${this.state.trashUnlocked ? '🔓' : '🔒'}</small>
+
+        <div class="app-Launcher" onclick="OS.openApp('bank')">
+          <div class="app-squircle bg-bank">
+            💳
+            <span class="app-badge">${this.state.bankUnlocked ? '✓' : '🔒'}</span>
+          </div>
+          <span class="app-label">NeoBank</span>
         </div>
-        <div class="app-icon" onclick="Engine.openApp('solve')">
-          <span>⚖️</span>
-          <small>Resolver Caso</small>
+
+        <div class="app-Launcher" onclick="OS.openApp('notes')">
+          <div class="app-squircle bg-notes">
+            🔐
+            <span class="app-badge">${this.state.notesUnlocked ? '✓' : '🔒'}</span>
+          </div>
+          <span class="app-label">Notas VIP</span>
+        </div>
+
+        <div class="app-Launcher" onclick="OS.openApp('cases')">
+          <div class="app-squircle bg-cases">📁</div>
+          <span class="app-label">Expedientes</span>
+        </div>
+
+        <div class="app-Launcher" onclick="OS.openApp('solve')">
+          <div class="app-squircle bg-solve">⚖️</div>
+          <span class="app-label">Acusar</span>
         </div>
       </div>
     `;
   },
 
-  openApp(appName) {
+  openApp(app) {
     SoundEngine.click();
-    const screen = document.getElementById('phone-screen-content');
+    const screen = document.getElementById('screen');
+    const c = this.caseData;
 
-    // 1. CHATS
-    if (appName === 'chats') {
-      const allChats = [...this.freeData.chats, ...(this.vipData ? this.vipData.extraChats : [])];
+    // 1. SELECTOR DE CASOS (CASO 1 GRATIS, CASO 2 DE PAGO)
+    if (app === 'cases') {
       screen.innerHTML = `
-        <div class="app-header">
-          <button class="btn-back" onclick="Engine.renderPhoneHome()">← Volver</button>
-          <strong>Mensajes</strong>
+        <div class="app-topbar">
+          <button class="btn-back-ios" onclick="OS.goHome()">‹ Inicio</button>
+          <span class="app-title-header">Archivo de Casos</span>
+          <span style="width:45px;"></span>
         </div>
-        ${allChats.map(c => `
-          <div class="chat-bubble">
-            <span class="chat-meta">${c.sender} • ${c.time}</span>${c.text}
-          </div>
-        `).join('')}
-      `;
-    }
-
-    // 2. FOTOS
-    if (appName === 'photos') {
-      screen.innerHTML = `
-        <div class="app-header">
-          <button class="btn-back" onclick="Engine.renderPhoneHome()">← Volver</button>
-          <strong>Galería</strong>
-        </div>
-        ${this.freeData.photos.map(p => `
-          <div class="photo-item">
-            <div class="photo-visual">${p.visualText}</div>
-            <strong style="font-size:0.85rem; display:block; margin-bottom:4px;">${p.title}</strong>
-            <p style="font-size:0.8rem; color:var(--text-muted);">${p.caption}</p>
-          </div>
-        `).join('')}
-      `;
-    }
-
-    // 3. NOTAS (PUZLE 1 GRATIS)
-    if (appName === 'notes') {
-      if (!this.state.noteUnlocked) {
-        screen.innerHTML = `
-          <div class="app-header">
-            <button class="btn-back" onclick="Engine.renderPhoneHome()">← Volver</button>
-            <strong>Notas Protegidas</strong>
-          </div>
-          <p style="font-size:0.85rem; color:var(--text-muted); text-align:center; margin-top:15px;">
-            ${this.freeData.pinHint}
-          </p>
-          <input type="text" maxlength="4" id="pin-attempt" class="pin-input" placeholder="••••" oninput="SoundEngine.key()">
-          <button class="btn-action" onclick="Engine.checkPin()">Desbloquear Carpeta</button>
-          <p id="pin-error" style="color:var(--accent); font-size:0.8rem; text-align:center; margin-top:10px;"></p>
-        `;
-      } else {
-        screen.innerHTML = `
-          <div class="app-header">
-            <button class="btn-back" onclick="Engine.renderPhoneHome()">← Volver</button>
-            <strong>Nota Desbloqueada</strong>
-          </div>
-          <div class="photo-item" style="border-color:var(--accent);">
-            <span class="clue-tag">CLAVE CORRECTA</span>
-            <h4 style="margin-bottom:8px;">${this.freeData.secretNoteUnlocked.title}</h4>
-            <p style="font-size:0.88rem; line-height:1.5;">${this.freeData.secretNoteUnlocked.content}</p>
-            <button class="btn-action" id="btn-play-tape" style="margin-top:15px;" onclick="Engine.triggerAudioClimax(this)">
-              ▶ Escuchar AUDIO_PARKING_0210.MP3
-            </button>
-          </div>
-        `;
-      }
-    }
-
-    // 4. GRABADORA VIP
-    if (appName === 'audio') {
-      if (!this.state.vipUnlocked) {
-        this.triggerAudioClimax();
-        return;
-      }
-      screen.innerHTML = `
-        <div class="app-header">
-          <button class="btn-back" onclick="Engine.renderPhoneHome()">← Volver</button>
-          <strong>Grabadora Forense</strong>
-        </div>
-        ${this.vipData.audios.map(a => `
-          <div class="photo-item" style="border-color:var(--accent-green);">
-            <span class="clue-tag" style="color:var(--accent-green);">${a.duration}</span>
-            <h4 style="margin-bottom:6px;">${a.title}</h4>
-            <p style="font-size:0.83rem; color:#e2e8f0; line-height:1.45;">${a.transcript}</p>
-          </div>
-        `).join('')}
-      `;
-    }
-
-    // 5. PAPELERA OCULTA (PUZLE 2 VIP)
-    if (appName === 'trash') {
-      if (!this.state.vipUnlocked) {
-        this.triggerAudioClimax();
-        return;
-      }
-      if (!this.state.trashUnlocked) {
-        screen.innerHTML = `
-          <div class="app-header">
-            <button class="btn-back" onclick="Engine.renderPhoneHome()">← Volver</button>
-            <strong>Papelera Cifrada</strong>
-          </div>
-          <p style="font-size:0.85rem; color:var(--text-muted); text-align:center; margin-top:15px;">
-            ${this.vipData.trashPuzzle.hint}
-          </p>
-          <input type="text" maxlength="4" id="trash-pin-attempt" class="pin-input" placeholder="••••" oninput="SoundEngine.key()">
-          <button class="btn-action" onclick="Engine.checkTrashPin()">Recuperar Archivos Borrados</button>
-          <p id="trash-error" style="color:var(--accent); font-size:0.8rem; text-align:center; margin-top:10px;"></p>
-        `;
-      } else {
-        screen.innerHTML = `
-          <div class="app-header">
-            <button class="btn-back" onclick="Engine.renderPhoneHome()">← Volver</button>
-            <strong>Archivos Recuperados</strong>
-          </div>
-          ${this.vipData.trashPhotos.map(p => `
-            <div class="photo-item" style="border-color:var(--accent-amber);">
-              <div class="photo-visual">${p.visualText}</div>
-              <strong style="font-size:0.85rem; display:block; margin-bottom:4px;">${p.title}</strong>
-              <p style="font-size:0.8rem; color:var(--text-muted);">${p.caption}</p>
+        ${this.catalog.map(item => `
+          <div class="glass-card" style="border-left: 3px solid ${item.isFree ? 'var(--accent-green)' : 'var(--accent-amber)'}">
+            <div class="meta-line">
+              <span>DIFICULTAD: ${item.difficulty}</span>
+              <span style="color:${item.isFree ? 'var(--accent-green)' : 'var(--accent-amber)'}">
+                ${item.isFree ? '● ACCESO GRATUITO' : '🔒 EXPEDIENTE VIP (4,99 €)'}
+              </span>
             </div>
-          `).join('')}
+            <h3 style="font-size:1rem; margin:6px 0;">${item.title}</h3>
+            <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:12px;">${item.teaser}</p>${item.isFree 
+              ? `<button class="btn-primary" style="background:var(--accent-green); padding:10px;" onclick="OS.loadCase('${item.id}')">Jugar este Caso</button>`
+              : `<button class="btn-primary" style="padding:10px;" onclick="window.open('${item.checkoutUrl}', '_blank')">🔓 Comprar Acceso (4,99 €)</button>`
+            }
+          </div>
+        `).join('')}
+      `;
+    }
+
+    // 2. DOSSIER DE SOSPECHOSOS E INSTRUCCIONES
+    if (app === 'suspects') {
+      screen.innerHTML = `
+        <div class="app-topbar">
+          <button class="btn-back-ios" onclick="OS.goHome()">‹ Inicio</button>
+          <span class="app-title-header">Ficha Policial</span>
+          <span style="width:45px;"></span>
+        </div>
+        <div class="glass-card" style="border-left:3px solid var(--accent-blue);">
+          <div class="meta-line">OBJETIVO DE LA INVESTIGACIÓN</div>
+          <p style="font-size:0.83rem; line-height:1.45; color:#e2e8f0;">${c.briefing}</p>
+        </div>
+        ${c.suspects.map(s => `
+          <div class="glass-card">
+            <div class="meta-line"><span>SOSPECHOSO</span><span>COARTADA OFICIAL</span></div>
+            <h4 style="font-size:0.98rem; margin-bottom:4px;">${s.name}</h4>
+            <p style="font-size:0.82rem; color:var(--text-muted); line-height:1.4;">"${s.alibi}"</p>
+          </div>
+        `).join('')}
+      `;
+    }
+
+    // 3. MENSAJES (LISTA DE CONTACTOS)
+    if (app === 'chats') {
+      screen.innerHTML = `
+        <div class="app-topbar">
+          <button class="btn-back-ios" onclick="OS.goHome()">‹ Inicio</button>
+          <span class="app-title-header">Mensajes</span>
+          <span style="width:45px;"></span>
+        </div>
+        ${c.chats.map((thread, idx) => `
+          <button class="chat-contact-btn" onclick="OS.openChatThread(${idx})">
+            <div>
+              <strong style="font-size:0.92rem; display:block; margin-bottom:3px;">${thread.contact}</strong>
+              <span style="font-size:0.78rem; color:var(--text-muted);">${thread.messages[thread.messages.length - 1].text.substring(0, 38)}...</span>
+            </div>
+            <span style="font-family:'JetBrains Mono',monospace; font-size:0.72rem; color:var(--accent-green);">Ver ›</span>
+          </button>
+        `).join('')}
+      `;
+    }
+
+    // 4. M-MAIL (CORREO ELECTRÓNICO)
+    if (app === 'mail') {
+      screen.innerHTML = `
+        <div class="app-topbar">
+          <button class="btn-back-ios" onclick="OS.goHome()">‹ Inicio</button>
+          <span class="app-title-header">Bandeja M-Mail</span>
+          <span style="width:45px;"></span>
+        </div>
+        ${c.emails.map(m => `
+          <div class="glass-card">
+            <div class="meta-line">
+              <span>DE: ${m.from}</span>
+              <span>${m.time}</span>
+            </div>
+            <h4 style="font-size:0.9rem; margin:5px 0 8px; color:#fde047;">${m.subject}</h4>
+            <p style="font-size:0.82rem; color:#cbd5e1; line-height:1.45; white-space:pre-line;">${m.body}</p>
+          </div>
+        `).join('')}
+      `;
+    }
+
+    // 5. GEOTRACK (HISTORIAL DE UBICACIONES ESTILO GOOGLE MAPS)
+    if (app === 'maps') {
+      screen.innerHTML = `
+        <div class="app-topbar">
+          <button class="btn-back-ios" onclick="OS.goHome()">‹ Inicio</button>
+          <span class="app-title-header">GeoTrack GPS</span>
+          <span style="width:45px;"></span>
+        </div>
+        <div class="glass-card" style="margin-bottom:16px;">
+          <div class="meta-line">HISTORIAL DE POSICIÓN DEL DISPOSITIVO</div>
+          <p style="font-size:0.78rem; color:var(--text-muted);">Rastreo satelital registrado antes de perder la señal.</p>
+        </div>
+        ${c.locations.map(loc => `
+          <div class="timeline-node">
+            <div class="glass-card" style="margin-bottom:0;">
+              <div class="meta-line">
+                <span>${loc.time}</span>
+                <span>${loc.coords}</span>
+              </div>
+              <h4 style="font-size:0.92rem; margin:4px 0;">${loc.place}</h4>
+              <p style="font-size:0.8rem; color:var(--text-muted);">${loc.detail}</p>
+            </div>
+          </div>
+        `).join('')}
+      `;
+    }
+
+    // 6. NEOBANK (EXTRACTO BANCARIO PROTEGIDO CON PUZLE 1)
+    if (app === 'bank') {
+      if (!this.state.bankUnlocked) {
+        screen.innerHTML = `
+          <div class="app-topbar">
+            <button class="btn-back-ios" onclick="OS.goHome()">‹ Inicio</button>
+            <span class="app-title-header">NeoBank Seguridad</span>
+            <span style="width:45px;"></span>
+          </div>
+          <div class="glass-card" style="text-align:center;">
+            <span style="font-size:2rem;">💳</span>
+            <h3 style="margin:8px 0;">Acceso Biométrico Fallido</h3>
+            <p style="font-size:0.82rem; color:var(--text-muted); line-height:1.4;">${c.bankPuzzle.hint}</p>
+            <input type="text" maxlength="4" id="bank-pin" class="pin-box" placeholder="••••" oninput="SoundEngine.key()">
+            <button class="btn-primary" onclick="OS.verifyPin('bank')">Entrar a NeoBank</button>
+            <p id="pin-err" style="color:var(--accent-red); font-size:0.78rem; margin-top:10px;"></p>
+          </div>
+        `;
+      } else {
+        screen.innerHTML = `
+          <div class="app-topbar">
+            <button class="btn-back-ios" onclick="OS.goHome()">‹ Inicio</button>
+            <span class="app-title-header">Movimientos NeoBank</span>
+            <span style="width:45px;"></span>
+          </div>
+          <div class="glass-card" style="background:linear-gradient(135deg,#4c1d95,#1e1b4b);">
+            <div class="meta-line" style="color:#ddd6fe;">SALDO DISPONIBLE</div>
+            <h2 style="font-family:'JetBrains Mono',monospace; font-size:1.6rem; margin-top:4px;">${c.bankPuzzle.balance}</h2>
+          </div>
+          <div class="glass-card">
+            <div class="meta-line">ÚLTIMOS CARGOS CON TARJETA</div>
+            ${c.bankPuzzle.transactions.map(t => `
+              <div class="bank-row">
+                <div>
+                  <strong style="font-size:0.85rem; display:block;">${t.concept}</strong>
+                  <small style="color:var(--text-muted); font-size:0.74rem;">${t.time} •${t.detail}</small>
+                </div>
+                <span class="amount-neg">${t.amount}</span>
+              </div>
+            `).join('')}
+          </div>
         `;
       }
     }
 
-    // 6. RESOLVER CASO (SENTENCIA FINAL)
-    if (appName === 'solve') {
-      if (!this.state.vipUnlocked) {
-        this.triggerAudioClimax();
-        return;
+    // 7. NOTAS SECRETAS (PROTEGIDA CON PUZLE 2)
+    if (app === 'notes') {
+      if (!this.state.notesUnlocked) {
+        screen.innerHTML = `
+          <div class="app-topbar">
+            <button class="btn-back-ios" onclick="OS.goHome()">‹ Inicio</button>
+            <span class="app-title-header">Carpeta Cifrada</span>
+            <span style="width:45px;"></span>
+          </div>
+          <div class="glass-card" style="text-align:center;">
+            <span style="font-size:2rem;">🔐</span>
+            <h3 style="margin:8px 0;">Nota bloqueada con PIN</h3>
+            <p style="font-size:0.82rem; color:var(--text-muted); line-height:1.4;">${c.notesPuzzle.hint}</p>
+            <input type="text" maxlength="4" id="notes-pin" class="pin-box" placeholder="••••" oninput="SoundEngine.key()">
+            <button class="btn-primary" onclick="OS.verifyPin('notes')">Desbloquear Nota</button>
+            <p id="pin-err" style="color:var(--accent-red); font-size:0.78rem; margin-top:10px;"></p>
+          </div>
+        `;
+      } else {
+        screen.innerHTML = `
+          <div class="app-topbar">
+            <button class="btn-back-ios" onclick="OS.goHome()">‹ Inicio</button>
+            <span class="app-title-header">Nota Confidencial</span>
+            <span style="width:45px;"></span>
+          </div>
+          <div class="glass-card" style="border-color:var(--accent-amber);">
+            <div class="meta-line" style="color:var(--accent-amber);">BORRADOR GUARDADO A LAS 02:08 AM</div>
+            <h3 style="margin:6px 0 10px;">${c.notesPuzzle.title}</h3>
+            <p style="font-size:0.86rem; line-height:1.55; color:#f1f5f9; white-space:pre-line;">${c.notesPuzzle.content}</p>
+          </div>
+        `;
       }
-      const sol = this.vipData.solution;
+    }
+
+    // 8. FORMULARIO FINAL DE ACUSACIÓN (100% GRATIS EN EL CASO 1)
+    if (app === 'solve') {
+      const sol = c.solution;
       screen.innerHTML = `
-        <div class="app-header">
-          <button class="btn-back" onclick="Engine.renderPhoneHome()">← Volver</button>
-          <strong>Informe de Arresto</strong>
+        <div class="app-topbar">
+          <button class="btn-back-ios" onclick="OS.goHome()">‹ Inicio</button>
+          <span class="app-title-header">Emitir Orden Policial</span>
+          <span style="width:45px;"></span>
         </div>
-        <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:10px;">
-          Selecciona las 3 conclusiones forenses para emitir la orden de detención:
-        </p>
-        <label style="font-size:0.75rem; color:var(--accent-amber);">1. ¿QUIÉN ATACÓ A ÁLEX?</label>
-        <select id="sol-killer" class="select-input">
-          ${sol.killerOptions.map(o => `<option value="${o}">${o}</option>`).join('')}
-        </select>
+        <div class="glass-card">
+          <label style="font-size:0.75rem; color:var(--accent-blue); font-weight:700;">1. ¿QUIÉN SECUESTRÓ A ÁLEX?</label>
+          <select id="ans-1" class="select-modern">
+            ${sol.q1Options.map(o => `<option value="${o}">${o}</option>`).join('')}
+          </select>
 
-        <label style="font-size:0.75rem; color:var(--accent-amber);">2. ¿QUIÉN FUE SU CÓMPLICE?</label>
-        <select id="sol-accomplice" class="select-input">
-          ${sol.accompliceOptions.map(o => `<option value="${o}">${o}</option>`).join('')}
-        </select>
+          <label style="font-size:0.75rem; color:var(--accent-blue); font-weight:700;">2. ¿QUIÉN FUE SU CÓMPLICE?</label>
+          <select id="ans-2" class="select-modern">
+            ${sol.q2Options.map(o => `<option value="${o}">${o}</option>`).join('')}
+          </select>
 
-        <label style="font-size:0.75rem; color:var(--accent-amber);">3. PRUEBA DEFINITIVA:</label>
-        <select id="sol-motive" class="select-input">
-          ${sol.evidenceOptions.map(o => `<option value="${o}">${o}</option>`).join('')}
-        </select>
+          <label style="font-size:0.75rem; color:var(--accent-blue); font-weight:700;">3. ¿QUÉ PRUEBA DESTROZA SU COARTADA?</label>
+          <select id="ans-3" class="select-modern">
+            ${sol.q3Options.map(o => `<option value="${o}">${o}</option>`).join('')}
+          </select>
 
-        <button class="btn-action" style="background:var(--accent-green);" onclick="Engine.submitVerdict()">
-          ⚖️ Firmar Orden de Arresto
-        </button>
-        <div id="verdict-feedback" style="margin-top:12px;"></div>
+          <button class="btn-primary" style="background:var(--accent-green);" onclick="OS.submitVerdict()">
+            ⚖️ Confirmar Acusación Oficial
+          </button>
+          <div id="verdict-box" style="margin-top:14px;"></div>
+        </div>
       `;
     }
   },
 
-  checkPin() {
-    const inputEl = document.getElementById('pin-attempt');
-    if (inputEl.value.trim() === this.freeData.pinCode) {
-      SoundEngine.success();
-      this.state.noteUnlocked = true;
-      this.saveState();
-      this.openApp('notes');
-    } else {
-      this.state.attempts++;
-      this.saveState();
-      SoundEngine.error();
-      inputEl.classList.remove('shake-anim');
-      void inputEl.offsetWidth;
-      inputEl.classList.add('shake-anim');
-      document.getElementById('pin-error').textContent = "❌ PIN incorrecto. Cruza el chat de Marc con la Galería.";
-    }
+  openChatThread(index) {
+    SoundEngine.click();
+    const thread = this.caseData.chats[index];
+    const screen = document.getElementById('screen');
+
+    screen.innerHTML = `
+      <div class="app-topbar">
+        <button class="btn-back-ios" onclick="OS.openApp('chats')">‹ Chats</button>
+        <span class="app-title-header">${thread.contact}</span>
+        <span style="width:45px;"></span>
+      </div>
+      <div style="display:flex; flex-direction:column;">
+        ${thread.messages.map(m => `
+          <div class="bubble ${m.fromMe ? 'sent' : ''}">
+            <div class="meta-line" style="color:${m.fromMe ? '#a7f3d0' : 'var(--accent-blue)'}">
+              <span>${m.fromMe ? 'Álex (Yo)' : thread.contact}</span>
+              <span>${m.time}</span>
+            </div>
+            ${m.text}
+          </div>
+        `).join('')}
+      </div>
+    `;
   },
 
-  checkTrashPin() {
-    const inputEl = document.getElementById('trash-pin-attempt');
-    if (inputEl.value.trim() === this.vipData.trashPuzzle.pinCode) {
+  verifyPin(type) {
+    const isBank = type === 'bank';
+    const input = document.getElementById(isBank ? 'bank-pin' : 'notes-pin');
+    const expected = isBank ? this.caseData.bankPuzzle.pin : this.caseData.notesPuzzle.pin;
+
+    if (input.value.trim() === expected) {
       SoundEngine.success();
-      this.state.trashUnlocked = true;
-      this.saveState();
-      this.openApp('trash');
+      if (isBank) this.state.bankUnlocked = true;
+      else this.state.notesUnlocked = true;
+      this.save();
+      this.openApp(type);
     } else {
       this.state.attempts++;
-      this.saveState();
+      this.save();
       SoundEngine.error();
-      inputEl.classList.remove('shake-anim');
-      void inputEl.offsetWidth;
-      inputEl.classList.add('shake-anim');
-      document.getElementById('trash-error').textContent = "❌ Código incorrecto. Escucha el Audio #02 y revisa el Tablón.";
+      input.classList.remove('shake-anim');
+      void input.offsetWidth;
+      input.classList.add('shake-anim');
+      document.getElementById('pin-err').textContent = "❌ Código incorrecto. Revisa los correos, chats y ubicaciones GPS.";
     }
   },
 
   submitVerdict() {
-    const k = document.getElementById('sol-killer').value;
-    const a = document.getElementById('sol-accomplice').value;
-    const m = document.getElementById('sol-motive').value;
-    const sol = this.vipData.solution;
-    const fb = document.getElementById('verdict-feedback');
+    const a1 = document.getElementById('ans-1').value;
+    const a2 = document.getElementById('ans-2').value;
+    const a3 = document.getElementById('ans-3').value;
+    const sol = this.caseData.solution;
+    const box = document.getElementById('verdict-box');
 
-    if (k === sol.correctKiller && a === sol.correctAccomplice && m === sol.correctEvidence) {
+    if (a1 === sol.a1 && a2 === sol.a2 && a3 === sol.a3) {
       SoundEngine.success();
-      this.state.caseSolved = true;
-      this.saveState();
-      const rank = this.state.attempts === 0 ? "Inspector Jefe (0 Fallos)" : "Detective Analista";
-      fb.innerHTML = `
-        <div class="photo-item" style="border-color:var(--accent-green); background:#064e3b;">
-          <span class="clue-tag" style="color:#a7f3d0;">CASO CERRADO CON ÉXITO</span>
-          <h4 style="margin-bottom:6px;">Rango: ${rank}</h4>
-          <p style="font-size:0.82rem; line-height:1.45;">${sol.epilogue}</p>
+      this.state.solved = true;
+      this.save();
+      box.innerHTML = `
+        <div class="glass-card" style="border-color:var(--accent-green); background:rgba(16, 185, 129, 0.15);">
+          <div class="meta-line" style="color:var(--accent-green);">¡CASO #01 RESUELTO! (${this.state.attempts} FALLOS)</div>
+          <h4 style="margin:6px 0;">Orden de arresto validada</h4>
+          <p style="font-size:0.82rem; line-height:1.45; margin-bottom:12px;">${sol.epilogue}</p>
+          <button class="btn-primary" onclick="OS.openApp('cases')">📁 Ir al Caso #02 (VIP)</button>
         </div>
       `;
     } else {
       this.state.attempts++;
-      this.saveState();
+      this.save();
       SoundEngine.error();
-      fb.innerHTML = `<p style="color:var(--accent); font-size:0.82rem; text-align:center;">❌ Hipótesis rechazada por el fiscal. Revisa la Papelera de fotos y los Audios.</p>`;
-    }
-  },
-
-  triggerAudioClimax(btnEl) {
-    if (this.state.vipUnlocked) {
-      this.openApp('audio');
-      return;
-    }
-    if (btnEl) {
-      btnEl.disabled = true;
-      btnEl.textContent = "🔊 Reproduciendo grabación (00:01)...";
-    }
-    const phoneFrame = document.getElementById('phone-frame-el');
-    phoneFrame.classList.add('shake-anim');
-
-    SoundEngine.glitchTape(() => {
-      phoneFrame.classList.remove('shake-anim');
-      if (btnEl) {
-        btnEl.disabled = false;
-        btnEl.textContent = "▶ Escuchar AUDIO_PARKING_0210.MP3";
-      }
-      document.getElementById('paywall-modal').style.display = 'flex';
-    });
-  },
-
-  closePaywall() {
-    SoundEngine.click();
-    document.getElementById('paywall-modal').style.display = 'none';
-  },
-
-  async verifyVipCode() {
-    const code = document.getElementById('vip-code-input').value.trim().toUpperCase();
-    if (code === this.freeData.vipAccessCode) {
-      SoundEngine.success();
-      this.state.vipUnlocked = true;
-      this.saveState();
-      await this.loadVipJson();
-      this.renderBoard();
-      document.getElementById('paywall-modal').style.display = 'none';
-      this.openApp('audio');
-    } else {
-      SoundEngine.error();
-      alert("Código VIP incorrecto. Usa el código de prueba: MURAZO99");
+      box.innerHTML = `<p style="color:var(--accent-red); font-size:0.82rem; text-align:center;">❌ Pruebas insuficientes o incorrectas. Desbloquea NeoBank y Notas VIP antes de acusar.</p>`;
     }
   }
 };
 
-window.addEventListener('DOMContentLoaded', () => Engine.init());
+window.addEventListener('DOMContentLoaded', () => OS.init());
