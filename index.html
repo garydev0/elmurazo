@@ -1,2064 +1,589 @@
 <!DOCTYPE html>
-<html lang="es" class="scroll-smooth">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>El Murazo | Gadgets, Setups y Regalos sin Trampa</title>
-  <meta name="description" content="Encuentra los gadgets de nuestros vídeos, configura tu setup por presupuesto estimado y descubre compras seguras en Amazon sin llevarte un murazo.">
-  
-  <!-- Favicon y Metadatos para Pestaña del Navegador y Redes Sociales -->
-  <link rel="icon" type="image/png" href="logo.png">
-  <link rel="apple-touch-icon" href="logo.png">
-  <meta property="og:title" content="El Murazo | Gadgets, Setups y Regalos sin Trampa">
-  <meta property="og:description" content="Encuentra los gadgets de nuestros vídeos, configura tu setup por presupuesto estimado y descubre compras seguras en Amazon.">
-  <meta property="og:image" content="logo.png">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="logo.png">
-
-  <!-- Google Fonts: Inter (Pesos completos hasta Black 900) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  
-  <!-- Font Awesome Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            brand: {
-              50: '#fff7ed',
-              100: '#ffedd5',
-              400: '#fb923c',
-              500: '#f97316',
-              600: '#ea580c',
-              700: '#c2410c',
-              dark: '#0f172a',
-              card: '#1e293b'
-            },
-            amazon: {
-              yellow: '#febd69',
-              orange: '#ff9900',
-              hover: '#e88b00'
-            }
-          },
-          fontFamily: {
-            sans: ['Inter', 'sans-serif'],
-            display: ['Inter', 'sans-serif']
-          }
-        }
-      }
-    }
-  </script>
-
+  <title>EL MURAZO | Expedientes Interactivos</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
   <style>
-    /* Custom glassmorphism & glow effects */
-    .glass-panel {
-      background: rgba(30, 41, 59, 0.7);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+    :root {
+      --bg-dark: #020617;
+      --panel-bg: #0f172a;
+      --border: #1e293b;
+      --accent: #ef4444;
+      --accent-amber: #f59e0b;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --green-chat: #059669;
     }
-    .neon-border:focus-within {
-      box-shadow: 0 0 0 2px #ea580c, 0 0 15px rgba(234, 88, 12, 0.4);
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
-    .badge-code {
-      background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);
+
+    /* BARRA SUPERIOR */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 20px;
+      background: rgba(15, 23, 42, 0.9);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 50;
     }
-    /* Hide scrollbars for clean tag navigation */
-    .no-scrollbar::-webkit-scrollbar {
+    .brand {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .badge-case {
+      background: rgba(239, 68, 68, 0.15);
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+    }
+    .view-switcher {
+      display: flex;
+      gap: 8px;
+    }
+    .btn-tab {
+      background: var(--panel-bg);
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.85rem;
+      transition: 0.2s;
+    }
+    .btn-tab.active {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    /* CONTENEDOR PRINCIPAL */
+    main {
+      flex: 1;
+      max-width: 1100px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    /* VISTA 1: TABLÓN POLICIAL */
+    #view-board {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 18px;
+    }
+    .clue-card {
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--accent);
+      border-radius: 10px;
+      padding: 18px;
+      position: relative;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+    }
+    .clue-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--accent-amber);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      display: block;
+    }
+    .clue-card h3 { font-size: 1.05rem; margin-bottom: 10px; }
+    .clue-card p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; }
+    .suspect-item {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px dashed var(--border);
+      font-size: 0.85rem;
+    }
+    .suspect-item strong { color: var(--text-main); }
+
+    /* VISTA 2: MÓVIL INTERACTIVO */
+    #view-phone {
       display: none;
+      justify-content: center;
+      width: 100%;
     }
-    .no-scrollbar {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
+    .phone-frame {
+      width: 360px;
+      height: 670px;
+      background: #090d16;
+      border: 8px solid #1e293b;
+      border-radius: 38px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.7);
     }
+    .phone-statusbar {
+      padding: 10px 20px;
+      background: #020617;
+      display: flex;
+      justify-content: space-between;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      border-bottom: 1px solid #1e293b;
+    }
+    .phone-screen {
+      flex: 1;
+      padding: 18px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+    .app-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      margin-top: 15px;
+    }
+    .app-icon {
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px 12px;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.15s, border-color 0.15s;
+    }
+    .app-icon:hover {
+      transform: translateY(-2px);
+      border-color: var(--accent-amber);
+    }
+    .app-icon span { font-size: 1.8rem; display: block; margin-bottom: 8px; }
+    .app-icon small { font-weight: 600; font-size: 0.85rem; }
+
+    /* CABECERA DENTRO DE CADA APP DEL MÓVIL */
+    .app-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 12px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .btn-back {
+      background: none;
+      border: none;
+      color: var(--accent-amber);
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    /* ESTILOS DE APPS INTERNAS (CHATS, FOTOS, PIN) */
+    .chat-bubble {
+      background: #1e293b;
+      padding: 10px 12px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      font-size: 0.85rem;
+      line-height: 1.4;
+    }
+    .chat-bubble.me {
+      background: var(--green-chat);
+      align-self: flex-end;
+    }
+    .chat-meta {
+      font-size: 0.7rem;
+      color: var(--accent-amber);
+      font-family: 'JetBrains Mono', monospace;
+      margin-bottom: 4px;
+      display: block;
+    }
+    .photo-item {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+    .photo-visual {
+      background: #020617;
+      border: 1px dashed var(--accent-amber);
+      padding: 18px;
+      text-align: center;
+      font-family: 'JetBrains Mono', monospace;
+      margin-bottom: 8px;
+      border-radius: 6px;
+      color: #fde047;
+    }
+    .pin-input {
+      width: 100%;
+      padding: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.3rem;
+      text-align: center;
+      letter-spacing: 6px;
+      background: #020617;
+      border: 1px solid var(--border);
+      color: white;
+      border-radius: 8px;
+      margin: 12px 0;
+    }
+    .btn-action {
+      width: 100%;
+      padding: 12px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+
+    /* MODAL MURO DE PAGO (EL MURAZO VIP) */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(2, 6, 23, 0.88);
+      backdrop-filter: blur(6px);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      z-index: 100;
+    }
+    .modal-box {
+      background: var(--panel-bg);
+      border: 2px solid var(--accent);
+      border-radius: 16px;
+      max-width: 430px;
+      width: 100%;
+      padding: 24px;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(239, 68, 68, 0.25);
+    }
+    .modal-box h2 { margin-bottom: 10px; font-size: 1.3rem; }
+    .modal-box p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 16px; line-height: 1.5; }
   </style>
 </head>
+<body>
 
-<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col antialiased selection:bg-orange-500 selection:text-white">
-
-  <header class="sticky top-0 z-40 bg-slate-950/90 backdrop-blur-md border-b border-slate-800">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
-      
-      <!-- Brand Logo -->
-      <a href="#" class="flex items-center gap-2.5 group cursor-pointer" onclick="resetFilters(event)">
-        <img 
-          src="logo.png" 
-          alt="El Murazo" 
-          class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl object-contain shadow-md shadow-orange-500/10 group-hover:scale-105 transition-transform"
-          onerror="this.style.display='none'"
-        >
-        <div>
-          <span class="font-display font-black text-xl tracking-tight text-white flex items-center gap-1">
-            EL<span class="text-orange-500">MURAZO</span>
-            <span class="text-[10px] uppercase font-bold tracking-widest bg-orange-500/10 text-orange-400 px-1.5 py-0.5 rounded border border-orange-500/20">COM</span>
-          </span>
-        </div>
-      </a>
-
-      <!-- Quick Search Bar (Syncs with Code & Text) -->
-      <div class="flex-1 max-w-md relative">
-        <div class="relative flex items-center neon-border rounded-xl transition-all">
-          <i class="fa-solid fa-magnifying-glass absolute left-3.5 text-slate-400 pointer-events-none text-sm"></i>
-          <input 
-            type="text" 
-            id="searchInput"
-            placeholder="Buscar por palabra o código TikTok (ej: #04, soporte)..." 
-            class="w-full pl-10 pr-10 py-2 bg-slate-900 border border-slate-800 rounded-xl text-sm placeholder-slate-500 focus:outline-none focus:border-orange-500 text-white transition-colors"
-            oninput="handleSearch(this.value)"
-          >
-          <button 
-            id="clearSearchBtn" 
-            onclick="clearSearch()" 
-            class="hidden absolute right-3 text-slate-400 hover:text-white text-xs"
-            title="Limpiar búsqueda"
-          >
-            <i class="fa-solid fa-xmark"></i>
-          </button>
-        </div>
-      </div>
-
-      <!-- Action Buttons -->
-      <div class="flex items-center gap-2">
-        <button 
-          onclick="openSuggestModal()" 
-          class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-medium transition-colors flex items-center gap-1.5"
-          title="Sugerir un gadget visto en redes"
-        >
-          <i class="fa-solid fa-paper-plane text-[11px] text-orange-400"></i>
-          <span class="hidden sm:inline">Sugerir</span>
-        </button>
-
-        <!-- Admin Access Button -->
-        <button 
-          id="adminNavBtn"
-          onclick="handleAdminNavClick()" 
-          class="px-3 py-2 bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-orange-400 rounded-xl text-xs font-medium transition-all border border-slate-800 flex items-center gap-1.5"
-          title="Panel de Administración"
-        >
-          <i class="fa-solid fa-lock text-[11px]"></i>
-          <span id="adminNavLabel" class="hidden sm:inline">Admin</span>
-        </button>
-      </div>
-
+  <header>
+    <div class="brand">
+      <span>EL MURAZO</span>
+      <span class="badge-case" id="case-title-badge">CASO #01</span>
+    </div>
+    <div class="view-switcher">
+      <button class="btn-tab active" id="tab-board" onclick="switchMainView('board')">📋 Tablón</button>
+      <button class="btn-tab" id="tab-phone" onclick="switchMainView('phone')">📱 Móvil Hallado</button>
     </div>
   </header>
 
-  <section class="relative overflow-hidden pt-8 pb-6 border-b border-slate-900 bg-gradient-to-b from-slate-900/40 via-slate-950 to-slate-950">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center sm:text-left sm:flex sm:items-center sm:justify-between gap-8">
-      <div class="max-w-2xl">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-400 text-xs font-semibold mb-3">
-          <span class="flex h-2 w-2 rounded-full bg-orange-500 animate-pulse"></span>
-          Cero compras absurdas • 100% satisfecho
+  <main>
+    <!-- VISTA A: TABLÓN DE DETECTIVE -->
+    <section id="view-board"></section>
+
+    <!-- VISTA B: TELÉFONO DE LA VÍCTIMA -->
+    <section id="view-phone">
+      <div class="phone-frame">
+        <div class="phone-statusbar">
+          <span>02:15 AM</span>
+          <span>🔋 12% | SIN SIM</span>
         </div>
-        <h1 class="font-display text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">
-          Encuentra lo que buscas en <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-500">El Murazo</span>
-        </h1>
-        <p class="mt-2 text-sm sm:text-base text-slate-400">
-          Encuentra al instante el producto exacto de nuestros vídeos escribiendo su <strong>#código</strong>.
-        </p>
-      </div>
-
-      <!-- Gift Finder Quiz Callout Button -->
-      <div class="mt-6 sm:mt-0 flex sm:flex-col items-center justify-center sm:items-end gap-3 shrink-0">
-        <button 
-          type="button"
-          onclick="openGiftFinderModal()" 
-          class="glass-panel px-4 py-3 rounded-2xl text-left border border-pink-500/30 hover:border-pink-500/60 bg-gradient-to-r from-pink-500/10 via-orange-500/10 to-transparent hover:from-pink-500/20 hover:via-orange-500/20 transition-all duration-300 flex items-center gap-3.5 group cursor-pointer shadow-lg shadow-pink-500/5 hover:scale-105 active:scale-95"
-          title="Abrir recomendador de regalos"
-        >
-          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-pink-500 to-rose-600 text-white flex items-center justify-center text-lg shadow-md shadow-pink-500/25 group-hover:rotate-6 transition-transform">
-            <i class="fa-solid fa-gift"></i>
-          </div>
-          <div>
-            <div class="flex items-center gap-1.5 mb-0.5">
-              <span class="text-[10px] uppercase font-bold tracking-wider text-pink-400 bg-pink-500/20 px-1.5 py-0.5 rounded border border-pink-500/30 flex items-center gap-1">
-                <span class="w-1.5 h-1.5 rounded-full bg-pink-400 animate-pulse"></span>
-                Asistente Express
-              </span>
-            </div>
-            <p class="text-xs font-bold text-white group-hover:text-pink-300 transition-colors">
-              Quiz: ¿Qué regalar? (3 clics)
-            </p>
-            <p class="text-[10px] text-slate-400">Te recomendamos el gadget ideal</p>
-          </div>
-          <i class="fa-solid fa-chevron-right text-slate-500 group-hover:text-white text-xs ml-0.5 group-hover:translate-x-0.5 transition-all"></i>
-        </button>
-      </div>
-    </div>
-  </section>
-
-  <!-- Generador de Setup ocultado temporalmente para que los productos salgan directamente -->
-  <section id="comboBuilderSection" class="hidden bg-slate-900/80 border-b border-slate-800 transition-all duration-300">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-      
-      <div class="flex items-center justify-between mb-4">
-        <div class="flex items-center gap-2.5">
-          <span class="w-8 h-8 rounded-lg bg-orange-500/20 text-orange-400 flex items-center justify-center text-sm">
-            <i class="fa-solid fa-wand-magic-sparkles"></i>
-          </span>
-          <div>
-            <h2 class="text-base font-bold text-white font-display">Generador de Setup por Presupuesto Estimado</h2>
-          </div>
-        </div>
-        <button onclick="toggleComboBuilder()" class="text-slate-400 hover:text-white text-xs p-1" title="Minimizar">
-          <i id="comboToggleIcon" class="fa-solid fa-chevron-up"></i>
-        </button>
-      </div>
-
-      <!-- Controls Container -->
-      <div id="comboControls" class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
-        
-        <!-- Ambience Selector -->
-        <div class="glass-panel p-3.5 rounded-xl border border-slate-800">
-          <label class="block text-xs font-semibold text-slate-300 mb-2">
-            1. Elige el tipo de rincón o necesidad
-          </label>
-          <select id="comboAmbience" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-orange-500">
-            <option value="minimal">Setup Minimalista & Limpio</option>
-            <option value="productive">Teletrabajo & Productividad</option>
-            <option value="creator">Creador / Streamer / Iluminación</option>
-          </select>
-        </div>
-
-        <!-- Estimated Budget Tier Selector -->
-        <div class="glass-panel p-3.5 rounded-xl border border-slate-800">
-          <div class="flex justify-between items-center mb-2">
-            <label class="text-xs font-semibold text-slate-300">
-              2. Rango de presupuesto estimado
-            </label>
-            <span id="budgetDisplay" class="text-xs font-bold text-orange-400 bg-orange-500/10 px-2 py-0.5 rounded border border-orange-500/20">
-              Hasta ~50€
-            </span>
-          </div>
-          <input 
-            type="range" 
-            id="budgetSlider" 
-            min="25" 
-            max="150" 
-            step="25" 
-            value="50"
-            class="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-orange-500"
-            oninput="updateBudgetDisplay(this.value)"
-          >
-        </div>
-
-        <!-- Generate Button & Action -->
-        <div class="glass-panel p-3.5 rounded-xl border border-slate-800 flex flex-col justify-center">
-          <button 
-            onclick="generateSetupCombo()" 
-            class="w-full py-2.5 px-4 bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white text-xs font-bold rounded-xl shadow-lg shadow-orange-500/20 flex items-center justify-center gap-2 transition-all transform active:scale-95"
-          >
-            <i class="fa-solid fa-bolt"></i>
-            <span>Calcular Combo Recomendado</span>
-          </button>
-          <span class="text-[10px] text-slate-500 text-center mt-1.5">
-            *Cálculo estimativo para cumplir las políticas de precios en tiempo real de Amazon.
-          </span>
-        </div>
-
-      </div>
-
-      <!-- Combo Result Area (Dynamically Rendered) -->
-      <div id="comboResultContainer" class="hidden mt-4 pt-4 border-t border-slate-800/80">
-        <!-- Injected by JavaScript -->
-      </div>
-
-    </div>
-  </section>
-
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full">
-    
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
-      
-      <!-- Category Tabs (Rendered dynamically based on available products) -->
-      <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1 sm:pb-0" id="categoryFilters">
-        <!-- Injected and updated automatically by JavaScript -->
-      </div>
-
-      <!-- Sorting & Active Count -->
-      <div class="flex items-center justify-between sm:justify-end gap-3 text-xs text-slate-400">
-        <span id="resultsCount">Mostrando catálogo</span>
-        <div class="flex items-center gap-1.5 bg-slate-900 px-2.5 py-1.5 rounded-lg border border-slate-800">
-          <i class="fa-solid fa-arrow-down-wide-short text-slate-500"></i>
-          <select id="sortSelect" onchange="handleSort(this.value)" class="bg-transparent text-slate-300 focus:outline-none cursor-pointer">
-            <option value="code_asc">Código (#01 → #12)</option>
-            <option value="popular">Más vistos en TikTok</option>
-            <option value="budget_asc">Gama (Económica primero)</option>
-            <option value="budget_desc">Gama (Pro primero)</option>
-          </select>
+        <div class="phone-screen" id="phone-screen-content">
+          <!-- El motor inyecta aquí la pantalla activa del móvil -->
         </div>
       </div>
-
-    </div>
-
-    <!-- Active Search Banner -->
-    <div id="searchIndicator" class="hidden mb-4 p-3 bg-slate-900 border border-slate-800 rounded-xl flex items-center justify-between text-xs">
-      <div class="flex items-center gap-2 text-slate-300">
-        <i class="fa-solid fa-filter text-orange-400"></i>
-        <span>Filtro activo: <strong id="searchIndicatorText" class="text-white">""</strong></span>
-      </div>
-      <button onclick="clearSearch()" class="text-orange-400 hover:text-orange-300 font-semibold underline">
-        Mostrar todo
-      </button>
-    </div>
-
-    <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-      <!-- Cards populated by JavaScript -->
-    </div>
-
-    <!-- Empty State -->
-    <div id="emptyState" class="hidden py-16 text-center max-w-md mx-auto">
-      <div class="w-16 h-16 mx-auto rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-500 text-2xl mb-4">
-        <i class="fa-solid fa-layer-group"></i>
-      </div>
-      <h3 id="emptyStateTitle" class="text-lg font-bold text-white font-display">Aún no hay gadgets publicados</h3>
-      <p id="emptyStateDesc" class="text-xs text-slate-400 mt-1">
-        El catálogo está listo. Inicia sesión con tu cuenta de administrador para publicar tus primeros productos comprobados.
-      </p>
-      <div id="emptyStateAction" class="mt-4">
-        <button onclick="openAdminModal()" class="px-4 py-2 bg-orange-600 hover:bg-orange-500 text-white font-semibold text-xs rounded-xl transition-colors inline-flex items-center gap-1.5 shadow-lg shadow-orange-500/20">
-          <i class="fa-solid fa-lock"></i>
-          <span>Acceder al Panel Admin</span>
-        </button>
-      </div>
-    </div>
-
+    </section>
   </main>
 
-  <!-- PRODUCT DETAIL MODAL -->
-  <div id="productModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm animate-fade-in" onclick="closeModalOnBackdrop(event)">
-    <div class="glass-panel w-full max-w-lg rounded-2xl border border-slate-700 overflow-hidden shadow-2xl relative" onclick="event.stopPropagation()">
-      <button onclick="closeProductModal()" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-slate-800/80 text-slate-300 hover:text-white flex items-center justify-center z-10">
-        <i class="fa-solid fa-xmark text-sm"></i>
+  <!-- MODAL DE PAGO / DESBLOQUEO DEL CASO COMPLETO -->
+  <div class="modal-overlay" id="paywall-modal">
+    <div class="modal-box">
+      <span class="badge-case">EXPEDIENTE CLASIFICADO</span>
+      <h2 style="margin-top:10px;">Has chocado contra El Murazo</h2>
+      <p>Solo el 18% de los investigadores descubre el PIN <strong>2489</strong>. El audio del parking contiene la voz del culpable y desbloquea los interrogatorios finales.</p>
+      <button class="btn-action" onclick="window.open('https://stripe.com', '_blank')">
+        🔓 Desbloquear Caso Completo (4,99 €)
       </button>
-      <div id="modalContent"></div>
+      <div style="margin-top:16px; padding-top:14px; border-top:1px solid var(--border);">
+        <small style="color:var(--text-muted);">¿Ya tienes tu código de acceso VIP? (Prueba: <strong>MURAZO99</strong>)</small>
+        <input type="text" id="vip-code-input" class="pin-input" style="font-size:0.95rem; letter-spacing:2px; padding:8px;" placeholder="INTRODUCE CÓDIGO VIP">
+        <button class="btn-tab" style="width:100%;" onclick="verifyVipCode()">Validar Código</button>
+      </div>
+      <button class="btn-back" style="margin-top:12px;" onclick="closePaywall()">Cerrar ventana</button>
     </div>
   </div>
 
-  <!-- GIFT FINDER QUIZ MODAL -->
-  <div id="giftFinderModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md" onclick="closeGiftFinderOnBackdrop(event)">
-    <div class="glass-panel w-full max-w-xl rounded-2xl border border-pink-500/30 p-6 relative shadow-2xl overflow-hidden max-h-[90vh] flex flex-col" onclick="event.stopPropagation()">
-      
-      <!-- Botón de Cerrar -->
-      <button onclick="closeGiftFinderModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center transition-colors z-10">
-        <i class="fa-solid fa-xmark text-sm"></i>
-      </button>
-
-      <!-- Encabezado del Modal -->
-      <div class="flex items-center gap-3 mb-4 shrink-0">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-pink-500 to-rose-600 text-white flex items-center justify-center text-lg shadow-md shadow-pink-500/25">
-          <i class="fa-solid fa-gift"></i>
-        </div>
-        <div>
-          <h3 class="text-base font-bold text-white font-display flex items-center gap-2">
-            Asistente de Regalos Sin Trampa
-            <span class="text-[10px] font-semibold text-pink-400 bg-pink-500/15 px-2 py-0.5 rounded border border-pink-500/25">3 clics</span>
-          </h3>
-          <p class="text-xs text-slate-400">Te recomendamos gadgets analizados según el perfil y presupuesto estimado.</p>
-        </div>
-      </div>
-
-      <!-- Barra de Progreso / Pasos -->
-      <div id="giftQuizProgress" class="flex items-center justify-between gap-2 mb-5 px-1 shrink-0">
-        <div class="flex items-center gap-2 sm:gap-3">
-          <div id="giftDot1" class="w-7 h-7 rounded-full bg-orange-600 text-white font-bold text-xs flex items-center justify-center transition-colors">1</div>
-          <div id="giftBar1" class="h-0.5 w-6 sm:w-10 bg-slate-800 transition-colors"></div>
-          <div id="giftDot2" class="w-7 h-7 rounded-full bg-slate-800 text-slate-400 font-bold text-xs flex items-center justify-center transition-colors">2</div>
-          <div id="giftBar2" class="h-0.5 w-6 sm:w-10 bg-slate-800 transition-colors"></div>
-          <div id="giftDot3" class="w-7 h-7 rounded-full bg-slate-800 text-slate-400 font-bold text-xs flex items-center justify-center transition-colors">3</div>
-        </div>
-        <span id="giftStepLabel" class="text-xs font-semibold text-orange-400 bg-orange-500/10 px-2 py-0.5 rounded border border-orange-500/20">Paso 1 de 3</span>
-      </div>
-
-      <!-- Cuerpo del Cuestionario -->
-      <div class="overflow-y-auto flex-1 pr-1">
-        
-        <!-- PASO 1: Perfil de la persona -->
-        <div id="giftStep1" class="space-y-3">
-          <h4 class="text-sm font-bold text-white">1. ¿A quién va dirigido el regalo?</h4>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-            <button type="button" onclick="selectGiftAnswer('profile', 'gamer')" data-group="profile" data-val="gamer" class="gift-option-btn p-3 rounded-xl border border-slate-800 bg-slate-900/60 hover:border-orange-500/50 text-left transition-all flex items-center gap-3">
-              <span class="w-9 h-9 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center text-sm shrink-0"><i class="fa-solid fa-gamepad"></i></span>
-              <div>
-                <p class="text-xs font-bold text-white">Gamer / Streamer</p>
-                <p class="text-[10px] text-slate-400">Juegos, directos y rincón gaming</p>
-              </div>
-            </button>
-            <button type="button" onclick="selectGiftAnswer('profile', 'worker')" data-group="profile" data-val="worker" class="gift-option-btn p-3 rounded-xl border border-slate-800 bg-slate-900/60 hover:border-orange-500/50 text-left transition-all flex items-center gap-3">
-              <span class="w-9 h-9 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-sm shrink-0"><i class="fa-solid fa-laptop-code"></i></span>
-              <div>
-                <p class="text-xs font-bold text-white">Teletrabajo / Oficina</p>
-                <p class="text-[10px] text-slate-400">Productividad, comodidad y orden</p>
-              </div>
-            </button>
-            <button type="button" onclick="selectGiftAnswer('profile', 'viral')" data-group="profile" data-val="viral" class="gift-option-btn p-3 rounded-xl border border-slate-800 bg-slate-900/60 hover:border-orange-500/50 text-left transition-all flex items-center gap-3">
-              <span class="w-9 h-9 rounded-lg bg-orange-500/10 text-orange-400 flex items-center justify-center text-sm shrink-0"><i class="fa-solid fa-fire"></i></span>
-              <div>
-                <p class="text-xs font-bold text-white">Fan de Gadgets Virales</p>
-                <p class="text-[10px] text-slate-400">Curiosidades tech y novedades</p>
-              </div>
-            </button>
-            <button type="button" onclick="selectGiftAnswer('profile', 'school')" data-group="profile" data-val="school" class="gift-option-btn p-3 rounded-xl border border-slate-800 bg-slate-900/60 hover:border-orange-500/50 text-left transition-all flex items-center gap-3">
-              <span class="w-9 h-9 rounded-lg bg-yellow-500/10 text-yellow-400 flex items-center justify-center text-sm shrink-0"><i class="fa-solid fa-graduation-cap"></i></span>
-              <div>
-                <p class="text-xs font-bold text-white">Estudiante / Colegio / Profe</p>
-                <p class="text-[10px] text-slate-400">Estudio, material escolar y organización</p>
-              </div>
-            </button>
-          </div>
-        </div>
-
-        <!-- PASO 2: Presupuesto estimado -->
-        <div id="giftStep2" class="hidden space-y-3">
-          <h4 class="text-sm font-bold text-white">2. ¿Qué presupuesto aproximado tienes?</h4>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-            <button type="button" onclick="selectGiftAnswer('budget', 'tier1')" data-group="budget" data-val="tier1" class="gift-option-btn p-3 rounded-xl border border-slate-800 bg-slate-900/60 hover:border-orange-500/50 text-left transition-all flex items-center gap-3">
-              <span class="w-9 h-9 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xs font-bold shrink-0">~25€</span>
-              <div>
-                <p class="text-xs font-bold text-white">Hasta ~25€</p>
-                <p class="text-[10px] text-slate-400">Detalle económico o amigo invisible</p>
-              </div>
-            </button>
-            <button type="button" onclick="selectGiftAnswer('budget', 'tier2')" data-group="budget" data-val="tier2" class="gift-option-btn p-3 rounded-xl border border-slate-800 bg-slate-900/60 hover:border-orange-500/50 text-left transition-all flex items-center gap-3">
-              <span class="w-9 h-9 rounded-lg bg-orange-500/10 text-orange-400 flex items-center justify-center text-xs font-bold shrink-0">~50€</span>
-              <div>
-                <p class="text-xs font-bold text-white">De 25€ a ~50€</p>
-                <p class="text-[10px] text-slate-400">Gama equilibrada de calidad</p>
-              </div>
-            </button>
-            <button type="button" onclick="selectGiftAnswer('budget', 'tier3')" data-group="budget" data-val="tier3" class="gift-option-btn p-3 rounded-xl border border-slate-800 bg-slate-900/60 hover:border-orange-500/50 text-left transition-all flex items-center gap-3">
-              <span class="w-9 h-9 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center text-xs font-bold shrink-0">+50€</span>
-              <div>
-                <p class="text-xs font-bold text-white">Más de 50€ (Gama Pro)</p>
-                <p class="text-[10px] text-slate-400">Regalo principal de alto impacto</p>
-              </div>
-            </button>
-            <button type="button" onclick="selectGiftAnswer('budget', 'all')" data-group="budget" data-val="all" class="gift-option-btn p-3 rounded-xl border border-slate-800 bg-slate-900/60 hover:border-orange-500/50 text-left transition-all flex items-center gap-3">
-              <span class="w-9 h-9 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center text-xs font-bold shrink-0">∞</span>
-              <div>
-                <p class="text-xs font-bold text-white">Sin límite</p>
-                <p class="text-[10px] text-slate-400">Lo mejor sin importar el coste</p>
-              </div>
-            </button>
-          </div>
-        </div>
-
-        <!-- PASO 3: Objetivo -->
-        <div id="giftStep3" class="hidden space-y-3">
-          <h4 class="text-sm font-bold text-white">3. ¿Cuál es tu objetivo?</h4>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-            <button type="button" onclick="selectGiftAnswer('goal', 'wow')" data-group="goal" data-val="wow" class="gift-option-btn p-3 rounded-xl border border-slate-800 bg-slate-900/60 hover:border-orange-500/50 text-left transition-all flex items-center gap-3">
-              <span class="w-9 h-9 rounded-lg bg-pink-500/10 text-pink-400 flex items-center justify-center text-sm shrink-0"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
-              <div>
-                <p class="text-xs font-bold text-white">Efecto WOW</p>
-                <p class="text-[10px] text-slate-400">Que diga "¿Dónde has encontrado esto?"</p>
-              </div>
-            </button>
-            <button type="button" onclick="selectGiftAnswer('goal', 'useful')" data-group="goal" data-val="useful" class="gift-option-btn p-3 rounded-xl border border-slate-800 bg-slate-900/60 hover:border-orange-500/50 text-left transition-all flex items-center gap-3">
-              <span class="w-9 h-9 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-sm shrink-0"><i class="fa-solid fa-check-double"></i></span>
-              <div>
-                <p class="text-xs font-bold text-white">100% Útil</p>
-                <p class="text-[10px] text-slate-400">Cero trastos que queden en un cajón</p>
-              </div>
-            </button>
-            <button type="button" onclick="selectGiftAnswer('goal', 'clean')" data-group="goal" data-val="clean" class="gift-option-btn p-3 rounded-xl border border-slate-800 bg-slate-900/60 hover:border-orange-500/50 text-left transition-all flex items-center gap-3">
-              <span class="w-9 h-9 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center text-sm shrink-0"><i class="fa-solid fa-sparkles"></i></span>
-              <div>
-                <p class="text-xs font-bold text-white">Estética & Orden</p>
-                <p class="text-[10px] text-slate-400">Minimalismo y cables fuera de vista</p>
-              </div>
-            </button>
-            <button type="button" onclick="selectGiftAnswer('goal', 'safe')" data-group="goal" data-val="safe" class="gift-option-btn p-3 rounded-xl border border-slate-800 bg-slate-900/60 hover:border-orange-500/50 text-left transition-all flex items-center gap-3">
-              <span class="w-9 h-9 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center text-sm shrink-0"><i class="fa-solid fa-shield-halved"></i></span>
-              <div>
-                <p class="text-xs font-bold text-white">Acierto Seguro</p>
-                <p class="text-[10px] text-slate-400">El producto más probado y valorado</p>
-              </div>
-            </button>
-          </div>
-        </div>
-
-        <!-- CONTENEDOR DE RESULTADOS -->
-        <div id="giftResultsContainer" class="hidden"></div>
-
-      </div>
-
-      <!-- Pie y Controles del Modal -->
-      <div id="giftQuizFooter" class="pt-4 border-t border-slate-800/80 mt-4 flex items-center justify-between gap-3 shrink-0">
-        <button id="giftPrevBtn" type="button" onclick="prevGiftStep()" disabled class="px-3.5 py-2 bg-slate-900 hover:bg-slate-800 disabled:opacity-40 disabled:hover:bg-slate-900 text-slate-300 rounded-xl text-xs font-semibold transition-colors flex items-center gap-1.5 border border-slate-800 cursor-pointer">
-          <i class="fa-solid fa-arrow-left text-[10px]"></i>
-          <span>Anterior</span>
-        </button>
-        <button id="giftNextBtn" type="button" onclick="nextGiftStep()" class="px-4 py-2 bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 disabled:opacity-40 text-white rounded-xl text-xs font-bold transition-all shadow-md shadow-orange-500/20 flex items-center gap-1.5 cursor-pointer">
-          <span id="giftNextLabel">Siguiente paso</span>
-          <i class="fa-solid fa-arrow-right text-[10px]"></i>
-        </button>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- SUGGEST PRODUCT MODAL -->
-  <div id="suggestModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm" onclick="closeSuggestOnBackdrop(event)">
-    <div class="glass-panel w-full max-w-md rounded-2xl border border-slate-700 p-6 relative shadow-2xl" onclick="event.stopPropagation()">
-      <button onclick="closeSuggestModal()" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-slate-800 text-slate-300 hover:text-white flex items-center justify-center">
-        <i class="fa-solid fa-xmark text-sm"></i>
-      </button>
-      
-      <div class="flex items-center gap-2.5 mb-4">
-        <span class="w-8 h-8 rounded-lg bg-orange-500/20 text-orange-400 flex items-center justify-center text-sm">
-          <i class="fa-solid fa-lightbulb"></i>
-        </span>
-        <h3 class="text-base font-bold text-white font-display">¿Viste un gadget sospechoso o viral?</h3>
-      </div>
-      
-      <p class="text-xs text-slate-400 mb-4">
-        Pásanos el enlace de TikTok o Amazon. Lo probaremos para confirmar si vale la pena o si es un murazo en toda regla.
-      </p>
-
-      <form id="suggestForm" onsubmit="submitSuggestion(event)" class="space-y-3">
-        <div>
-          <label class="block text-[11px] font-semibold text-slate-300 mb-1">Enlace del vídeo o producto</label>
-          <input type="text" id="suggestLink" required placeholder="https://vm.tiktok.com/... o enlace de Amazon" class="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-orange-500">
-        </div>
-        <div>
-          <label class="block text-[11px] font-semibold text-slate-300 mb-1">¿Por qué te llama la atención?</label>
-          <textarea id="suggestComment" rows="2" placeholder="Tiene pinta de romperse en dos días / Lo usa todo el mundo..." class="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-orange-500"></textarea>
-        </div>
-        <button type="submit" class="w-full py-2.5 bg-orange-600 hover:bg-orange-500 text-white font-bold text-xs rounded-xl transition-colors">
-          Enviar para análisis
-        </button>
-      </form>
-    </div>
-  </div>
-
-  <!-- ADMIN AUTH & DASHBOARD MODAL -->
-  <div id="adminModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md" onclick="closeAdminOnBackdrop(event)">
-    <div class="glass-panel w-full max-w-2xl rounded-2xl border border-slate-700 max-h-[90vh] flex flex-col relative shadow-2xl overflow-hidden" onclick="event.stopPropagation()">
-      
-      <!-- Modal Header (Seguro: No revela el email público a ningún visitante) -->
-      <div class="px-6 py-4 border-b border-slate-800 flex items-center justify-between bg-slate-900/60">
-        <div class="flex items-center gap-2.5">
-          <div class="w-8 h-8 rounded-lg bg-orange-500/20 text-orange-400 flex items-center justify-center text-sm">
-            <i class="fa-solid fa-shield-halved"></i>
-          </div>
-          <div>
-            <h3 class="text-sm font-bold text-white font-display">Panel de Gestión de El Murazo</h3>
-            <p class="text-[10px] text-slate-400">Acceso restringido para administradores autorizados</p>
-          </div>
-        </div>
-        <button onclick="closeAdminModal()" class="w-7 h-7 rounded-full bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center transition-colors">
-          <i class="fa-solid fa-xmark text-xs"></i>
-        </button>
-      </div>
-
-      <!-- State 1: Login Request (Protegido sin mostrar correos) -->
-      <div id="adminLoginSection" class="p-8 text-center space-y-4">
-        <div class="w-14 h-14 mx-auto rounded-2xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-400 text-2xl">
-          <i class="fa-solid fa-lock"></i>
-        </div>
-        <div>
-          <h4 class="text-base font-bold text-white">Identificación de Administrador</h4>
-          <p class="text-xs text-slate-400 mt-1 max-w-sm mx-auto">
-            Inicia sesión con tu cuenta de Google para gestionar los productos del catálogo de El Murazo.
-          </p>
-        </div>
-        <button 
-          id="googleLoginBtn"
-          onclick="loginWithGoogle()" 
-          class="px-6 py-3 bg-white hover:bg-slate-100 text-slate-900 font-bold text-xs rounded-xl shadow-lg transition-all inline-flex items-center gap-2.5 active:scale-95"
-        >
-          <svg class="w-4 h-4" viewBox="0 0 24 24">
-            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
-            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
-          </svg>
-          <span>Acceder con Google</span>
-        </button>
-      </div>
-
-      <!-- State 2: Active Dashboard (Solo visible cuando YA has iniciado sesión correctamente) -->
-      <div id="adminDashboardSection" class="hidden flex-1 flex flex-col overflow-hidden">
-        
-        <!-- Action Toolbar -->
-        <div class="p-4 border-b border-slate-800 bg-slate-900/40 flex items-center justify-between gap-4">
-          <div class="flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            <span class="text-xs text-slate-300 font-medium truncate">
-              Administrador conectado: <strong id="adminConnectedEmail" class="text-white font-mono"></strong>
-            </span>
-          </div>
-
-          <div class="flex items-center gap-2 shrink-0">
-            <button 
-              onclick="openProductFormModal(null)" 
-              class="px-3 py-1.5 bg-orange-600 hover:bg-orange-500 text-white rounded-lg text-xs font-bold transition-colors flex items-center gap-1 shadow-md shadow-orange-500/20"
-            >
-              <i class="fa-solid fa-plus text-[10px]"></i>
-              <span>Nuevo Producto</span>
-            </button>
-            <button 
-              onclick="handleLogout()" 
-              class="px-3 py-1.5 bg-slate-800 hover:bg-red-500/20 text-slate-300 hover:text-red-400 border border-slate-700 rounded-lg text-xs transition-colors"
-              title="Cerrar sesión"
-            >
-              <i class="fa-solid fa-arrow-right-from-bracket"></i>
-            </button>
-          </div>
-        </div>
-
-        <!-- Product Table / Listing -->
-        <div class="p-4 overflow-y-auto flex-1 space-y-2" id="adminProductsList">
-          <!-- Injected via JavaScript -->
-        </div>
-
-      </div>
-
-    </div>
-  </div>
-
-  <!-- PRODUCT CREATE / EDIT MODAL -->
-  <div id="productFormModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md" onclick="closeProductFormOnBackdrop(event)">
-    <div class="glass-panel w-full max-w-xl rounded-2xl border border-slate-700 p-6 max-h-[90vh] overflow-y-auto relative shadow-2xl" onclick="event.stopPropagation()">
-      
-      <button onclick="closeProductFormModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center transition-colors">
-        <i class="fa-solid fa-xmark text-sm"></i>
-      </button>
-
-      <div class="flex items-center gap-2.5 mb-4">
-        <span class="w-8 h-8 rounded-lg bg-orange-500/20 text-orange-400 flex items-center justify-center text-sm">
-          <i class="fa-solid fa-pen-to-square"></i>
-        </span>
-        <h3 id="productFormTitle" class="text-base font-bold text-white font-display">Publicar Nuevo Gadget</h3>
-      </div>
-
-      <form id="productCrudForm" onsubmit="handleProductSubmit(event)" class="space-y-4">
-        <input type="hidden" id="formProductId">
-
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <!-- Code: e.g. #01 -->
-          <div>
-            <label class="block text-[11px] font-semibold text-slate-300 mb-1">Código Vídeo (TikTok)</label>
-            <input type="text" id="formCode" required placeholder="#01" class="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-orange-500 font-mono">
-          </div>
-
-          <!-- Category (Incluyendo Material Escolar & Papelería) -->
-          <div>
-            <label class="block text-[11px] font-semibold text-slate-300 mb-1">Categoría Principal</label>
-            <select id="formCategory" class="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-orange-500">
-              <option value="setup">🖥️ Setups & Mesa</option>
-              <option value="viral">🔥 Gadgets Raros & Virales</option>
-              <option value="regalo">🎁 Ideas de Regalo</option>
-              <option value="escolar">📚 Material Escolar & Papelería</option>
-              <option value="audio">🎧 Audio & Auriculares</option>
-              <option value="iluminacion">💡 Iluminación & Tiras LED</option>
-              <option value="cables">🔌 Orden, Cables & Soportes</option>
-              <option value="viaje">🎒 Tech de Viaje / EDC</option>
-            </select>
-          </div>
-
-          <!-- Estimated Value for Combo Slider -->
-          <div>
-            <label class="block text-[11px] font-semibold text-slate-300 mb-1">
-              Valor Est. Combo (€)
-              <i class="fa-solid fa-circle-question text-slate-500" title="Uso interno exclusivo para el calculador de combos."></i>
-            </label>
-            <input type="number" id="formEstimatedValue" required min="1" max="500" placeholder="25" class="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-orange-500">
-          </div>
-        </div>
-
-        <!-- Title -->
-        <div>
-          <label class="block text-[11px] font-semibold text-slate-300 mb-1">Título del Producto</label>
-          <input type="text" id="formTitle" required placeholder="Ej: Barra de Luz Monitor ScreenBar Asimétrica USB" class="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-orange-500">
-        </div>
-
-        <!-- Tier Label & Views -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          <div>
-            <label class="block text-[11px] font-semibold text-slate-300 mb-1">Etiqueta de Gama (Visible)</label>
-            <input type="text" id="formTier" required placeholder="Gama Media (~25-35€)" class="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-orange-500">
-          </div>
-          <div>
-            <label class="block text-[11px] font-semibold text-slate-300 mb-1">Vistas en Redes (Opcional)</label>
-            <input type="text" id="formViews" placeholder="125K" class="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-orange-500">
-          </div>
-        </div>
-
-        <!-- Rating & Enlace de Amazon -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <div>
-            <label class="block text-[11px] font-semibold text-slate-300 mb-1">Valoración Media (1-5)</label>
-            <input type="number" id="formRating" step="0.1" min="1" max="5" value="4.8" class="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-orange-500">
-          </div>
-          <div class="sm:col-span-2">
-            <label class="block text-[11px] font-semibold text-slate-300 mb-1">Enlace de Afiliado Amazon (o ASIN)</label>
-            <input type="url" id="formAmzUrl" required placeholder="https://www.amazon.es/dp/B08C4V4427?tag=elmurazo-21" class="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-orange-500">
-          </div>
-        </div>
-
-        <!-- Image URL -->
-        <div>
-          <label class="block text-[11px] font-semibold text-slate-300 mb-1">URL de la Imagen (Amazon o Unsplash)</label>
-          <input type="url" id="formImage" required placeholder="https://images.unsplash.com/..." class="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-orange-500">
-        </div>
-
-        <!-- Hook / Punchline -->
-        <div>
-          <label class="block text-[11px] font-semibold text-slate-300 mb-1">Gancho breve (resumen en tarjeta)</label>
-          <textarea id="formHook" rows="2" required placeholder="Ilumina el escritorio sin reflejar jamás en la pantalla..." class="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-orange-500"></textarea>
-        </div>
-
-        <!-- Por qué no es un murazo -->
-        <div>
-          <label class="block text-[11px] font-semibold text-emerald-400 mb-1 flex items-center gap-1">
-            <i class="fa-solid fa-shield-halved"></i> ¿Por qué NO es un murazo? (Ficha de confianza)
-          </label>
-          <textarea id="formWhyNotMurazo" rows="2" required placeholder="A diferencia de los modelos baratos de plástico, este soporte está hecho de una sola pieza..." class="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-orange-500"></textarea>
-        </div>
-
-        <!-- Ambience check tags for combo builder -->
-        <div>
-          <label class="block text-[11px] font-semibold text-slate-300 mb-1">Apto para generador de combos en:</label>
-          <div class="flex flex-wrap gap-3 text-xs text-slate-300">
-            <label class="inline-flex items-center gap-1.5 cursor-pointer">
-              <input type="checkbox" value="minimal" class="form-ambience rounded bg-slate-800 text-orange-500 border-slate-700">
-              <span>Minimalista</span>
-            </label>
-            <label class="inline-flex items-center gap-1.5 cursor-pointer">
-              <input type="checkbox" value="productive" class="form-ambience rounded bg-slate-800 text-orange-500 border-slate-700">
-              <span>Productividad</span>
-            </label>
-            <label class="inline-flex items-center gap-1.5 cursor-pointer">
-              <input type="checkbox" value="creator" class="form-ambience rounded bg-slate-800 text-orange-500 border-slate-700">
-              <span>Creador / Stream</span>
-            </label>
-          </div>
-        </div>
-
-        <!-- Tags separated by comma -->
-        <div>
-          <label class="block text-[11px] font-semibold text-slate-300 mb-1">Etiquetas de búsqueda (separadas por comas)</label>
-          <input type="text" id="formTags" placeholder="setup, luz, pantalla, usb" class="w-full px-3 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-white focus:outline-none focus:border-orange-500">
-        </div>
-
-        <!-- Submit Buttons -->
-        <div class="pt-2 flex items-center justify-end gap-3">
-          <button type="button" onclick="closeProductFormModal()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-semibold transition-colors">
-            Cancelar
-          </button>
-          <button type="submit" id="formSubmitBtn" class="px-5 py-2 bg-orange-600 hover:bg-orange-500 text-white rounded-xl text-xs font-bold transition-all shadow-lg shadow-orange-500/20 flex items-center gap-1.5">
-            <i class="fa-solid fa-floppy-disk"></i>
-            <span>Guardar Producto</span>
-          </button>
-        </div>
-      </form>
-
-    </div>
-  </div>
-
-  <!-- CONFIRM DELETE MODAL -->
-  <div id="deleteModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md" onclick="closeDeleteOnBackdrop(event)">
-    <div class="glass-panel w-full max-w-sm rounded-2xl border border-red-500/30 p-6 text-center shadow-2xl relative" onclick="event.stopPropagation()">
-      <div class="w-12 h-12 mx-auto rounded-xl bg-red-500/10 text-red-400 flex items-center justify-center text-xl mb-3">
-        <i class="fa-solid fa-triangle-exclamation"></i>
-      </div>
-      <h3 class="text-sm font-bold text-white font-display">¿Eliminar este gadget?</h3>
-      <p id="deleteItemTitle" class="text-xs text-slate-400 mt-1 mb-4 truncate"></p>
-      
-      <div class="flex items-center justify-center gap-2">
-        <button onclick="closeDeleteModal()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-semibold transition-colors">
-          Cancelar
-        </button>
-        <button id="confirmDeleteBtn" onclick="executeProductDelete()" class="px-4 py-2 bg-red-600 hover:bg-red-500 text-white rounded-xl text-xs font-bold transition-all shadow-lg shadow-red-600/20">
-          Sí, eliminar
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <footer class="bg-slate-950 border-t border-slate-900 text-slate-400 text-xs py-10">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-      
-      <!-- Upper Section -->
-      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div class="flex items-center gap-2.5">
-          <img 
-            src="logo.png" 
-            alt="El Murazo" 
-            class="w-7 h-7 rounded-lg object-contain"
-            onerror="this.style.display='none'"
-          >
-          <span class="font-display font-black text-sm tracking-tight text-white">ELMURAZO.COM</span>
-        </div>
-        
-        <div class="flex flex-wrap gap-4 text-slate-400 text-xs">
-          <span>• Libre de publicidad invasiva</span>
-          <span>• Enlaces auditados</span>
-          <span>• Cumplimiento RGPD & Amazon EU</span>
-        </div>
-      </div>
-
-      <!-- Legal Disclosure Notice -->
-      <div class="bg-slate-900/60 p-4 rounded-xl border border-slate-800 text-[11px] leading-relaxed text-slate-400 space-y-2">
-        <p class="font-semibold text-slate-300 flex items-center gap-1.5">
-          <i class="fa-solid fa-circle-info text-orange-400"></i> Aviso Legal de Afiliación y Precios:
-        </p>
-        <p>
-          En calidad de Afiliado de Amazon, <strong>elmurazo.com</strong> obtiene ingresos por las compras adscritas que cumplen los requisitos aplicables. El clic en los botones de compra redirige directamente a la plataforma oficial de Amazon España.
-        </p>
-        <p class="text-slate-500">
-          *Para cumplir con la política de transparencia de precios de Amazon, en esta web no publicamos precios fijos manuales, ya que las ofertas y el stock fluctúan en tiempo real. Los valores indicados en el generador son estimaciones orientativas por gamas de coste. El precio final y vinculante es el que aparece directamente en Amazon en el momento de tramitar el pedido.
-        </p>
-      </div>
-
-      <!-- Copyright -->
-      <div class="pt-4 border-t border-slate-900 flex flex-col sm:flex-row justify-between items-center text-slate-500 text-[11px] gap-2">
-        <p>© <span id="currentYear">2026</span> elmurazo.com — Todos los derechos reservados.</p>
-        <div class="flex items-center gap-4">
-          <button onclick="openAdminModal()" class="hover:text-orange-400 transition-colors flex items-center gap-1">
-            <i class="fa-solid fa-lock text-[9px]"></i> Panel Admin
-          </button>
-          <button onclick="showLegalNotice()" class="hover:text-slate-300 transition-colors">Términos y Privacidad</button>
-          <button onclick="openSuggestModal()" class="hover:text-slate-300 transition-colors">Contacto / Sugerencias</button>
-        </div>
-      </div>
-
-    </div>
-  </footer>
-
-  <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
-
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-    import { 
-      getAuth, 
-      signInWithPopup, 
-      GoogleAuthProvider, 
-      signOut, 
-      onAuthStateChanged,
-      signInAnonymously
-    } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-    import { 
-      getFirestore, 
-      collection, 
-      doc, 
-      addDoc, 
-      updateDoc, 
-      deleteDoc, 
-      onSnapshot 
-    } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyCFE0T4m16MOyn9JqMujJZZwMJCLen-LgA",
-      authDomain: "elmurazo.firebaseapp.com",
-      projectId: "elmurazo",
-      storageBucket: "elmurazo.firebasestorage.app",
-      messagingSenderId: "722334671597",
-      appId: "1:722334671597:web:4b316572169de9c66262e4",
-      measurementId: "G-P003BX46Z4"
+  <script>
+    /**
+     * ============================================================================
+     * 1. CARTUCHO DE DATOS (En producción, esto va en /cases/caso-01-free.json)
+     * Para crear el Caso #02 en el futuro, solo creas otro JSON con esta estructura.
+     * ============================================================================
+     */
+    const CASE_01_DATA = {
+      id: "caso-01",
+      title: "CASO #01: EL ÚLTIMO DIRECTO",
+      pinCode: "2489",
+      vipAccessCode: "MURAZO99",
+      boardClues: [
+        {
+          tag: "INFORME POLICIAL #01",
+          title: "Desaparición en el Parking",
+          body: "Álex V. (23 años) cortó su emisión en directo a las 02:15 AM. Su teléfono apareció en el suelo del parking subterráneo Norte. La carpeta de Notas tiene un bloqueo de 4 dígitos."
+        },
+        {
+          tag: "DECLARACIÓN DE SOSPECHOSOS",
+          title: "3 Personas en el punto de mira",
+          suspects: [
+            { name: "Marc (Socio)", alibi: "Asegura que se fue a dormir a las 00:30 AM tras aparcar el coche y no volvió a salir." },
+            { name: "Elena (Ex-pareja)", alibi: "Dice que estuvo de turno de noche en urgencias hasta las 06:00 AM." },
+            { name: "Usuario_99", alibi: "Amenazó a Álex en el chat diciendo que sabía dónde aparcaba." }
+          ]
+        },
+        {
+          tag: "OBJETIVO INICIAL (FASE GRATIS)",
+          title: "¿Cómo empezar?",
+          body: "Entra en el 'Móvil Hallado' arriba a la derecha. Cruza los mensajes de WhatsApp con las fotos de la Galería para deducir el PIN de 4 dígitos de la App de Notas."
+        }
+      ],
+      chats: [
+        { sender: "Marc (Socio)", time: "23:40", text: "Tío, ya te he dejado el coche en el parking Norte. Está en la plaza de siempre, justo al lado del ascensor (los 2 primeros números de tu PIN)." },
+        { sender: "Marc (Socio)", time: "23:42", text: "Acuérdate de que la segunda mitad del PIN es el número de pedido de donde cenamos hoy. Yo me voy a dormir ya." },
+        { sender: "Usuario_99", time: "01:50", text: "Deja de enseñar esos papeles en directo o bajo al parking ahora mismo." }
+      ],
+      photos: [
+        {
+          title: "IMG_8821.JPG - Columna del Parking",
+          visualText: "[ PLAZA RESERVADA Nº 24 ]",
+          caption: "Foto tomada a las 23:55 al llegar al coche."
+        },
+        {
+          title: "IMG_8825.JPG - Ticket Cafetería 24h",
+          visualText: "PEDIDO #89 | HORA: 01:15 AM | 2x CAFÉ SOLO",
+          caption: "Espera... Si Marc estaba durmiendo a las 00:30, ¿con quién tomaba café Álex a la 01:15 AM?"
+        }
+      ],
+      secretNoteUnlocked: {
+        title: "NOTA: SI ME PASA ALGO",
+        content: "Marc me ha mentido. No estaba durmiendo, acaba de bajar al parking con otra persona. He dejado el móvil grabando audio en el bolsillo antes de que se acerquen. El archivo está en 'Grabadora VIP'."
+      }
     };
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-
-    // Official Admin email definition
-    const ADMIN_EMAIL = "gerardlopezgarcia1@gmail.com";
-    const appId = typeof __app_id !== 'undefined' ? __app_id : 'elmurazo';
-
-    // Firestore collection path
-    const productsCollectionRef = collection(db, 'artifacts', appId, 'public', 'data', 'products');
-
-    // Centralized Category Catalog with Icons and Badge Colors
-    const CATEGORIES = {
-      all: { label: "Todos los Gadgets", icon: "fa-solid fa-border-all", color: "text-white" },
-      setup: { label: "Setups & Mesa", icon: "fa-solid fa-desktop", color: "text-blue-400" },
-      viral: { label: "Gadgets Virales", icon: "fa-solid fa-fire", color: "text-orange-400" },
-      regalo: { label: "Ideas de Regalo", icon: "fa-solid fa-gift", color: "text-pink-400" },
-      escolar: { label: "Material Escolar", icon: "fa-solid fa-graduation-cap", color: "text-yellow-400" },
-      audio: { label: "Audio & Auriculares", icon: "fa-solid fa-headphones", color: "text-purple-400" },
-      iluminacion: { label: "Iluminación & LED", icon: "fa-solid fa-lightbulb", color: "text-amber-400" },
-      cables: { label: "Orden & Cables", icon: "fa-solid fa-plug", color: "text-emerald-400" },
-      viaje: { label: "Tech de Viaje / EDC", icon: "fa-solid fa-briefcase", color: "text-cyan-400" }
+    /**
+     * ============================================================================
+     * 2. ESTADO DEL JUGADOR (Guardado automático en localStorage)
+     * ============================================================================
+     */
+    let gameState = JSON.parse(localStorage.getItem('elmurazo_state_caso01')) || {
+      noteUnlocked: false,
+      vipUnlocked: false
     };
 
-    let products = [];
-    let currentUser = null;
-    let isAdmin = false;
-    let currentCategory = "all";
-    let searchQuery = "";
-    let currentSort = "code_asc";
-    let isBuilderExpanded = true;
-    let pendingDeleteId = null;
-    let unsubscribeProducts = null;
-
-    // Gift Quiz State
-    let giftQuizStep = 1;
-    let giftAnswers = {
-      profile: null,
-      budget: null,
-      goal: null
-    };
-
-    // Monitor authentication state
-    onAuthStateChanged(auth, (user) => {
-      currentUser = user;
-      isAdmin = !!(user && user.email === ADMIN_EMAIL);
-      updateAdminUI();
-      renderCatalog();
-    });
-
-    // Initialize Auth and Firestore real-time listener
-    async function initFirebaseSync() {
-      try {
-        await auth.authStateReady();
-        if (!auth.currentUser) {
-          try {
-            await signInAnonymously(auth);
-            console.log("[Auth] Visitante conectado con éxito");
-          } catch (authErr) {
-            console.warn("[Auth] Proveedor anónimo opcional:", authErr.code);
-          }
-        }
-
-        if (unsubscribeProducts) unsubscribeProducts();
-        unsubscribeProducts = onSnapshot(productsCollectionRef, (snapshot) => {
-          products = [];
-          snapshot.forEach(docSnap => {
-            products.push({
-              id: docSnap.id,
-              ...docSnap.data()
-            });
-          });
-          renderCatalog();
-          renderAdminProductsList();
-        }, (error) => {
-          console.error("[Firestore Error]", error);
-          if (error.code === 'permission-denied') {
-            showToast("Aviso: Revisa las reglas de lectura pública en Firestore Console.");
-          } else {
-            showToast("Error conectando con la base de datos de productos");
-          }
-        });
-      } catch (e) {
-        console.error("[Init Error]", e);
-      }
+    function saveProgress() {
+      localStorage.setItem('elmurazo_state_caso01', JSON.stringify(gameState));
     }
 
-    initFirebaseSync();
-
-    function updateAdminUI() {
-      const navBtn = document.getElementById("adminNavBtn");
-      const navLabel = document.getElementById("adminNavLabel");
-      const loginSection = document.getElementById("adminLoginSection");
-      const dashboardSection = document.getElementById("adminDashboardSection");
-      const connectedEmailEl = document.getElementById("adminConnectedEmail");
-
-      if (isAdmin && currentUser) {
-        navBtn.classList.add("border-orange-500/50", "bg-orange-500/10", "text-orange-400");
-        navLabel.textContent = "Panel Admin ✓";
-        loginSection.classList.add("hidden");
-        dashboardSection.classList.remove("hidden");
-        if (connectedEmailEl) {
-          connectedEmailEl.textContent = currentUser.email;
-        }
-      } else {
-        navBtn.classList.remove("border-orange-500/50", "bg-orange-500/10", "text-orange-400");
-        navLabel.textContent = "Admin";
-        loginSection.classList.remove("hidden");
-        dashboardSection.classList.add("hidden");
-        if (connectedEmailEl) {
-          connectedEmailEl.textContent = "";
-        }
-      }
+    /**
+     * ============================================================================
+     * 3. MOTOR DE RENDERIZADO (No tendrás que tocarlo al añadir futuros casos)
+     * ============================================================================
+     */
+    function initEngine(caseData) {
+      document.getElementById('case-title-badge').textContent = caseData.title;
+      renderBoard(caseData);
+      renderPhoneHome();
     }
 
-    async function loginWithGoogle() {
-      const provider = new GoogleAuthProvider();
-      try {
-        const result = await signInWithPopup(auth, provider);
-        const loggedUser = result.user;
-        if (loggedUser.email !== ADMIN_EMAIL) {
-          await signOut(auth);
-          await signInAnonymously(auth);
-          showToast("Acceso denegado: cuenta de Google no autorizada como administrador.");
-        } else {
-          showToast("¡Sesión iniciada con éxito en el Panel de Administración!");
-          updateAdminUI();
-        }
-      } catch (err) {
-        console.error("Login failed:", err);
-        showToast("No se pudo completar el inicio de sesión con Google.");
-      }
+    function switchMainView(view) {
+      document.getElementById('view-board').style.display = view === 'board' ? 'grid' : 'none';
+      document.getElementById('view-phone').style.display = view === 'phone' ? 'flex' : 'none';
+      document.getElementById('tab-board').classList.toggle('active', view === 'board');
+      document.getElementById('tab-phone').classList.toggle('active', view === 'phone');
     }
 
-    async function handleLogout() {
-      try {
-        await signOut(auth);
-        await signInAnonymously(auth);
-        closeAdminModal();
-        showToast("Sesión de administrador cerrada.");
-      } catch (err) {
-        console.error("Logout failed:", err);
-      }
-    }
-
-    function renderCatalog() {
-      const grid = document.getElementById("productGrid");
-      const empty = document.getElementById("emptyState");
-      const countLabel = document.getElementById("resultsCount");
-      const searchIndicator = document.getElementById("searchIndicator");
-      const searchIndicatorText = document.getElementById("searchIndicatorText");
-
-      renderCategoryTabs();
-
-      let filtered = products.filter(item => {
-        const matchesCategory = (currentCategory === "all") || (item.category === currentCategory);
-        const cleanQuery = searchQuery.trim().toLowerCase().replace(/^#/, '');
-        const itemCodeClean = (item.code || "").toLowerCase().replace(/^#/, '');
-        
-        const matchesSearch = !cleanQuery || 
-          (item.title && item.title.toLowerCase().includes(cleanQuery)) ||
-          (item.hook && item.hook.toLowerCase().includes(cleanQuery)) ||
-          itemCodeClean.includes(cleanQuery) ||
-          (Array.isArray(item.tags) && item.tags.some(t => t.toLowerCase().includes(cleanQuery)));
-
-        return matchesCategory && matchesSearch;
-      });
-
-      filtered.sort((a, b) => {
-        if (currentSort === "code_asc") return (a.code || "").localeCompare(b.code || "");
-        if (currentSort === "popular") return parseInt(b.views || 0) - parseInt(a.views || 0);
-        if (currentSort === "budget_asc") return (a.estimatedValue || 0) - (b.estimatedValue || 0);
-        if (currentSort === "budget_desc") return (b.estimatedValue || 0) - (a.estimatedValue || 0);
-        return 0;
-      });
-
-      if (searchQuery.trim()) {
-        searchIndicator.classList.remove("hidden");
-        searchIndicatorText.textContent = `"${searchQuery}"`;
-      } else {
-        searchIndicator.classList.add("hidden");
-      }
-
-      if (filtered.length === 0) {
-        grid.innerHTML = "";
-        empty.classList.remove("hidden");
-        countLabel.textContent = "0 productos";
-
-        const titleEl = document.getElementById("emptyStateTitle");
-        const descEl = document.getElementById("emptyStateDesc");
-        const actionEl = document.getElementById("emptyStateAction");
-
-        if (products.length === 0) {
-          titleEl.textContent = "El Muro está listo para publicar";
-          descEl.textContent = isAdmin 
-            ? "No hay gadgets activos en la base de datos. Haz clic a continuación para añadir el primero."
-            : "Aún no se han añadido gadgets a la tienda. Vuelve pronto para descubrir los productos del canal.";
-          actionEl.innerHTML = isAdmin 
-            ? `<button onclick="openProductFormModal(null)" class="px-4 py-2 bg-orange-600 hover:bg-orange-500 text-white font-bold text-xs rounded-xl shadow-lg shadow-orange-500/20 inline-flex items-center gap-1.5"><i class="fa-solid fa-plus"></i> Publicar Primer Gadget</button>`
-            : `<button onclick="openAdminModal()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs rounded-xl inline-flex items-center gap-1.5"><i class="fa-solid fa-lock"></i> Acceso Admin</button>`;
-        } else {
-          titleEl.textContent = "No encontramos ese gadget";
-          descEl.textContent = "Prueba con otra palabra clave o restablece los filtros.";
-          actionEl.innerHTML = `<button onclick="clearSearch()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs rounded-xl">Restablecer catálogo</button>`;
-        }
-        return;
-      }
-
-      empty.classList.add("hidden");
-      countLabel.textContent = `Mostrando ${filtered.length} producto${filtered.length > 1 ? 's' : ''}`;
-
-      grid.innerHTML = filtered.map(item => `
-        <article class="glass-panel rounded-2xl overflow-hidden border border-slate-800 hover:border-orange-500/40 transition-all duration-300 flex flex-col group hover:-translate-y-1 hover:shadow-xl hover:shadow-orange-500/5 relative">
-          
-          ${isAdmin ? `
-            <div class="absolute top-3 right-3 z-20 flex items-center gap-1 bg-slate-950/90 backdrop-blur-md p-1 rounded-lg border border-slate-700 shadow-lg">
-              <button onclick="openProductFormModal('${item.id}')" class="w-6 h-6 rounded bg-slate-800 hover:bg-orange-600 text-slate-300 hover:text-white flex items-center justify-center text-[10px]" title="Editar">
-                <i class="fa-solid fa-pen"></i>
-              </button>
-              <button onclick="promptDeleteProduct('${item.id}', '${escapeQuotes(item.title)}')" class="w-6 h-6 rounded bg-slate-800 hover:bg-red-600 text-slate-300 hover:text-white flex items-center justify-center text-[10px]" title="Eliminar">
-                <i class="fa-solid fa-trash"></i>
-              </button>
-            </div>
-          ` : ''}
-
-          <div class="relative aspect-video sm:aspect-square overflow-hidden bg-slate-900">
-            <img 
-              src="${item.image || 'https://placehold.co/600x600/1e293b/f97316?text=El+Murazo'}" 
-              alt="${item.title}" 
-              loading="lazy" 
-              class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
-              onerror="this.src='https://placehold.co/600x600/1e293b/f97316?text=El+Murazo'"
-            >
-            
-            <div class="absolute top-3 left-3 badge-code text-white text-xs font-black px-2.5 py-1 rounded-lg shadow-md flex items-center gap-1 tracking-wider z-10">
-              <i class="fa-brands fa-tiktok text-[10px]"></i>
-              <span>${item.code || '#00'}</span>
-            </div>
-
-            <div class="absolute ${isAdmin ? 'top-11 right-3' : 'top-3 right-3'} bg-slate-950/80 backdrop-blur-md border border-slate-700/60 text-slate-300 text-[10px] font-semibold px-2 py-0.5 rounded-md z-10">
-              ${item.tier || 'Gama Estimada'}
-            </div>
-
-            ${item.views ? `
-              <div class="absolute bottom-3 left-3 bg-slate-950/70 backdrop-blur-sm text-slate-300 text-[10px] font-medium px-2 py-0.5 rounded flex items-center gap-1">
-                <i class="fa-solid fa-eye text-orange-400 text-[9px]"></i>
-                <span>${item.views} vistas</span>
-              </div>
-            ` : ''}
-          </div>
-
-          <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between">
-            <div>
-              <div class="flex items-center gap-1.5 text-amber-400 text-[11px] font-semibold mb-1">
-                <i class="fa-solid fa-star text-[10px]"></i>
-                <span>${item.rating || '4.8'}</span>
-                <span class="text-slate-500">• Verificado</span>
-              </div>
-
-              <h3 class="font-display font-bold text-sm sm:text-base text-white group-hover:text-orange-400 transition-colors line-clamp-2 leading-snug">
-                ${item.title}
-              </h3>
-
-              <p class="text-xs text-slate-400 mt-2 line-clamp-2 leading-relaxed">
-                ${item.hook}
-              </p>
-            </div>
-
-            <div class="mt-4 pt-3 border-t border-slate-800/80 flex items-center gap-2">
-              <a 
-                href="${item.amzUrl}" 
-                target="_blank" 
-                rel="nofollow sponsored noopener"
-                class="flex-1 py-2 px-3 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-slate-950 hover:text-black font-bold text-xs rounded-xl transition-all shadow-md shadow-orange-500/10 flex items-center justify-center gap-1.5"
-                onclick="trackOutboundClick('${item.code}')"
-              >
-                <i class="fa-brands fa-amazon text-sm"></i>
-                <span>Ver precio</span>
-                <i class="fa-solid fa-arrow-up-right-from-square text-[10px] opacity-75"></i>
-              </a>
-
-              <button 
-                onclick="openProductModal('${item.id}')"
-                class="p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded-xl text-xs transition-colors border border-slate-700/50"
-                title="Ver por qué no es un murazo"
-              >
-                <i class="fa-solid fa-circle-info"></i>
-              </button>
-
-              <button 
-                onclick="copyProductLink('${item.code}', '${item.amzUrl}')"
-                class="p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded-xl text-xs transition-colors border border-slate-700/50"
-                title="Copiar enlace"
-              >
-                <i class="fa-solid fa-share-nodes"></i>
-              </button>
-            </div>
-
-          </div>
-
-        </article>
-      `).join("");
-    }
-
-    // Dynamic category tabs based on predefined list and available items
-    function renderCategoryTabs() {
-      const container = document.getElementById("categoryFilters");
-      if (!container) return;
-
-      // Always show 'all', plus setup, viral, regalo, escolar, and any active category in products
-      const activeCategoryKeys = new Set(products.map(p => p.category));
-      const tabsToRender = Object.keys(CATEGORIES).filter(key => {
-        if (key === 'all' || key === 'setup' || key === 'viral' || key === 'regalo' || key === 'escolar') return true;
-        return activeCategoryKeys.has(key);
-      });
-
-      container.innerHTML = tabsToRender.map(key => {
-        const cat = CATEGORIES[key] || { label: key, icon: 'fa-solid fa-tag', color: 'text-slate-400' };
-        const isActive = (currentCategory === key);
-        return `
-          <button 
-            onclick="setCategory('${key}')" 
-            data-category="${key}"
-            class="filter-tab px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 ${
-              isActive 
-                ? 'bg-orange-600 text-white shadow-md shadow-orange-600/20' 
-                : 'bg-slate-900 text-slate-300 hover:bg-slate-800 hover:text-white border border-slate-800'
-            }"
-          >
-            <i class="${cat.icon} ${isActive ? 'text-white' : cat.color}"></i>
-            <span>${cat.label}</span>
-          </button>
-        `;
-      }).join("");
-    }
-
-    function renderAdminProductsList() {
-      const container = document.getElementById("adminProductsList");
-      if (!container) return;
-
-      if (products.length === 0) {
-        container.innerHTML = `
-          <div class="p-8 text-center text-slate-500 text-xs">
-            <i class="fa-solid fa-box-open text-2xl mb-2 text-slate-600"></i>
-            <p>Aún no hay productos en la base de datos.</p>
-            <button onclick="openProductFormModal(null)" class="mt-3 px-3 py-1.5 bg-orange-600 text-white rounded-lg text-xs font-semibold">
-              Crear el primero
-            </button>
-          </div>
-        `;
-        return;
-      }
-
-      container.innerHTML = products.map(item => {
-        const catInfo = CATEGORIES[item.category] || { label: item.category };
-        return `
-        <div class="p-3 bg-slate-900/80 rounded-xl border border-slate-800 flex items-center justify-between gap-3 hover:border-slate-700 transition-colors">
-          <div class="flex items-center gap-3 min-w-0">
-            <img src="${item.image}" alt="${item.title}" class="w-10 h-10 rounded-lg object-cover bg-slate-950 shrink-0">
-            <div class="min-w-0">
-              <div class="flex items-center gap-2">
-                <span class="font-mono text-xs font-black text-orange-400">${item.code || '#--'}</span>
-                <span class="text-[10px] px-1.5 py-0.5 bg-slate-800 text-slate-300 rounded border border-slate-700/60">${catInfo.label}</span>
-                <span class="text-[10px] text-slate-500">Est: ~${item.estimatedValue || 0}€</span>
-              </div>
-              <p class="text-xs font-semibold text-white truncate max-w-xs sm:max-w-md">${item.title}</p>
-            </div>
-          </div>
-          <div class="flex items-center gap-1.5 shrink-0">
-            <button onclick="openProductFormModal('${item.id}')" class="px-2.5 py-1.5 bg-slate-800 hover:bg-orange-600 text-slate-300 hover:text-white rounded-lg text-xs transition-colors flex items-center gap-1">
-              <i class="fa-solid fa-pen text-[10px]"></i>
-              <span class="hidden sm:inline">Editar</span>
-            </button>
-            <button onclick="promptDeleteProduct('${item.id}', '${escapeQuotes(item.title)}')" class="px-2.5 py-1.5 bg-slate-800 hover:bg-red-600 text-slate-300 hover:text-white rounded-lg text-xs transition-colors flex items-center gap-1">
-              <i class="fa-solid fa-trash text-[10px]"></i>
-              <span class="hidden sm:inline">Borrar</span>
-            </button>
-          </div>
+    function renderBoard(caseData) {
+      const board = document.getElementById('view-board');
+      board.innerHTML = caseData.boardClues.map(clue => `
+        <div class="clue-card">
+          <span class="clue-tag">${clue.tag}</span>
+          <h3>${clue.title}</h3>
+          ${clue.body ? `<p>${clue.body}</p>` : ''}
+          ${clue.suspects ? clue.suspects.map(s => `
+            <div class="suspect-item"><strong>${s.name}:</strong> <span style="color:#94a3b8">${s.alibi}</span></div>
+          `).join('') : ''}
         </div>
-      `}).join("");
+      `).join('');
     }
 
-    function openProductFormModal(productId = null) {
-      if (!isAdmin) {
-        showToast("Acceso denegado. Inicia sesión como administrador.");
-        return;
-      }
-
-      const modal = document.getElementById("productFormModal");
-      const titleEl = document.getElementById("productFormTitle");
-      const form = document.getElementById("productCrudForm");
-      form.reset();
-
-      if (productId) {
-        const item = products.find(p => p.id === productId);
-        if (!item) return;
-
-        titleEl.textContent = `Editar Gadget: ${item.code || ''}`;
-        document.getElementById("formProductId").value = item.id;
-        document.getElementById("formCode").value = item.code || "";
-        document.getElementById("formCategory").value = item.category || "setup";
-        document.getElementById("formEstimatedValue").value = item.estimatedValue || 25;
-        document.getElementById("formTitle").value = item.title || "";
-        document.getElementById("formTier").value = item.tier || "";
-        document.getElementById("formViews").value = item.views || "";
-        document.getElementById("formRating").value = item.rating || 4.8;
-        document.getElementById("formAmzUrl").value = item.amzUrl || "";
-        document.getElementById("formImage").value = item.image || "";
-        document.getElementById("formHook").value = item.hook || "";
-        document.getElementById("formWhyNotMurazo").value = item.whyNotMurazo || "";
-        document.getElementById("formTags").value = Array.isArray(item.tags) ? item.tags.join(", ") : "";
-
-        const checkboxes = document.querySelectorAll(".form-ambience");
-        checkboxes.forEach(cb => {
-          cb.checked = Array.isArray(item.ambience) && item.ambience.includes(cb.value);
-        });
-      } else {
-        titleEl.textContent = "Publicar Nuevo Gadget";
-        document.getElementById("formProductId").value = "";
-        const nextNumber = products.length + 1;
-        document.getElementById("formCode").value = `#${nextNumber < 10 ? '0' + nextNumber : nextNumber}`;
-        document.getElementById("formRating").value = 4.8;
-        document.getElementById("formTier").value = "Gama Media (~25-35€)";
-      }
-
-      modal.classList.remove("hidden");
-    }
-
-    async function handleProductSubmit(e) {
-      e.preventDefault();
-      if (!isAdmin) {
-        showToast("Permiso denegado");
-        return;
-      }
-
-      const submitBtn = document.getElementById("formSubmitBtn");
-      submitBtn.disabled = true;
-      submitBtn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Guardando...`;
-
-      try {
-        const id = document.getElementById("formProductId").value;
-        const code = document.getElementById("formCode").value.trim();
-        const category = document.getElementById("formCategory").value;
-        const estimatedValue = parseInt(document.getElementById("formEstimatedValue").value, 10) || 20;
-        const title = document.getElementById("formTitle").value.trim();
-        const tier = document.getElementById("formTier").value.trim();
-        const views = document.getElementById("formViews").value.trim();
-        const rating = parseFloat(document.getElementById("formRating").value) || 4.8;
-        const amzUrl = document.getElementById("formAmzUrl").value.trim();
-        const image = document.getElementById("formImage").value.trim();
-        const hook = document.getElementById("formHook").value.trim();
-        const whyNotMurazo = document.getElementById("formWhyNotMurazo").value.trim();
-
-        const selectedAmbiences = [];
-        document.querySelectorAll(".form-ambience:checked").forEach(cb => {
-          selectedAmbiences.push(cb.value);
-        });
-        if (selectedAmbiences.length === 0) selectedAmbiences.push("minimal");
-
-        const tagsInput = document.getElementById("formTags").value;
-        const tags = tagsInput.split(",").map(t => t.trim().toLowerCase()).filter(Boolean);
-
-        const payload = {
-          code,
-          category,
-          estimatedValue,
-          title,
-          tier,
-          views,
-          rating,
-          amzUrl,
-          image,
-          hook,
-          whyNotMurazo,
-          ambience: selectedAmbiences,
-          tags,
-          updatedAt: new Date().toISOString()
-        };
-
-        if (id) {
-          const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'products', id);
-          await updateDoc(docRef, payload);
-          showToast(`¡Gadget ${code} actualizado correctamente!`);
-        } else {
-          payload.createdAt = new Date().toISOString();
-          await addDoc(productsCollectionRef, payload);
-          showToast(`¡Gadget ${code} publicado en El Murazo!`);
-        }
-
-        closeProductFormModal();
-      } catch (err) {
-        console.error("Error saving product:", err);
-        showToast("Error al guardar el producto en Firestore. Revisa las reglas.");
-      } finally {
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = `<i class="fa-solid fa-floppy-disk"></i> Guardar Producto`;
-      }
-    }
-
-    function promptDeleteProduct(id, title) {
-      if (!isAdmin) return;
-      pendingDeleteId = id;
-      document.getElementById("deleteItemTitle").textContent = title;
-      document.getElementById("deleteModal").classList.remove("hidden");
-    }
-
-    async function executeProductDelete() {
-      if (!isAdmin || !pendingDeleteId) return;
-      const btn = document.getElementById("confirmDeleteBtn");
-      btn.disabled = true;
-      btn.textContent = "Eliminando...";
-
-      try {
-        const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'products', pendingDeleteId);
-        await deleteDoc(docRef);
-        showToast("Gadget eliminado del catálogo.");
-        closeDeleteModal();
-      } catch (err) {
-        console.error("Error deleting:", err);
-        showToast("No se pudo eliminar el producto.");
-      } finally {
-        btn.disabled = false;
-        btn.textContent = "Sí, eliminar";
-        pendingDeleteId = null;
-      }
-    }
-
-    function generateSetupCombo() {
-      const ambience = document.getElementById("comboAmbience").value;
-      const budgetMax = parseInt(document.getElementById("budgetSlider").value, 10);
-      const container = document.getElementById("comboResultContainer");
-
-      const pool = products.filter(p => Array.isArray(p.ambience) && p.ambience.includes(ambience));
-      
-      if (pool.length === 0) {
-        showToast("No hay gadgets cargados para este rincón aún. Añade productos desde el admin.");
-        return;
-      }
-
-      let selected = [];
-      let totalEst = 0;
-      const shuffled = [...pool].sort(() => 0.5 - Math.random());
-      
-      for (const item of shuffled) {
-        const val = item.estimatedValue || 20;
-        if (totalEst + val <= budgetMax + 10) {
-          selected.push(item);
-          totalEst += val;
-        }
-        if (selected.length >= 3) break;
-      }
-
-      if (selected.length === 0 && pool.length > 0) {
-        selected = [pool.sort((a,b) => (a.estimatedValue||0) - (b.estimatedValue||0))[0]];
-      }
-
-      container.classList.remove("hidden");
-      container.innerHTML = `
-        <div class="glass-panel p-4 rounded-xl border border-orange-500/30 bg-slate-900/90">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
-            <div>
-              <span class="text-[10px] font-bold uppercase tracking-wider text-orange-400 bg-orange-500/10 px-2 py-0.5 rounded border border-orange-500/20">
-                Combo Sugerido
-              </span>
-              <h3 class="text-sm font-bold text-white mt-1">
-                ${selected.length} Accesorios complementarios para tu rincón
-              </h3>
-            </div>
-            <div class="text-right">
-              <span class="text-xs text-slate-400 font-mono">Gama estimada: <strong class="text-white">~${budgetMax}€ aprox.</strong></span>
-            </div>
+    // PANTALLA DE INICIO DEL MÓVIL
+    function renderPhoneHome() {
+      const screen = document.getElementById('phone-screen-content');
+      screen.innerHTML = `
+        <div style="text-align:center; margin: 15px 0 20px;">
+          <h2 style="font-size:1.4rem; font-family:'JetBrains Mono',monospace;">Móvil de Álex V.</h2>
+          <small style="color:var(--text-muted);">Evidencia Policial #04</small>
+        </div>
+        <div class="app-grid">
+          <div class="app-icon" onclick="openApp('chats')">
+            <span>💬</span>
+            <small>Mensajes (3)</small>
           </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 my-3">
-            ${selected.map(item => `
-              <div class="bg-slate-950 p-3 rounded-lg border border-slate-800 flex items-center gap-3">
-                <img src="${item.image}" alt="${item.title}" class="w-12 h-12 rounded-lg object-cover shrink-0">
-                <div class="min-w-0 flex-1">
-                  <span class="text-[9px] font-black text-orange-400 font-mono">${item.code}</span>
-                  <p class="text-xs font-semibold text-white truncate">${item.title}</p>
-                  <a href="${item.amzUrl}" target="_blank" rel="nofollow sponsored" class="text-[11px] text-amber-400 hover:underline flex items-center gap-1 font-medium mt-0.5">
-                    Ver en Amazon <i class="fa-solid fa-arrow-up-right-from-square text-[8px]"></i>
-                  </a>
-                </div>
-              </div>
-            `).join("")}
+          <div class="app-icon" onclick="openApp('photos')">
+            <span>🖼️</span>
+            <small>Galería (2)</small>
           </div>
-
-          <div class="flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-slate-400 pt-2 border-t border-slate-800">
-            <span>✨ Combinación pensada para optimizar ergonomía y estética sin cables desordenados.</span>
-            <button onclick="copyComboSummary('${selected.map(i => i.code).join(", ")}')" class="text-orange-400 hover:text-orange-300 font-semibold flex items-center gap-1">
-              <i class="fa-solid fa-copy"></i> Copiar códigos del combo
-            </button>
+          <div class="app-icon" onclick="openApp('notes')">
+            <span>${gameState.noteUnlocked ? '🔓' : '🔒'}</span>
+            <small>Notas (PIN)</small>
+          </div>
+          <div class="app-icon" onclick="openApp('audio')">
+            <span>🎙️</span>
+            <small>Grabadora VIP</small>
           </div>
         </div>
       `;
-
-      showToast("¡Combo generado según tu presupuesto estimado!");
     }
 
-    function openProductModal(id) {
-      const item = products.find(p => p.id === id);
-      if (!item) return;
+    function openApp(appName) {
+      const screen = document.getElementById('phone-screen-content');
 
-      const modal = document.getElementById("productModal");
-      const content = document.getElementById("modalContent");
-
-      content.innerHTML = `
-        <div class="relative aspect-video w-full bg-slate-900">
-          <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover">
-          <div class="absolute bottom-3 left-4 badge-code text-white text-xs font-black px-2.5 py-1 rounded shadow flex items-center gap-1">
-            <i class="fa-brands fa-tiktok"></i> Vídeo ${item.code}
+      if (appName === 'chats') {
+        screen.innerHTML = `
+          <div class="app-header">
+            <button class="btn-back" onclick="renderPhoneHome()">← Volver</button>
+            <strong>WhatsApp</strong>
           </div>
-        </div>
-        
-        <div class="p-6 space-y-4">
-          <div>
-            <div class="flex items-center justify-between gap-2">
-              <span class="text-[10px] font-bold uppercase tracking-wider text-orange-400 bg-orange-500/10 px-2 py-0.5 rounded border border-orange-500/20">
-                ${item.tier || 'Gama Estimada'}
-              </span>
-              <span class="text-xs text-amber-400 font-semibold">
-                <i class="fa-solid fa-star text-[10px]"></i> ${item.rating || '4.8'} en Amazon
-              </span>
+          ${CASE_01_DATA.chats.map(c => `
+            <div class="chat-bubble">
+              <span class="chat-meta">${c.sender} • ${c.time}</span>${c.text}
             </div>
-            <h2 class="font-display font-bold text-lg text-white mt-1.5 leading-snug">${item.title}</h2>
-          </div>
+          `).join('')}
+        `;
+      }
 
-          <div class="bg-emerald-950/30 border border-emerald-500/30 p-3.5 rounded-xl">
-            <h4 class="text-xs font-bold text-emerald-400 flex items-center gap-1.5 mb-1">
-              <i class="fa-solid fa-shield-halved"></i> ¿Por qué NO es un murazo?
-            </h4>
-            <p class="text-xs text-emerald-200/90 leading-relaxed">${item.whyNotMurazo || 'Producto seleccionado por durabilidad y rendimiento óptimo en nuestros análisis.'}</p>
+      if (appName === 'photos') {
+        screen.innerHTML = `
+          <div class="app-header">
+            <button class="btn-back" onclick="renderPhoneHome()">← Volver</button>
+            <strong>Galería Reciente</strong>
           </div>
-
-          ${item.views ? `
-            <div class="text-xs text-slate-400">
-              <strong>Visto en redes:</strong> ${item.views} personas han visto este gadget en nuestro canal.
+          ${CASE_01_DATA.photos.map(p => `
+            <div class="photo-item">
+              <div class="photo-visual">${p.visualText}</div>
+              <strong style="font-size:0.85rem; display:block; margin-bottom:4px;">${p.title}</strong>
+              <p style="font-size:0.8rem; color:var(--text-muted);">${p.caption}</p>
             </div>
-          ` : ''}
+          `).join('')}
+        `;
+      }
 
-          <div class="pt-2">
-            <a 
-              href="${item.amzUrl}" 
-              target="_blank" 
-              rel="nofollow sponsored" 
-              class="w-full py-3 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-slate-950 font-black text-xs uppercase tracking-wider rounded-xl transition-all shadow-lg shadow-orange-500/20 flex items-center justify-center gap-2"
-              onclick="trackOutboundClick('${item.code}')"
-            >
-              <i class="fa-brands fa-amazon text-base"></i>
-              <span>Consultar Precio y Disponibilidad en Amazon</span>
-              <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
-            </a>
-            <p class="text-[10px] text-slate-500 text-center mt-2">
-              El precio final y los costes de envío se muestran en Amazon según tu cuenta Prime.
+      if (appName === 'notes') {
+        if (!gameState.noteUnlocked) {
+          screen.innerHTML = `
+            <div class="app-header">
+              <button class="btn-back" onclick="renderPhoneHome()">← Volver</button>
+              <strong>Carpeta Protegida</strong>
+            </div>
+            <p style="font-size:0.85rem; color:var(--text-muted); text-align:center; margin-top:20px;">
+              Introduce el PIN de 4 dígitos (Pista: Plaza de Parking + Nº Pedido Cafetería)
             </p>
-          </div>
-        </div>
-      `;
-
-      modal.classList.remove("hidden");
-    }
-
-    function handleAdminNavClick() {
-      openAdminModal();
-    }
-
-    function openAdminModal() {
-      document.getElementById("adminModal").classList.remove("hidden");
-    }
-
-    function closeAdminModal() {
-      document.getElementById("adminModal").classList.add("hidden");
-    }
-
-    function closeAdminOnBackdrop(e) {
-      if (e.target.id === "adminModal") closeAdminModal();
-    }
-
-    function closeProductFormModal() {
-      document.getElementById("productFormModal").classList.add("hidden");
-    }
-
-    function closeProductFormOnBackdrop(e) {
-      if (e.target.id === "productFormModal") closeProductFormModal();
-    }
-
-    function closeDeleteModal() {
-      document.getElementById("deleteModal").classList.add("hidden");
-    }
-
-    function closeDeleteOnBackdrop(e) {
-      if (e.target.id === "deleteModal") closeDeleteModal();
-    }
-
-    function closeProductModal() {
-      document.getElementById("productModal").classList.add("hidden");
-    }
-
-    function closeModalOnBackdrop(e) {
-      if (e.target.id === "productModal") closeProductModal();
-    }
-
-    function openSuggestModal() {
-      document.getElementById("suggestModal").classList.remove("hidden");
-    }
-
-    function closeSuggestModal() {
-      document.getElementById("suggestModal").classList.add("hidden");
-    }
-
-    function closeSuggestOnBackdrop(e) {
-      if (e.target.id === "suggestModal") closeSuggestModal();
-    }
-
-    function submitSuggestion(e) {
-      e.preventDefault();
-      closeSuggestModal();
-      document.getElementById("suggestForm").reset();
-      showToast("¡Recibido! Lo pondremos a prueba para el próximo vídeo.");
-    }
-
-    /* GIFT FINDER QUIZ LOGIC */
-    function openGiftFinderModal() {
-      resetGiftQuiz();
-      document.getElementById("giftFinderModal").classList.remove("hidden");
-    }
-
-    function closeGiftFinderModal() {
-      document.getElementById("giftFinderModal").classList.add("hidden");
-    }
-
-    function closeGiftFinderOnBackdrop(e) {
-      if (e.target.id === "giftFinderModal") closeGiftFinderModal();
-    }
-
-    function resetGiftQuiz() {
-      giftQuizStep = 1;
-      giftAnswers = { profile: null, budget: null, goal: null };
-      
-      document.querySelectorAll(".gift-option-btn").forEach(btn => {
-        btn.classList.remove("border-orange-500", "bg-orange-500/10");
-        btn.classList.add("border-slate-800", "bg-slate-900/60");
-      });
-
-      document.getElementById("giftResultsContainer").classList.add("hidden");
-      document.getElementById("giftQuizFooter").classList.remove("hidden");
-      document.getElementById("giftQuizProgress").classList.remove("hidden");
-      
-      updateGiftStepUI();
-    }
-
-    function selectGiftAnswer(group, val) {
-      giftAnswers[group] = val;
-
-      // Update button styling in this group
-      document.querySelectorAll(`.gift-option-btn[data-group="${group}"]`).forEach(btn => {
-        if (btn.dataset.val === val) {
-          btn.classList.remove("border-slate-800", "bg-slate-900/60");
-          btn.classList.add("border-orange-500", "bg-orange-500/15");
+            <input type="text" maxlength="4" id="pin-attempt" class="pin-input" placeholder="••••">
+            <button class="btn-action" onclick="checkPin()">Desbloquear Nota</button>
+            <p id="pin-error" style="color:var(--accent); font-size:0.8rem; text-align:center; margin-top:10px;"></p>
+          `;
         } else {
-          btn.classList.remove("border-orange-500", "bg-orange-500/15");
-          btn.classList.add("border-slate-800", "bg-slate-900/60");
-        }
-      });
-
-      // Automatically advance to the next step after a tiny feedback delay
-      setTimeout(() => {
-        if (giftQuizStep < 3) {
-          nextGiftStep();
-        } else {
-          showGiftResults();
-        }
-      }, 180);
-    }
-
-    function nextGiftStep() {
-      if (giftQuizStep === 1 && !giftAnswers.profile) return;
-      if (giftQuizStep === 2 && !giftAnswers.budget) return;
-
-      if (giftQuizStep < 3) {
-        giftQuizStep++;
-        updateGiftStepUI();
-      } else {
-        showGiftResults();
-      }
-    }
-
-    function prevGiftStep() {
-      if (giftQuizStep > 1) {
-        giftQuizStep--;
-        updateGiftStepUI();
-      }
-    }
-
-    function updateGiftStepUI() {
-      const step1 = document.getElementById("giftStep1");
-      const step2 = document.getElementById("giftStep2");
-      const step3 = document.getElementById("giftStep3");
-      const results = document.getElementById("giftResultsContainer");
-      const prevBtn = document.getElementById("giftPrevBtn");
-      const nextBtn = document.getElementById("giftNextBtn");
-      const nextLabel = document.getElementById("giftNextLabel");
-      const stepLabel = document.getElementById("giftStepLabel");
-
-      step1.classList.add("hidden");
-      step2.classList.add("hidden");
-      step3.classList.add("hidden");
-      results.classList.add("hidden");
-
-      prevBtn.disabled = (giftQuizStep === 1);
-
-      // Dots and progress styling
-      const d1 = document.getElementById("giftDot1");
-      const d2 = document.getElementById("giftDot2");
-      const d3 = document.getElementById("giftDot3");
-      const b1 = document.getElementById("giftBar1");
-      const b2 = document.getElementById("giftBar2");
-
-      [d1, d2, d3].forEach((d, idx) => {
-        if (idx + 1 === giftQuizStep) {
-          d.className = "w-7 h-7 rounded-full bg-orange-600 text-white font-bold text-xs flex items-center justify-center transition-colors shadow-md shadow-orange-500/30";
-        } else if (idx + 1 < giftQuizStep) {
-          d.className = "w-7 h-7 rounded-full bg-emerald-600 text-white font-bold text-xs flex items-center justify-center transition-colors";
-          d.innerHTML = `<i class="fa-solid fa-check text-[10px]"></i>`;
-        } else {
-          d.className = "w-7 h-7 rounded-full bg-slate-800 text-slate-400 font-bold text-xs flex items-center justify-center transition-colors";
-          d.textContent = idx + 1;
-        }
-      });
-
-      b1.className = `h-0.5 w-6 sm:w-10 ${giftQuizStep > 1 ? 'bg-orange-500' : 'bg-slate-800'} transition-colors`;
-      b2.className = `h-0.5 w-6 sm:w-10 ${giftQuizStep > 2 ? 'bg-orange-500' : 'bg-slate-800'} transition-colors`;
-
-      stepLabel.textContent = `Paso ${giftQuizStep} de 3`;
-
-      if (giftQuizStep === 1) {
-        step1.classList.remove("hidden");
-        nextBtn.disabled = !giftAnswers.profile;
-        nextLabel.textContent = "Siguiente paso";
-      } else if (giftQuizStep === 2) {
-        step2.classList.remove("hidden");
-        nextBtn.disabled = !giftAnswers.budget;
-        nextLabel.textContent = "Siguiente paso";
-      } else if (giftQuizStep === 3) {
-        step3.classList.remove("hidden");
-        nextBtn.disabled = !giftAnswers.goal;
-        nextLabel.textContent = "Ver regalos ideales";
-      }
-    }
-
-    function showGiftResults() {
-      const step1 = document.getElementById("giftStep1");
-      const step2 = document.getElementById("giftStep2");
-      const step3 = document.getElementById("giftStep3");
-      const resultsContainer = document.getElementById("giftResultsContainer");
-      const footer = document.getElementById("giftQuizFooter");
-      const progress = document.getElementById("giftQuizProgress");
-
-      step1.classList.add("hidden");
-      step2.classList.add("hidden");
-      step3.classList.add("hidden");
-      footer.classList.add("hidden");
-      progress.classList.add("hidden");
-      resultsContainer.classList.remove("hidden");
-
-      if (products.length === 0) {
-        resultsContainer.innerHTML = `
-          <div class="py-8 text-center text-slate-400 space-y-3">
-            <div class="w-12 h-12 mx-auto rounded-xl bg-orange-500/10 text-orange-400 flex items-center justify-center text-xl">
-              <i class="fa-solid fa-boxes-packing"></i>
+          screen.innerHTML = `
+            <div class="app-header">
+              <button class="btn-back" onclick="renderPhoneHome()">← Volver</button>
+              <strong>Nota Desbloqueada</strong>
             </div>
-            <p class="text-xs">Aún no hay productos subidos en el catálogo. Entra al Panel Admin para publicar los primeros.</p>
-            <button onclick="closeGiftFinderModal()" class="px-4 py-2 bg-slate-800 text-white rounded-xl text-xs font-semibold">
-              Cerrar
-            </button>
-          </div>
-        `;
-        return;
-      }
-
-      // Algorithm: Score each product against the 3 answers
-      const scored = products.map(item => {
-        let score = 0;
-        const est = item.estimatedValue || 25;
-        const cat = item.category || "";
-        const ambience = Array.isArray(item.ambience) ? item.ambience : [];
-        const tags = Array.isArray(item.tags) ? item.tags : [];
-
-        // 1. Budget Fit
-        if (giftAnswers.budget === "tier1") {
-          if (est <= 25) score += 4;
-          else if (est <= 35) score += 1;
-        } else if (giftAnswers.budget === "tier2") {
-          if (est >= 20 && est <= 55) score += 4;
-          else score += 1;
-        } else if (giftAnswers.budget === "tier3") {
-          if (est > 45) score += 4;
-          else score += 1;
-        } else {
-          score += 2; // all
-        }
-
-        // 2. Profile Fit
-        if (giftAnswers.profile === "gamer") {
-          if (cat === "setup" || ambience.includes("creator")) score += 4;
-          if (tags.some(t => ["gamer", "juegos", "stream", "luz", "pantalla"].includes(t))) score += 3;
-        } else if (giftAnswers.profile === "worker") {
-          if (cat === "setup" && ambience.includes("productive")) score += 4;
-          if (tags.some(t => ["oficina", "trabajo", "soporte", "orden", "usb", "mesa"].includes(t))) score += 3;
-        } else if (giftAnswers.profile === "viral") {
-          if (cat === "viral") score += 5;
-          if (tags.some(t => ["gadget", "viral", "curioso"].includes(t))) score += 3;
-        } else if (giftAnswers.profile === "school") {
-          if (cat === "escolar") score += 6;
-          if (tags.some(t => ["colegio", "escuela", "estudiante", "papeleria", "mochila", "cuaderno", "estuche"].includes(t))) score += 4;
-        } else {
-          if (cat === "regalo" || cat === "viral") score += 3;
-          score += 2;
-        }
-
-        // 3. Goal Fit
-        if (giftAnswers.goal === "wow") {
-          if (cat === "viral") score += 3;
-          if (parseFloat(item.rating || 0) >= 4.7) score += 2;
-        } else if (giftAnswers.goal === "useful") {
-          if (cat === "setup" || cat === "escolar" || ambience.includes("productive")) score += 3;
-        } else if (giftAnswers.goal === "clean") {
-          if (ambience.includes("minimal") || cat === "cables") score += 4;
-        } else if (giftAnswers.goal === "safe") {
-          if (parseFloat(item.rating || 0) >= 4.7) score += 3;
-          if (cat === "regalo" || cat === "escolar") score += 2;
-        }
-
-        return { item, score };
-      });
-
-      scored.sort((a, b) => b.score - a.score);
-      const topMatches = scored.slice(0, 3).map(s => s.item);
-
-      resultsContainer.innerHTML = `
-        <div class="space-y-4">
-          <div class="bg-gradient-to-r from-pink-500/10 via-orange-500/10 to-amber-500/10 border border-orange-500/20 p-4 rounded-xl flex items-center justify-between gap-3">
-            <div>
-              <span class="text-[10px] font-black uppercase tracking-wider text-pink-400 bg-pink-500/20 px-2 py-0.5 rounded border border-pink-500/30">
-                Selección Personalizada
-              </span>
-              <h4 class="text-sm font-bold text-white mt-1">
-                ¡Los ${topMatches.length} mejores gadgets según tu test!
-              </h4>
-              <p class="text-[11px] text-slate-400">Verificados en vídeo, con alta puntuación y entrega en Amazon.</p>
+            <div class="photo-item" style="border-color:var(--accent);">
+              <span class="clue-tag">DESBLOQUEADO CON ÉXITO</span>
+              <h4 style="margin-bottom:8px;">${CASE_01_DATA.secretNoteUnlocked.title}</h4>
+              <p style="font-size:0.9rem; line-height:1.5; color:#e2e8f0;">${CASE_01_DATA.secretNoteUnlocked.content}</p>
+              <button class="btn-action" style="margin-top:15px;" onclick="openApp('audio')">
+                ▶ Escuchar AUDIO_PARKING_0210.MP3
+              </button>
             </div>
-            <button onclick="resetGiftQuiz()" class="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-700 rounded-lg text-xs font-semibold transition-all shrink-0 flex items-center gap-1.5">
-              <i class="fa-solid fa-rotate-right text-[10px]"></i>
-              <span class="hidden sm:inline">Repetir</span>
-            </button>
-          </div>
-
-          <div class="space-y-3">
-            ${topMatches.map(product => `
-              <div class="bg-slate-900/90 border border-slate-800 hover:border-orange-500/40 p-3 rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 transition-colors">
-                <div class="flex items-center gap-3 min-w-0">
-                  <img src="${product.image || 'https://placehold.co/100x100/1e293b/f97316?text=Regalo'}" alt="${product.title}" class="w-14 h-14 rounded-lg object-cover bg-slate-950 shrink-0 border border-slate-800">
-                  <div class="min-w-0">
-                    <div class="flex items-center gap-1.5">
-                      <span class="text-[9px] font-black font-mono text-orange-400 bg-orange-500/10 px-1.5 py-0.2 rounded border border-orange-500/20">
-                        ${product.code || '#--'}
-                      </span>
-                      <span class="text-[10px] text-slate-400 font-semibold">${product.tier || 'Gama Estimada'}</span>
-                      <span class="text-[10px] text-amber-400 flex items-center gap-1 font-semibold">
-                        <i class="fa-solid fa-star text-[9px]"></i> ${product.rating || '4.8'}
-                      </span>
-                    </div>
-                    <h5 class="text-xs font-bold text-white truncate max-w-xs mt-0.5">${product.title}</h5>
-                    <p class="text-[11px] text-slate-400 line-clamp-1 mt-0.5">${product.hook || ''}</p>
-                  </div>
-                </div>
-
-                <div class="flex items-center gap-2 w-full sm:w-auto justify-end shrink-0 pt-2 sm:pt-0 border-t border-slate-800/80 sm:border-0">
-                  <button 
-                    onclick="openProductModal('${product.id}')"
-                    class="p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white rounded-lg text-xs transition-colors"
-                    title="Ver ficha completa"
-                  >
-                    <i class="fa-solid fa-circle-info"></i>
-                  </button>
-                  <a 
-                    href="${product.amzUrl}" 
-                    target="_blank" 
-                    rel="nofollow sponsored" 
-                    class="flex-1 sm:flex-initial px-3.5 py-2 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-slate-950 font-black text-xs rounded-lg transition-all shadow-md shadow-orange-500/10 flex items-center justify-center gap-1.5"
-                    onclick="trackOutboundClick('${product.code}')"
-                  >
-                    <i class="fa-brands fa-amazon text-sm"></i>
-                    <span>Ver precio</span>
-                    <i class="fa-solid fa-arrow-up-right-from-square text-[9px] opacity-75"></i>
-                  </a>
-                </div>
-              </div>
-            `).join("")}
-          </div>
-
-          <div class="pt-2 text-center">
-            <button onclick="closeGiftFinderModal()" class="text-xs text-slate-400 hover:text-white transition-colors underline">
-              Cerrar y seguir navegando
-            </button>
-          </div>
-        </div>
-      `;
-    }
-
-    function updateBudgetDisplay(val) {
-      document.getElementById("budgetDisplay").textContent = `Hasta ~${val}€`;
-    }
-
-    function toggleComboBuilder() {
-      const controls = document.getElementById("comboControls");
-      const icon = document.getElementById("comboToggleIcon");
-      const result = document.getElementById("comboResultContainer");
-
-      isBuilderExpanded = !isBuilderExpanded;
-      if (isBuilderExpanded) {
-        controls.classList.remove("hidden");
-        icon.className = "fa-solid fa-chevron-up";
-      } else {
-        controls.classList.add("hidden");
-        result.classList.add("hidden");
-        icon.className = "fa-solid fa-chevron-down";
-      }
-    }
-
-    function handleSearch(val) {
-      searchQuery = val;
-      const clearBtn = document.getElementById("clearSearchBtn");
-      if (val.trim()) {
-        clearBtn.classList.remove("hidden");
-      } else {
-        clearBtn.classList.add("hidden");
-      }
-      renderCatalog();
-    }
-
-    function clearSearch() {
-      searchQuery = "";
-      document.getElementById("searchInput").value = "";
-      document.getElementById("clearSearchBtn").classList.add("hidden");
-      renderCatalog();
-    }
-
-    function setCategory(cat) {
-      currentCategory = cat;
-      const tabs = document.querySelectorAll(".filter-tab");
-      tabs.forEach(tab => {
-        if (tab.dataset.category === cat) {
-          tab.className = "filter-tab active-tab px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all bg-orange-600 text-white";
-        } else {
-          tab.className = "filter-tab px-3.5 py-1.5 rounded-xl text-xs font-medium whitespace-nowrap transition-all bg-slate-900 text-slate-300 hover:bg-slate-800 hover:text-white border border-slate-800";
+          `;
         }
-      });
-      renderCatalog();
-    }
-
-    function handleSort(val) {
-      currentSort = val;
-      renderCatalog();
-    }
-
-    function resetFilters(e) {
-      e.preventDefault();
-      currentCategory = "all";
-      searchQuery = "";
-      document.getElementById("searchInput").value = "";
-      document.getElementById("clearSearchBtn").classList.add("hidden");
-      setCategory("all");
-    }
-
-    function copyProductLink(code, url) {
-      const tempInput = document.createElement("input");
-      tempInput.value = `${window.location.origin}${window.location.pathname}?ref=${(code||'').replace('#', '')}`;
-      document.body.appendChild(tempInput);
-      tempInput.select();
-      try {
-        document.execCommand("copy");
-        showToast(`Enlace directo al gadget ${code} copiado al portapapeles`);
-      } catch (err) {
-        showToast(`Código ${code} listo`);
       }
-      document.body.removeChild(tempInput);
-    }
 
-    function copyComboSummary(codes) {
-      const tempInput = document.createElement("input");
-      tempInput.value = `Gadgets recomendados en elmurazo.com: ${codes}`;
-      document.body.appendChild(tempInput);
-      tempInput.select();
-      document.execCommand("copy");
-      document.body.removeChild(tempInput);
-      showToast("Códigos del combo copiados al portapapeles");
-    }
-
-    function trackOutboundClick(code) {
-      console.log(`[El Murazo Analytics] Clic hacia Amazon: ${code}`);
-    }
-
-    function showLegalNotice() {
-      showToast("Cumplimiento RGPD y Afiliación de Amazon España activo.");
-    }
-
-    function showToast(message) {
-      const container = document.getElementById("toastContainer");
-      const toast = document.createElement("div");
-      toast.className = "glass-panel px-4 py-3 rounded-xl border border-orange-500/40 text-xs font-semibold text-white shadow-2xl flex items-center gap-2 transform transition-all duration-300 translate-y-2 opacity-0";
-      toast.innerHTML = `
-        <i class="fa-solid fa-check-circle text-orange-400"></i>
-        <span>${message}</span>
-      `;
-      container.appendChild(toast);
-
-      requestAnimationFrame(() => {
-        toast.classList.remove("translate-y-2", "opacity-0");
-      });
-
-      setTimeout(() => {
-        toast.classList.add("opacity-0", "translate-y-2");
-        setTimeout(() => toast.remove(), 300);
-      }, 3500);
-    }
-
-    function escapeQuotes(str) {
-      return (str || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
-    }
-
-    // Expose functions to window
-    window.handleAdminNavClick = handleAdminNavClick;
-    window.openAdminModal = openAdminModal;
-    window.closeAdminModal = closeAdminModal;
-    window.closeAdminOnBackdrop = closeAdminOnBackdrop;
-    window.loginWithGoogle = loginWithGoogle;
-    window.handleLogout = handleLogout;
-    window.openProductFormModal = openProductFormModal;
-    window.closeProductFormModal = closeProductFormModal;
-    window.closeProductFormOnBackdrop = closeProductFormOnBackdrop;
-    window.handleProductSubmit = handleProductSubmit;
-    window.promptDeleteProduct = promptDeleteProduct;
-    window.executeProductDelete = executeProductDelete;
-    window.closeDeleteModal = closeDeleteModal;
-    window.closeDeleteOnBackdrop = closeDeleteOnBackdrop;
-    window.openProductModal = openProductModal;
-    window.closeProductModal = closeProductModal;
-    window.closeModalOnBackdrop = closeModalOnBackdrop;
-    window.openSuggestModal = openSuggestModal;
-    window.closeSuggestModal = closeSuggestModal;
-    window.closeSuggestOnBackdrop = closeSuggestOnBackdrop;
-    window.submitSuggestion = submitSuggestion;
-    window.openGiftFinderModal = openGiftFinderModal;
-    window.closeGiftFinderModal = closeGiftFinderModal;
-    window.closeGiftFinderOnBackdrop = closeGiftFinderOnBackdrop;
-    window.selectGiftAnswer = selectGiftAnswer;
-    window.nextGiftStep = nextGiftStep;
-    window.prevGiftStep = prevGiftStep;
-    window.resetGiftQuiz = resetGiftQuiz;
-    window.generateSetupCombo = generateSetupCombo;
-    window.updateBudgetDisplay = updateBudgetDisplay;
-    window.toggleComboBuilder = toggleComboBuilder;
-    window.handleSearch = handleSearch;
-    window.clearSearch = clearSearch;
-    window.setCategory = setCategory;
-    window.handleSort = handleSort;
-    window.resetFilters = resetFilters;
-    window.copyProductLink = copyProductLink;
-    window.copyComboSummary = copyComboSummary;
-    window.trackOutboundClick = trackOutboundClick;
-    window.showLegalNotice = showLegalNotice;
-
-    // Initialization on DOM load
-    window.addEventListener("DOMContentLoaded", () => {
-      document.getElementById("currentYear").textContent = new Date().getFullYear();
-
-      const urlParams = new URLSearchParams(window.location.search);
-      const refParam = urlParams.get('ref');
-      const qParam = urlParams.get('q');
-
-      if (refParam) {
-        document.getElementById("searchInput").value = `#${refParam}`;
-        handleSearch(`#${refParam}`);
-      } else if (qParam) {
-        document.getElementById("searchInput").value = qParam;
-        handleSearch(qParam);
+      if (appName === 'audio') {
+        if (!gameState.vipUnlocked) {
+          document.getElementById('paywall-modal').style.display = 'flex';
+        } else {
+          screen.innerHTML = `
+            <div class="app-header">
+              <button class="btn-back" onclick="renderPhoneHome()">← Volver</button>
+              <strong>Grabadora Forense (VIP)</strong>
+            </div>
+            <div class="photo-item" style="border-color:#10b981;">
+              <span class="clue-tag" style="color:#10b981;">ACCESO COMPLETO ACTIVADO</span>
+              <h4>AUDIO_PARKING_0210.MP3</h4>
+              <p style="font-size:0.85rem; color:var(--text-muted); margin:10px 0;">
+                [Transcripción Forense]: Se escucha la puerta de un coche abrirse. Una voz femenina dice: "Marc, quítale el teléfono antes de que vea que salí del hospital a las 12".
+              </p>
+              <button class="btn-action" style="background:#10b981;" onclick="alert('¡Aquí se abrirá el formulario final de acusación del Caso 1!')">
+                ⚖️ Acusar al Culpable Final
+              </button>
+            </div>
+          `;
+        }
       }
-    });
+    }
+
+    function checkPin() {
+      const attempt = document.getElementById('pin-attempt').value.trim();
+      if (attempt === CASE_01_DATA.pinCode) {
+        gameState.noteUnlocked = true;
+        saveProgress();
+        openApp('notes');
+      } else {
+        document.getElementById('pin-error').textContent = "❌ PIN incorrecto. Revisa el chat de Marc y las fotos.";
+      }
+    }
+
+    function closePaywall() {
+      document.getElementById('paywall-modal').style.display = 'none';
+    }
+
+    function verifyVipCode() {
+      const code = document.getElementById('vip-code-input').value.trim().toUpperCase();
+      if (code === CASE_01_DATA.vipAccessCode) {
+        gameState.vipUnlocked = true;
+        saveProgress();
+        closePaywall();
+        openApp('audio');
+      } else {
+        alert("Código VIP no válido. Prueba con: MURAZO99");
+      }
+    }
+
+    // Arrancar el motor con el Caso 01
+    initEngine(CASE_01_DATA);
   </script>
-
 </body>
 </html>
